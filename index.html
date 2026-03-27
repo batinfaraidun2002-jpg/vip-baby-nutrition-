@@ -348,14 +348,56 @@
         renderPages(); 
     }
 
-    let creds = JSON.parse(localStorage.getItem('creds')) || {u: "admin", p: "20242024"};
-    let allProds = JSON.parse(localStorage.getItem('products')) || [];
-    let cart = [];
-    let pages = JSON.parse(localStorage.getItem('pages')) || [];
-    let chats = JSON.parse(localStorage.getItem('chats')) || [];
-    let orders = JSON.parse(localStorage.getItem('orders')) || []; 
-    let themeColor = localStorage.getItem('theme') || '#1e293b';
+function renderProducts(prods) {
+    document.getElementById('products-container').innerHTML = prods.map((p, index) => {
+        let priceHtml = `<div class="price">${p.price} IQD</div>`;
+        let badgeHtml = '';
 
+        if(p.oldPrice && p.oldPrice.trim() !== '') {
+            badgeHtml = `<div class="discount-badge">${dict[currentLang].discountBadge}</div>`;
+            priceHtml = `
+                <div class="price-container">
+                    <span class="price">${p.price} IQD</span>
+                    <span class="old-price">${p.oldPrice}</span>
+                </div>
+            `;
+        } else {
+            priceHtml = `<div class="price-container"><span class="price">${p.price} IQD</span></div>`;
+        }
+
+        // 🔒 Delete only for admin
+        let deleteBtn = '';
+        function deleteProduct(index) {
+    if(confirm("دڵنیایت دەتەوێت ئەم بەرهەمە بسڕیتەوە؟")) {
+        allProds.splice(index, 1);
+        localStorage.setItem('products', JSON.stringify(allProds));
+        renderProducts(allProds);
+        showToast("بەرهەمەکە سڕایەوە!");
+    }
+}
+        if(document.getElementById('admin-panel').style.display === 'block') {
+            deleteBtn = `
+                <button onclick="deleteProduct(${index})"
+                style="background:#ef4444; color:white; border:none; padding:6px; border-radius:6px; margin-bottom:8px; cursor:pointer;">
+                ❌ Delete
+                </button>`;
+        }
+
+        return `
+        <div class="card">
+            ${badgeHtml}
+            ${deleteBtn}
+            <img src="${p.image}" alt="Product">
+            <h4>${p.name}</h4>
+            <p class="desc">${p.desc || ''}</p>
+            ${priceHtml}
+            <button class="add-btn" onclick="addToCart('${p.name}', ${p.price})">
+                ${dict[currentLang].buyBtn}
+            </button>
+        </div>
+        `;
+    }).join("");
+}
     document.documentElement.style.setProperty('--main', themeColor);
     document.getElementById('themeColor').value = themeColor;
 
