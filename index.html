@@ -3,109 +3,128 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VIP Baby Nutrition</title>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <title>VIP Baby Store - Official</title>
     <style>
-        :root { --primary: #1a2a6c; --secondary: #b21f1f; --white: #ffffff; }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; background: #f4f7f6; }
-        header { background: var(--primary); color: white; padding: 1rem; text-align: center; position: sticky; top: 0; z-index: 100; display: flex; justify-content: space-between; align-items: center; }
-        .admin-btn { background: #f39c12; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; }
-        .container { padding: 20px; display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; }
-        .card { background: white; border-radius: 15px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.1); text-align: center; padding-bottom: 15px; position: relative; }
-        .card img { width: 100%; height: 200px; object-fit: contain; background: #fff; }
-        .price { color: #27ae60; font-weight: bold; font-size: 1.2rem; }
-        .delete-btn { background: #e74c3c; color: white; border: none; padding: 5px 10px; border-radius: 5px; margin-top: 10px; cursor: pointer; display: none; }
-        .admin-mode .delete-btn { display: inline-block; }
-        #admin-panel { display: none; background: white; padding: 20px; margin: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
-        input { width: 90%; padding: 10px; margin: 10px 0; border: 1px solid #ddd; border-radius: 5px; }
+        /* هەمان ستایڵە جوانەکەی خۆت */
+        :root { --main: #1e293b; --accent: #f59e0b; --bg: #f8fafc; --text: #334155; }
+        body { font-family: Tahoma, Arial, sans-serif; background: var(--bg); color: var(--text); margin: 0; padding-bottom: 50px; transition: 0.3s; }
+        .header { background: var(--main); color: white; padding: 15px 20px; position: sticky; top: 0; z-index: 1000; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); }
+        .nav-row { display: flex; justify-content: space-between; align-items: center; }
+        .logo { width: 45px; height: 45px; border-radius: 50%; border: 2px solid white; object-fit: cover; }
+        .search-bar { width: 100%; margin-top: 15px; padding: 12px; border-radius: 8px; border: 1px solid #cbd5e1; box-sizing: border-box; outline: none; }
+        .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 15px; padding: 15px; }
+        .card { background: white; border-radius: 16px; padding: 15px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); text-align: center; border: 1px solid #e2e8f0; position: relative; }
+        .card img { width: 100%; height: 130px; object-fit: contain; }
+        .price { color: #16a34a; font-weight: 700; font-size: 16px; }
+        .add-btn { background: var(--main); color: white; border: none; padding: 10px; border-radius: 8px; width: 100%; cursor: pointer; margin-top: 5px; }
+        
+        /* دوگمەی سڕینەوەی نوێ */
+        .del-prod-btn { background: #ef4444 !important; margin-top: 8px; font-size: 12px; display: none; }
+        .admin-mode .del-prod-btn { display: block; }
+
+        #admin-panel { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg); z-index: 5000; overflow-y: auto; padding: 20px; box-sizing: border-box; }
+        .admin-section { border: 1px solid #e2e8f0; padding: 20px; border-radius: 12px; margin-bottom: 20px; background: white; }
+        input, textarea { width: 100%; padding: 12px; margin-bottom: 12px; border: 1px solid #cbd5e1; border-radius: 8px; }
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.7); z-index: 3000; align-items: center; justify-content: center; }
+        .modal-content { background: white; padding: 25px; border-radius: 16px; width: 90%; max-width: 420px; }
     </style>
 </head>
-<body>
+<body id="mainBody">
 
-<header>
-    <button class="admin-btn" onclick="toggleAdmin()">بەڕێوەبەر</button>
-    <h2>VIP Baby Store</h2>
-    <div style="width: 80px;"></div>
-</header>
-
-<div id="admin-panel">
-    <h3>زیادکردنی کاڵای نوێ</h3>
-    <input type="text" id="p-name" placeholder="ناوی کاڵا">
-    <input type="number" id="p-price" placeholder="نرخ بە دینار">
-    <input type="text" id="p-img" placeholder="لینکی وێنە (Direct Link)">
-    <button onclick="addProduct()" style="background: #27ae60; color: white; padding: 10px 20px; border: none; border-radius: 5px; width: 100%;">بڵاوکردنەوە</button>
+<div class="header">
+    <div class="nav-row">
+        <button onclick="openModal('menu-modal')" style="background:none; border:none; color:white; font-size:20px; cursor:pointer;">☰</button>
+        <div onclick="adminLogic()" style="cursor:pointer; display:flex; align-items:center; gap:10px;">
+            <img src="https://i.postimg.cc/RWNMnJDG/image.jpg" class="logo">
+            <h2 style="margin:0; font-size: 18px;">VIP Baby</h2>
+        </div>
+        <div style="display:flex; gap:15px;">
+            <div onclick="openModal('cart-modal')" style="cursor:pointer; font-size: 22px;">🛒 <span id="cart-count">0</span></div>
+        </div>
+    </div>
+    <input type="text" id="searchInput" class="search-bar" placeholder="گەڕان..." onkeyup="filterProds()">
 </div>
 
-<div class="container" id="product-list">
+<div id="p-home" class="page active-page">
+    <div class="product-grid" id="products-container"></div>
+</div>
+
+<div id="admin-panel">
+    <button onclick="closeAdmin()" style="float:left; background:#ef4444; color:white; border:none; padding:10px; border-radius:8px;">داخستن</button>
+    <h3>بەڕێوەبردن 🛠️</h3>
+    <div class="admin-section">
+        <h4>زیادکردنی بەرهەم:</h4>
+        <input id="pName" placeholder="ناوی بەرهەم">
+        <input id="pPrice" placeholder="نرخ">
+        <input id="pImage" placeholder="لینکی وێنە">
+        <button onclick="saveProduct()" class="add-btn" style="background:#16a34a;">بڵاوکردنەوە</button>
     </div>
+</div>
+
+<div id="admin-login-modal" class="modal">
+    <div class="modal-content">
+        <h3>🔒 چوونەژوورەوە</h3>
+        <input type="text" id="adminUserInput" placeholder="یوزەرنەیم">
+        <input type="password" id="adminPassInput" placeholder="پاسۆرد">
+        <button onclick="verifyAdmin()" class="add-btn">چوونەژوورەوە</button>
+    </div>
+</div>
+
+<div id="cart-modal" class="modal"><div class="modal-content"><h3>سەبەتە</h3><div id="cart-items"></div><button onclick="closeModal('cart-modal')">داخستن</button></div></div>
 
 <script>
-    // لێرە زانیارییەکانی خۆت دابنێوە (Config)
-    const firebaseConfig = {
-        apiKey: "خۆت لێرە دایبنێوە",
-        authDomain: "vip-baby-nutrition.firebaseapp.com",
-        projectId: "vip-baby-nutrition",
-        storageBucket: "vip-baby-nutrition.appspot.com",
-        messagingSenderId: "774900889280",
-        appId: "1:774900889280:web:4860647c458a18353381e4"
-    };
-    
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.firestore();
+    let allProds = JSON.parse(localStorage.getItem('products')) || [];
+    let creds = {u: "admin", p: "20242024"};
     let isAdmin = false;
 
-    function toggleAdmin() {
-        const pass = prompt("کۆدی نهێنی بنووسە:");
-        if (pass === "1234") {
+    function adminLogic() { openModal('admin-login-modal'); }
+    function openModal(id) { document.getElementById(id).style.display='flex'; }
+    function closeModal(id) { document.getElementById(id).style.display='none'; }
+    function closeAdmin() { document.getElementById('admin-panel').style.display='none'; }
+
+    function verifyAdmin() {
+        const u = document.getElementById('adminUserInput').value;
+        const p = document.getElementById('adminPassInput').value;
+        if(u === creds.u && p === creds.p) {
             isAdmin = true;
-            document.getElementById('admin-panel').style.display = 'block';
+            closeModal('admin-login-modal');
+            document.getElementById('admin-panel').style.display='block';
             document.body.classList.add('admin-mode');
-            renderProducts();
-        } else {
-            alert("کۆدەکە هەڵەیە!");
+            renderProducts(allProds);
         }
     }
 
-    async function addProduct() {
-        const name = document.getElementById('p-name').value;
-        const price = document.getElementById('p-price').value;
-        const img = document.getElementById('p-img').value;
-
-        if(name && price && img) {
-            await db.collection("products").add({ name, price, img, date: new Date() });
-            alert("کاڵاکە زیادکرا!");
-            location.reload();
-        }
+    function renderProducts(prods) {
+        document.getElementById('products-container').innerHTML = prods.map((p, index) => `
+            <div class="card">
+                <img src="${p.image}">
+                <h4>${p.name}</h4>
+                <div class="price">${p.price} IQD</div>
+                <button class="add-btn">کڕین</button>
+                <button class="add-btn del-prod-btn" onclick="deleteProduct(${index})">سڕینەوە 🗑️</button>
+            </div>
+        `).join("");
     }
 
-    async function deleteProduct(id) {
+    function saveProduct() {
+        const n = document.getElementById('pName').value;
+        const p = document.getElementById('pPrice').value;
+        const img = document.getElementById('pImage').value;
+        allProds.push({ name: n, price: p, image: img });
+        localStorage.setItem('products', JSON.stringify(allProds));
+        renderProducts(allProds);
+        alert("زیادکرا!");
+    }
+
+    function deleteProduct(index) {
         if(confirm("دڵنیای لە سڕینەوە؟")) {
-            await db.collection("products").doc(id).delete();
-            renderProducts();
+            allProds.splice(index, 1);
+            localStorage.setItem('products', JSON.stringify(allProds));
+            renderProducts(allProds);
         }
     }
 
-    function renderProducts() {
-        const list = document.getElementById('product-list');
-        list.innerHTML = '';
-        db.collection("products").orderBy("date", "desc").onSnapshot((snapshot) => {
-            list.innerHTML = '';
-            snapshot.forEach((doc) => {
-                const p = doc.data();
-                list.innerHTML += `
-                    <div class="card">
-                        <img src="${p.img}" onerror="this.src='https://via.placeholder.com/150?text=No+Image'">
-                        <h3>${p.name}</h3>
-                        <p class="price">${p.price} IQD</p>
-                        <button class="delete-btn" onclick="deleteProduct('${doc.id}')">سڕینەوە 🗑️</button>
-                    </div>
-                `;
-            });
-        });
-    }
-
-    renderProducts();
+    renderProducts(allProds);
 </script>
 </body>
 </html>
