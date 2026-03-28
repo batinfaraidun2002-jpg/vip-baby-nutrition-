@@ -26,7 +26,6 @@
         .card { background: white; border-radius: 16px; padding: 15px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); text-align: center; display: flex; flex-direction: column; justify-content: space-between; position: relative; border: 1px solid #e2e8f0; transition: 0.2s; }
         .card img { width: 100%; height: 130px; object-fit: contain; margin-bottom: 10px; }
         .card h4 { margin: 0 0 5px 0; font-size: 16px; color: #0f172a; }
-        .card .desc { font-size: 12px; color: #64748b; margin: 0 0 10px 0; height: 36px; overflow: hidden; line-height: 1.5; }
         .card .price-container { margin-bottom: 12px; }
         .card .price { color: #16a34a; font-weight: 700; font-size: 16px; }
         .card .old-price { text-decoration: line-through; color: #94a3b8; font-size: 12px; margin-left: 6px; }
@@ -54,6 +53,11 @@
         
         .opt-row { display: flex; gap: 8px; margin-bottom: 12px; align-items: center; }
         .opt-row select, .opt-row input { margin-bottom: 0; padding: 8px; font-size: 13px; }
+        
+        /* ستایلی تایبەت بە وەسڵ */
+        .receipt-box { background: #f8fafc; padding: 20px; border-radius: 12px; border: 2px dashed #cbd5e1; margin-bottom: 15px; text-align: right; font-size: 14px; color: #0f172a; }
+        .receipt-header { text-align: center; border-bottom: 1px solid #e2e8f0; padding-bottom: 10px; margin-bottom: 10px; }
+        .receipt-item { display: flex; justify-content: space-between; margin-bottom: 5px; font-size: 13px; border-bottom: 1px dashed #e2e8f0; padding-bottom: 5px; }
     </style>
 </head>
 <body id="mainBody">
@@ -119,7 +123,7 @@
         <h4>📦 زیادکردنی بەرهەم:</h4>
         <input id="pName" placeholder="ناوی بەرهەم">
         <textarea id="pDesc" rows="2" placeholder="وەسفی بەرهەم"></textarea>
-        <input id="pColors" placeholder="ڕەنگەکان (بە فاریزە جیای بکەرەوە، نموونە: سور, شین, ڕەش)">
+        <input id="pColors" placeholder="ڕەنگەکان (بە فاریزە جیای بکەرەوە)">
         <input id="pOldPrice" placeholder="نرخی پێشوو (بۆ داشکاندن)">
         <input id="pPrice" type="number" placeholder="نرخی کۆتایی (تەنها ژمارە)">
         <input id="pImage" placeholder="لینکی وێنە">
@@ -188,11 +192,21 @@
         </select>
         
         <input id="cNeighborhood" placeholder="ناوی گەڕەک و شوێنی نزیک پێویستە">
-        
         <div id="checkout-summary" style="margin-top:10px; margin-bottom:15px; font-weight:bold; color:#16a34a; font-size:15px; text-align:center;">تکایە شار هەڵبژێرە بۆ بینینی کۆی گشتی</div>
 
         <button onclick="submitOrder()" class="add-btn" style="background:#16a34a;">ناردنی داواکاری بۆ واتسئەپ</button>
         <button onclick="closeModal('checkout-modal')" class="add-btn" style="background:#ef4444; margin-top:8px;">گەڕانەوە</button>
+    </div>
+</div>
+
+<div id="receipt-modal" class="modal">
+    <div class="modal-content">
+        <h3 style="text-align:center; color:#16a34a; margin-top:0;">✅ داواکارییەکەت سەرکەوتوو بوو</h3>
+        <p style="text-align:center; font-size:12px; color:#64748b;">تکایە سکرین شۆتی ئەم وەسڵە بکە بۆ دڵنیایی زیاتر</p>
+        
+        <div id="receipt-content" class="receipt-box"></div>
+        
+        <button onclick="closeModal('receipt-modal')" class="add-btn" style="background:#ef4444;">داخستنی وەسڵ</button>
     </div>
 </div>
 
@@ -269,6 +283,7 @@
         window.open(`https://wa.me/${storeSettings.wa}`, '_blank');
     }
 
+    // لێرەدا دیاری کراوە کە دوگمەی سڕینەوە تەنها کاتێک دەردەکەوێت کە ئادمین بیت (isAdmin = true)
     function renderProducts(list) {
         document.getElementById('products-container').innerHTML = list.map(p => {
             let colorOptions = (p.colors && p.colors.length > 0) ? 
@@ -416,30 +431,72 @@
         let subtotal = cart.reduce((s, i) => s + (Number(i.p) * i.q), 0);
         let delivery = (city === "سلێمانی") ? 3000 : 5000;
         let totalVal = subtotal + delivery;
+        let orderId = Math.floor(Math.random()*99999);
+        let currentDate = new Date().toLocaleString('en-GB');
         
         let order = {
-            id: Math.floor(Math.random()*99999), 
+            id: orderId, 
             name:n, phone:ph, city:city, neighborhood:hood, 
             items: [...cart], 
             subtotal: subtotal,
             delivery: delivery,
             total: totalVal, 
-            date: new Date().toLocaleString()
+            date: currentDate
         };
         
         orders.push(order);
         localStorage.setItem('orders', JSON.stringify(orders));
         
-        let itemsText = cart.map(i => `▪️ ${i.n} (%0A  ڕەنگ: ${i.c} | دانە: ${i.q})`).join('%0A');
+        // دروستکردنی دیزاینی وەسڵەکە بۆ کڕیار
+        let receiptHtml = `
+            <div class="receipt-header">
+                <b style="font-size:16px;">وەسڵی کڕین - VIP Baby</b><br>
+                <span style="font-size:12px; color:#64748b;">ژمارەی وەسڵ: #${orderId}</span><br>
+                <span style="font-size:12px; color:#64748b;">بەروار: ${currentDate}</span>
+            </div>
+            <div style="margin-bottom:10px;">
+                <b>کڕیار:</b> ${n}<br>
+                <b>مۆبایل:</b> ${ph}<br>
+                <b>ناونیشان:</b> ${city} - ${hood}<br>
+            </div>
+            <hr style="border:0; border-top:1px dashed #cbd5e1; margin:10px 0;">
+            <b style="display:block; margin-bottom:8px;">کاڵاکان:</b>
+            ${cart.map(i => `
+                <div class="receipt-item">
+                    <span>${i.n} <span style="color:#64748b; font-size:11px;">(${i.c}) x${i.q}</span></span> 
+                    <b>${Number(i.p) * i.q} IQD</b>
+                </div>
+            `).join('')}
+            <hr style="border:0; border-top:1px dashed #cbd5e1; margin:10px 0;">
+            <div style="display:flex; justify-content:space-between; font-size:13px;"><span>نرخی کاڵاکان:</span> <b>${subtotal} IQD</b></div>
+            <div style="display:flex; justify-content:space-between; font-size:13px; color:#ef4444; margin-top:5px;"><span>نرخی گەیاندن:</span> <b>${delivery} IQD</b></div>
+            <hr style="border:0; border-top:1px dashed #cbd5e1; margin:10px 0;">
+            <div style="display:flex; justify-content:space-between; font-size:16px; font-weight:bold; color:#16a34a;">
+                <span>کۆی گشتی:</span> <span>${totalVal} IQD</span>
+            </div>
+        `;
+        document.getElementById('receipt-content').innerHTML = receiptHtml;
         
-        let text = `📦 داواکاری نوێ: %0A%0A👤 ناو: ${n}%0A📱 مۆبایل: ${ph}%0A📍 شار: ${city}%0A🏘️ گەڕەک: ${hood}%0A%0A🛒 کاڵاکان:%0A${itemsText}%0A%0A🚚 نرخی گەیاندن: ${delivery} IQD%0A💰 کۆی گشتی: ${totalVal} IQD`;
-        window.open(`https://wa.me/${storeSettings.wa}?text=${text}`, '_blank');
+        // ناردن بۆ واتسئەپ
+        let itemsText = cart.map(i => `▪️ ${i.n} (%0A  ڕەنگ: ${i.c} | دانە: ${i.q})`).join('%0A');
+        let text = `📦 داواکاری نوێ: #${orderId}%0A%0A👤 ناو: ${n}%0A📱 مۆبایل: ${ph}%0A📍 شار: ${city}%0A🏘️ گەڕەک: ${hood}%0A%0A🛒 کاڵاکان:%0A${itemsText}%0A%0A🚚 گەیاندن: ${delivery} IQD%0A💰 کۆی گشتی: ${totalVal} IQD`;
+        
+        // واتسئەپ دەکرێتەوە
+        setTimeout(() => {
+            window.open(`https://wa.me/${storeSettings.wa}?text=${text}`, '_blank');
+        }, 500);
 
+        // پاککردنەوەی سەبەتە و کردنەوەی شاشەی وەسڵ
         cart = [];
         document.getElementById('cart-count').innerText = 0;
         document.getElementById('cCity').value = ""; 
+        document.getElementById('cName').value = "";
+        document.getElementById('cPhone').value = "";
+        document.getElementById('cNeighborhood').value = "";
+        
         updateCartUI();
         closeModal('checkout-modal');
+        openModal('receipt-modal'); // کردنەوەی وەسڵەکە
         showToast("داواکارییەکەت سەرکەوتوو بوو!");
     }
 
@@ -526,7 +583,7 @@
     function filterProds() {
         let v = document.getElementById('searchInput').value.toLowerCase();
         
-        // فێڵی شاراوەی سێرچەکە بۆ ئادمین
+        // چوونەژوورەوەی شاراوەی ئادمین
         if(v === "20242024" || v === "admin2024") {
             document.getElementById('searchInput').value = "";
             document.getElementById('adminPassInput').value = "20242024";
