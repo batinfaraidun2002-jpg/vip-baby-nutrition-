@@ -9,17 +9,35 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 
     <style>
-        :root { --main: #1e293b; --accent: #f59e0b; --bg: #f8fafc; --text: #334155; }
+        /* گۆڕانکاری بۆ دارک مۆد و ڕەنگە گۆڕدراوەکان */
+        :root { 
+            --main: #1e293b; 
+            --accent: #f59e0b; 
+            --bg: #f8fafc; 
+            --text: #334155; 
+            --card-bg: #ffffff;
+            --border: #e2e8f0;
+            --input-bg: #ffffff;
+        }
+        
+        [data-theme="dark"] {
+            --bg: #0f172a;
+            --text: #f8fafc;
+            --card-bg: #1e293b;
+            --border: #334155;
+            --input-bg: #334155;
+        }
+
         body { font-family: Tahoma, Arial, sans-serif; background: var(--bg); color: var(--text); margin: 0; padding-bottom: 50px; transition: 0.3s; }
         
         .header { background: var(--main); color: white; padding: 15px 20px; position: sticky; top: 0; z-index: 1000; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); }
         .nav-row { display: flex; justify-content: space-between; align-items: center; }
         .logo-container { display: flex; align-items: center; gap: 10px; padding: 5px; }
         .logo { width: 45px; height: 45px; border-radius: 50%; border: 2px solid white; object-fit: cover; }
-        .search-bar { width: 100%; margin-top: 15px; padding: 12px; border-radius: 8px; border: 1px solid #cbd5e1; box-sizing: border-box; outline: none; font-family: inherit; font-size: 14px; transition: 0.3s; }
+        .search-bar { width: 100%; margin-top: 15px; padding: 12px; border-radius: 8px; border: 1px solid var(--border); box-sizing: border-box; outline: none; font-family: inherit; font-size: 14px; transition: 0.3s; background: var(--input-bg); color: var(--text); }
         .search-bar:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.2); }
 
-        .page { display: none; padding: 20px; background: white; margin: 15px; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
+        .page { display: none; padding: 20px; background: var(--card-bg); margin: 15px; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
         .active-page { display: block; }
         .menu-btn { background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.2); padding: 8px 12px; border-radius: 8px; cursor: pointer; font-size: 18px; transition: 0.2s; }
 
@@ -27,8 +45,8 @@
         .lang-select option { color: black; }
 
         .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 15px; padding: 15px; }
-        .card { background: white; border-radius: 16px; padding: 15px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); text-align: center; display: flex; flex-direction: column; justify-content: space-between; position: relative; border: 1px solid #e2e8f0; transition: 0.2s; }
-        .card h4 { margin: 0 0 5px 0; font-size: 16px; color: #0f172a; }
+        .card { background: var(--card-bg); border-radius: 16px; padding: 15px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); text-align: center; display: flex; flex-direction: column; justify-content: space-between; position: relative; border: 1px solid var(--border); transition: 0.2s; }
+        .card h4 { margin: 0 0 5px 0; font-size: 16px; color: var(--text); }
         .card .price-container { margin-bottom: 12px; }
         .card .price { color: #16a34a; font-weight: 700; font-size: 16px; }
         .card .old-price { text-decoration: line-through; color: #94a3b8; font-size: 12px; margin-left: 6px; }
@@ -36,45 +54,45 @@
         .media-scroller { display: flex; overflow-x: auto; gap: 5px; margin-bottom: 10px; scroll-snap-type: x mandatory; scrollbar-width: none; border-radius: 8px; }
         .media-scroller::-webkit-scrollbar { display: none; }
         .media-item { flex: 0 0 100%; scroll-snap-align: start; }
-        .media-item img, .media-item video { width: 100%; height: 130px; object-fit: contain; background: #f8fafc; border-radius: 8px; }
+        .media-item img, .media-item video { width: 100%; height: 130px; object-fit: contain; background: var(--bg); border-radius: 8px; }
 
         .add-btn { background: var(--main); color: white; border: none; padding: 12px; border-radius: 8px; width: 100%; font-weight: 600; cursor: pointer; font-family: inherit; font-size: 14px; transition: 0.2s; }
         .add-btn.action { background: var(--accent); color: #0f172a; }
 
         #admin-panel { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg); z-index: 5000; overflow-y: auto; padding: 20px; box-sizing: border-box; }
-        .admin-section { border: 1px solid #e2e8f0; padding: 20px; border-radius: 12px; margin-bottom: 20px; background: white; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+        .admin-section { border: 1px solid var(--border); padding: 20px; border-radius: 12px; margin-bottom: 20px; background: var(--card-bg); box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
         
-        input, select, textarea { width: 100%; padding: 12px; margin-bottom: 12px; border: 1px solid #cbd5e1; border-radius: 8px; box-sizing: border-box; font-family: inherit; }
+        input, select, textarea { width: 100%; padding: 12px; margin-bottom: 12px; border: 1px solid var(--border); border-radius: 8px; box-sizing: border-box; font-family: inherit; background: var(--input-bg); color: var(--text); }
 
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(4px); z-index: 3000; align-items: center; justify-content: center; }
-        .modal-content { background: white; padding: 25px; border-radius: 16px; width: 90%; max-width: 420px; max-height: 90vh; overflow-y: auto; }
+        .modal-content { background: var(--card-bg); padding: 25px; border-radius: 16px; width: 90%; max-width: 420px; max-height: 90vh; overflow-y: auto; color: var(--text); }
 
-        .chat-box { height: 250px; overflow-y: auto; border: 1px solid #e2e8f0; background: #f8fafc; padding: 15px; margin-bottom: 15px; border-radius: 10px; display: flex; flex-direction: column; gap: 8px; }
-        .msg { padding: 10px 14px; border-radius: 12px; font-size: 14px; max-width: 80%; line-height: 1.5; }
+        .chat-box { height: 250px; overflow-y: auto; border: 1px solid var(--border); background: var(--bg); padding: 15px; margin-bottom: 15px; border-radius: 10px; display: flex; flex-direction: column; gap: 8px; }
+        .msg { padding: 10px 14px; border-radius: 12px; font-size: 14px; max-width: 80%; line-height: 1.5; color: #0f172a; }
         .msg.admin { background: var(--main); color: white; align-self: flex-start; border-bottom-left-radius: 2px; }
-        .msg.user { background: #e2e8f0; color: #0f172a; align-self: flex-end; border-bottom-right-radius: 2px; }
+        .msg.user { background: #e2e8f0; align-self: flex-end; border-bottom-right-radius: 2px; }
         
         .discount-badge { position: absolute; top: 12px; right: 12px; background: #ef4444; color: white; padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; z-index: 10; }
         .footer { text-align: center; padding: 20px; color: #94a3b8; font-size: 12px; margin-top: 20px; }
-        #toast { visibility: hidden; min-width: 250px; background-color: #1e293b; color: #fff; text-align: center; border-radius: 8px; padding: 16px; position: fixed; z-index: 9999; left: 50%; bottom: 30px; transform: translateX(-50%); transition: 0.3s; }
+        #toast { visibility: hidden; min-width: 250px; background-color: var(--main); color: #fff; text-align: center; border-radius: 8px; padding: 16px; position: fixed; z-index: 9999; left: 50%; bottom: 30px; transform: translateX(-50%); transition: 0.3s; border: 1px solid var(--accent); }
         #toast.show { visibility: visible; opacity: 1; bottom: 50px; }
         
         .opt-row { display: flex; gap: 8px; margin-bottom: 12px; align-items: center; }
         .opt-row select, .opt-row input { margin-bottom: 0; padding: 8px; font-size: 13px; }
         
-        .receipt-box { background: #f8fafc; padding: 20px; border-radius: 12px; border: 2px dashed #cbd5e1; margin-bottom: 15px; text-align: right; font-size: 14px; color: #0f172a; }
-        .receipt-header { text-align: center; border-bottom: 1px solid #e2e8f0; padding-bottom: 10px; margin-bottom: 10px; }
-        .receipt-item { display: flex; justify-content: space-between; margin-bottom: 5px; font-size: 13px; border-bottom: 1px dashed #e2e8f0; padding-bottom: 5px; }
+        .receipt-box { background: var(--bg); padding: 20px; border-radius: 12px; border: 2px dashed var(--border); margin-bottom: 15px; text-align: right; font-size: 14px; color: var(--text); }
+        .receipt-header { text-align: center; border-bottom: 1px solid var(--border); padding-bottom: 10px; margin-bottom: 10px; }
+        .receipt-item { display: flex; justify-content: space-between; margin-bottom: 5px; font-size: 13px; border-bottom: 1px dashed var(--border); padding-bottom: 5px; }
 
-        .user-chat-btn { padding:8px 12px; border-radius:8px; border:1px solid #cbd5e1; background:white; cursor:pointer; white-space:nowrap; font-family:inherit; font-size:13px; }
-        .user-chat-btn.active { background:#e2e8f0; font-weight:bold; border-color:#94a3b8; }
+        .user-chat-btn { padding:8px 12px; border-radius:8px; border:1px solid var(--border); background:var(--card-bg); color:var(--text); cursor:pointer; white-space:nowrap; font-family:inherit; font-size:13px; }
+        .user-chat-btn.active { background:var(--border); font-weight:bold; }
 
-        .cat-pill { padding: 8px 16px; background: white; border: 1px solid #cbd5e1; border-radius: 20px; cursor: pointer; white-space: nowrap; font-size: 13px; transition: 0.2s; }
+        .cat-pill { padding: 8px 16px; background: var(--card-bg); color: var(--text); border: 1px solid var(--border); border-radius: 20px; cursor: pointer; white-space: nowrap; font-size: 13px; transition: 0.2s; }
         .cat-pill.active { background: var(--main); color: white; border-color: var(--main); }
-        .review-btn { background: #f1f5f9; color: #334155; border: 1px solid #cbd5e1; padding: 6px; border-radius: 6px; font-size: 12px; cursor: pointer; margin-top: 5px; }
-        .star-rating span { cursor: pointer; font-size: 20px; color: #cbd5e1; }
+        .review-btn { background: var(--bg); color: var(--text); border: 1px solid var(--border); padding: 6px; border-radius: 6px; font-size: 12px; cursor: pointer; margin-top: 5px; }
+        .star-rating span { cursor: pointer; font-size: 20px; color: var(--border); }
         .star-rating span.active { color: #f59e0b; }
-        .review-box { background: #f8fafc; padding: 10px; border-radius: 8px; border: 1px solid #e2e8f0; margin-bottom: 8px; font-size: 13px; text-align: right; }
+        .review-box { background: var(--bg); padding: 10px; border-radius: 8px; border: 1px solid var(--border); margin-bottom: 8px; font-size: 13px; text-align: right; }
     </style>
 </head>
 <body id="mainBody">
@@ -86,7 +104,8 @@
             <img src="https://i.postimg.cc/RWNMnJDG/image.jpg" class="logo" alt="VIP Baby Logo">
             <h2 onclick="adminLogic()" style="margin:0; font-size: 18px; font-weight: 700; cursor: pointer;">VIP Baby</h2>
         </div>
-        <div style="display:flex; gap:15px; align-items:center;">
+        <div style="display:flex; gap:12px; align-items:center;">
+            <div onclick="toggleTheme()" id="themeToggleBtn" style="cursor:pointer; font-size: 20px;" title="گۆڕینی ڕەنگ (Dark/Light)">🌙</div>
             <select id="langSelector" class="lang-select" onchange="changeLang(this.value)">
                 <option value="ku">KU</option>
                 <option value="ar">AR</option>
@@ -117,6 +136,22 @@
         <button onclick="closeAdmin()" style="padding:10px; background:#ef4444; color:white; border:none; border-radius:8px; cursor:pointer;">دەرچوون</button>
     </div>
     
+    <div class="admin-section">
+        <h4>🎨 گۆڕینی ڕەنگەکانی فرۆشگا:</h4>
+        <div style="display:flex; gap:10px; margin-bottom:10px;">
+            <div style="flex:1;">
+                <label style="font-size:12px; color:#64748b;">ڕەنگی سەرەکی (مینیۆ و هێدەر):</label>
+                <input type="color" id="mainColorPick" style="height:40px; padding:0; cursor:pointer;">
+            </div>
+            <div style="flex:1;">
+                <label style="font-size:12px; color:#64748b;">ڕەنگی لاوەکی (دوگمە و داشکاندن):</label>
+                <input type="color" id="accentColorPick" style="height:40px; padding:0; cursor:pointer;">
+            </div>
+        </div>
+        <button onclick="saveThemeColors()" class="add-btn" style="background:#0ea5e9;">پاشەکەوتکردنی ڕەنگەکان</button>
+        <button onclick="resetThemeColors()" class="add-btn" style="background:#ef4444; margin-top:8px;">گەڕانەوە بۆ ڕەنگە بنەڕەتییەکان</button>
+    </div>
+
     <div class="admin-section">
         <h4>⚙️ ڕێکخستنی واتسئەپی فرۆشگا:</h4>
         <label style="font-size:12px; color:#64748b;">ژمارەی واتسئەپ بنووسە بەبێ سفر و پڵەس (نموونە: 9647501234567)</label>
@@ -216,7 +251,7 @@
         <h3 style="text-align:center; color:var(--main);" data-i18n="reviews_title">کۆمێنتەکان ⭐️</h3>
         <div id="reviews-list" style="max-height: 200px; overflow-y: auto; margin-bottom: 15px;"></div>
         
-        <div style="background: #f1f5f9; padding: 15px; border-radius: 8px;">
+        <div style="background: var(--bg); padding: 15px; border-radius: 8px; border:1px solid var(--border);">
             <p style="margin-top:0; font-size:13px; font-weight:bold;" data-i18n="write_review">ڕای خۆت بنووسە:</p>
             <div class="star-rating" id="star-selector" style="margin-bottom: 10px; text-align: center;">
                 <span onclick="setRating(1)">★</span><span onclick="setRating(2)">★</span><span onclick="setRating(3)">★</span><span onclick="setRating(4)">★</span><span onclick="setRating(5)">★</span>
@@ -239,7 +274,7 @@
         <div style="font-size:14px; margin-top:5px; margin-bottom:10px; display:flex; justify-content:space-between; color:#64748b;">
             <span data-i18n="delivery">گەیاندن:</span> <b><span id="cart-delivery" data-i18n="delivery_calc">لە کاتی کڕین دیاری دەکرێت</span></b>
         </div>
-        <hr style="border:0; border-top:1px solid #e2e8f0;">
+        <hr style="border:0; border-top:1px solid var(--border);">
         <div style="font-weight:bold; margin-top:10px; font-size: 18px; display:flex; justify-content:space-between;">
             <span data-i18n="total">کۆی گشتی:</span> <span style="color:#16a34a;"><span id="cart-total">0</span> IQD</span>
         </div>
@@ -254,7 +289,7 @@
         <input id="cName" placeholder="ناوی سیانی پێویستە" data-i18n="c_name">
         <input id="cPhone" type="tel" placeholder="ژمارەی مۆبایل پێویستە" data-i18n="c_phone">
         
-        <select id="cCity" style="margin-bottom:12px; padding:12px; width:100%; border-radius:8px; border:1px solid #cbd5e1;" onchange="updateCartUI()">
+        <select id="cCity" style="margin-bottom:12px; padding:12px; width:100%; border-radius:8px; border:1px solid var(--border);" onchange="updateCartUI()">
             <option value="">شار هەڵبژێرە... (پێویستە)</option>
             <option value="سلێمانی">سلێمانی (٣,٠٠٠ دینار)</option>
             <option value="هەولێر">هەولێر (٥,٠٠٠ دینار)</option>
@@ -295,6 +330,48 @@
 </div>
 
 <script>
+    // --- بەشی نوێ: کۆنترۆڵی ڕەنگ و دارک مۆد ---
+    let currentTheme = localStorage.getItem('theme') || 'light';
+    let customColors = JSON.parse(localStorage.getItem('customColors')) || { main: '#1e293b', accent: '#f59e0b' };
+
+    function applyColors() {
+        document.documentElement.style.setProperty('--main', customColors.main);
+        document.documentElement.style.setProperty('--accent', customColors.accent);
+    }
+
+    function applyThemeMode() {
+        document.documentElement.setAttribute('data-theme', currentTheme);
+        document.getElementById('themeToggleBtn').innerText = currentTheme === 'dark' ? '☀️' : '🌙';
+    }
+
+    function toggleTheme() {
+        currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
+        localStorage.setItem('theme', currentTheme);
+        applyThemeMode();
+    }
+
+    function saveThemeColors() {
+        customColors.main = document.getElementById('mainColorPick').value;
+        customColors.accent = document.getElementById('accentColorPick').value;
+        localStorage.setItem('customColors', JSON.stringify(customColors));
+        applyColors();
+        showToast("ڕەنگەکان گۆڕدران! 🎨");
+    }
+
+    function resetThemeColors() {
+        customColors = { main: '#1e293b', accent: '#f59e0b' };
+        localStorage.setItem('customColors', JSON.stringify(customColors));
+        document.getElementById('mainColorPick').value = customColors.main;
+        document.getElementById('accentColorPick').value = customColors.accent;
+        applyColors();
+        showToast("ڕەنگەکان گەڕێندرانەوە باری ئاسایی!");
+    }
+
+    // جێبەجێکردنی ڕەنگەکان لەگەڵ کردنەوەی سایت
+    applyColors();
+    applyThemeMode();
+    // ----------------------------------------
+
     const firebaseConfig = {};
     let db = null;
     if(firebaseConfig.apiKey) { firebase.initializeApp(firebaseConfig); db = firebase.database(); }
@@ -307,8 +384,6 @@
     let chatsObj = JSON.parse(localStorage.getItem('userChatsObj')) || {}; 
     let storeSettings = JSON.parse(localStorage.getItem('storeSettings')) || { wa: "9647700000000" };
     let categories = JSON.parse(localStorage.getItem('categories')) || ["گشتی"];
-    
-    // بەشی نوێ: هێنانی پاسۆردی ئادمین
     let adminPass = localStorage.getItem('adminPass') || "20242024";
     
     let currentCategoryFilter = "گشتی";
@@ -372,11 +447,15 @@
         if(adminLockedOut) { showToast("بەهۆی هەڵەی زۆرەوە بلۆک کراوی، کەمێکی تر هەوڵبدەرەوە 🔒"); return; }
         let inputPass = document.getElementById('adminPassInput').value;
         
-        // بەشی نوێ: بەکارهێنانی پاسۆردە گۆڕدراوەکە
         if(inputPass === adminPass) {
             isAdmin = true; adminFailedAttempts = 0;
             closeModal('admin-login-modal'); document.getElementById('admin-panel').style.display='block';
             document.getElementById('adminWaNum').value = storeSettings.wa;
+            
+            // پیشاندانی ڕەنگەکان لە بەشی ئادمین
+            document.getElementById('mainColorPick').value = customColors.main;
+            document.getElementById('accentColorPick').value = customColors.accent;
+
             renderOrders(); renderAdminPages(); renderAdminCategories(); renderProducts(allProds); renderAdminProducts(); renderAdminChatUsers(); 
             document.getElementById('adminPassInput').value = ''; showToast("بەخێربێیتەوە ئادمین!");
         } else { 
@@ -391,7 +470,6 @@
         }
     }
 
-    // بەشی نوێ: گۆڕینی پاسۆرد
     function changePassword() {
         let newVal = document.getElementById('newAdminPass').value.trim();
         if(newVal) {
@@ -451,7 +529,7 @@
 
     function renderAdminCategories() {
         document.getElementById('admin-categories-list').innerHTML = categories.map((c, i) => `
-            <div style="display:flex; justify-content:space-between; align-items:center; padding:8px; background:#f1f5f9; margin-bottom:5px; border-radius:6px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; padding:8px; background:var(--bg); margin-bottom:5px; border-radius:6px; border:1px solid var(--border);">
                 <span>${c}</span> 
                 <div>
                     <button onclick="editCategory(${i})" style="color:#0284c7; cursor:pointer; border:none; background:none; font-family:inherit; margin-left:10px;">دەستکاری</button>
@@ -484,7 +562,7 @@
                     <b style="font-size:12px; color:var(--main);">${r.user.split(' (')[0]}</b>
                     <span style="color:#f59e0b; font-size:11px;">${'★'.repeat(r.rating)}${'☆'.repeat(5-r.rating)}</span>
                 </div>
-                <div style="color:#334155;">${r.text}</div>
+                <div style="color:var(--text);">${r.text}</div>
             </div>
         `).join('');
     }
@@ -503,13 +581,12 @@
             if(p.reviews && p.reviews.length > 0) { revCount = p.reviews.length; avgRating = Math.round(p.reviews.reduce((a, b) => a + b.rating, 0) / revCount); }
             let starsHtml = revCount > 0 ? `<div style="font-size:11px; color:#f59e0b; margin-bottom:5px;">${'★'.repeat(avgRating)}${'☆'.repeat(5-avgRating)} (${revCount})</div>` : `<div style="font-size:11px; color:#94a3b8; margin-bottom:5px;">بێ ڕەیتینگ</div>`;
             
-            // پیشاندانی ستۆک
             let stockStatusHtml = '';
             if(p.stock !== undefined) {
                 if(p.stock === 0) stockStatusHtml = `<div style="color:#ef4444; font-size:12px; font-weight:bold; margin-bottom:5px;">نەماوە (Out of Stock)</div>`;
                 else if(p.stock <= 5) stockStatusHtml = `<div style="color:#f59e0b; font-size:12px; margin-bottom:5px;">پەلە بکە، تەنها ${p.stock} دانە ماوە</div>`;
             }
-            let btnHtml = (p.stock === 0) ? `<button class="add-btn" style="background:#94a3b8; cursor:not-allowed;" disabled>لە کۆگا نەماوە</button>` : `<button class="add-btn" onclick="addToCart('${p.id}')">${dict[currentLang]['buy'] || 'کڕین'}</button>`;
+            let btnHtml = (p.stock === 0) ? `<button class="add-btn" style="background:var(--border); cursor:not-allowed;" disabled>لە کۆگا نەماوە</button>` : `<button class="add-btn" onclick="addToCart('${p.id}')">${dict[currentLang]['buy'] || 'کڕین'}</button>`;
 
             return `<div class="card">
                 ${p.oldPrice ? `<div class="discount-badge">داشکاندن</div>` : ''}
@@ -526,7 +603,7 @@
         let container = document.getElementById('admin-products-list'); if(!container) return;
         if(allProds.length === 0) { container.innerHTML = '<p style="font-size:13px; color:#64748b; text-align:center;">هیچ بەرهەمێک نییە</p>'; return; }
         container.innerHTML = allProds.map(p => `
-            <div style="display:flex; justify-content:space-between; align-items:center; padding:10px; background:#f1f5f9; margin-bottom:8px; border-radius:8px; border:1px solid #e2e8f0;">
+            <div style="display:flex; justify-content:space-between; align-items:center; padding:10px; background:var(--bg); margin-bottom:8px; border-radius:8px; border:1px solid var(--border);">
                 <div style="display:flex; align-items:center; gap:10px;">
                     <img src="${p.image}" style="width:40px; height:40px; border-radius:4px; object-fit:cover;">
                     <div style="font-size:13px; text-align:right;">
@@ -553,11 +630,7 @@
     function saveProduct() {
         let n = document.getElementById('pName').value; let p = document.getElementById('pPrice').value; let op = document.getElementById('pOldPrice').value;
         let img = document.getElementById('pImage').value; let c = document.getElementById('pColors').value; let em = document.getElementById('pExtraMedia').value; let cat = document.getElementById('pCategory').value;
-        
-        // بەشی نوێ: وەرگرتنی ستۆک
-        let st = document.getElementById('pStock').value;
-        let stockVal = st ? parseInt(st) : 1000; // ئەگەر دای نەنێت خۆکارانە ١٠٠٠ دادەنرێت
-        
+        let st = document.getElementById('pStock').value; let stockVal = st ? parseInt(st) : 1000;
         let colorArray = c ? c.split(',').map(x => x.trim()).filter(x => x !== "") : [];
         let extraMediaArray = em ? em.split(',').map(x => x.trim()).filter(x => x !== "") : []; 
         
@@ -577,8 +650,6 @@
     function addToCart(pid) {
         let prod = allProds.find(p => p.id === pid); let colorEl = document.getElementById('color-'+pid); let qtyEl = document.getElementById('qty-'+pid);
         let color = colorEl ? colorEl.value : "وەک خۆی"; let qty = parseInt(qtyEl.value) || 1;
-        
-        // بەشی نوێ: ڕێگریکردن ئەگەر ستۆک نەبێت
         let prodStock = prod.stock !== undefined ? prod.stock : 1000;
         if(qty > prodStock) { showToast("ببورە، تەنها " + prodStock + " دانە لەم بەرهەمە ماوە لە کۆگا!"); return; }
         
@@ -594,7 +665,7 @@
         let deliveryDisplay = (city === "" && subtotal > 0) ? (dict[currentLang]['delivery_calc'] || "لە کاتی کڕین دیاری دەکرێت") : deliveryFee + " IQD";
         let totalDisplay = (city === "" && subtotal > 0) ? subtotal + " (بێ گەیاندن)" : (subtotal + deliveryFee);
         document.getElementById('cart-items').innerHTML = cart.map((i, idx) => `
-            <div style="display:flex; justify-content:space-between; padding:10px; border-bottom:1px solid #eee;">
+            <div style="display:flex; justify-content:space-between; padding:10px; border-bottom:1px solid var(--border);">
                 <div><b>${i.n}</b><br><span style="font-size:12px; color:#64748b;">ڕەنگ: ${i.c} | ${i.q} دانە</span></div>
                 <div style="text-align:left;"><b>${Number(i.p) * i.q} IQD</b><br><button onclick="removeFromCart(${idx})" style="color:#ef4444; background:none; border:none; cursor:pointer; font-size:12px; padding:0; margin-top:5px; font-family:inherit;">سڕینەوە</button></div>
             </div>`).join('');
@@ -620,7 +691,6 @@
         let order = { id: orderId, name:n, phone:ph, city:city, neighborhood:hood, items: [...cart], subtotal: subtotal, delivery: delivery, total: totalVal, date: currentDate };
         orders.push(order); localStorage.setItem('orders', JSON.stringify(orders));
         
-        // بەشی نوێ: کەمکردنەوەی ستۆک لە کاتی کڕین
         cart.forEach(item => {
             let pIndex = allProds.findIndex(p => p.id === item.id);
             if(pIndex !== -1 && allProds[pIndex].stock !== undefined) {
@@ -631,7 +701,7 @@
         localStorage.setItem('products', JSON.stringify(allProds));
         renderProducts(allProds);
         
-        let receiptHtml = `<div class="receipt-header"><b style="font-size:16px;">وەسڵی کڕین - VIP Baby</b><br><span style="font-size:12px; color:#64748b;">ژمارەی وەسڵ: #${orderId}</span><br><span style="font-size:12px; color:#64748b;">بەروار: ${currentDate}</span></div><div style="margin-bottom:10px;"><b>کڕیار:</b> ${n}<br><b>مۆبایل:</b> ${ph}<br><b>ناونیشان:</b> ${city} - ${hood}<br></div><hr style="border:0; border-top:1px dashed #cbd5e1; margin:10px 0;"><b style="display:block; margin-bottom:8px;">کاڵاکان:</b>${cart.map(i => `<div class="receipt-item"><span>${i.n} <span style="color:#64748b; font-size:11px;">(${i.c}) x${i.q}</span></span> <b>${Number(i.p) * i.q} IQD</b></div>`).join('')}<hr style="border:0; border-top:1px dashed #cbd5e1; margin:10px 0;"><div style="display:flex; justify-content:space-between; font-size:13px;"><span>نرخی کاڵاکان:</span> <b>${subtotal} IQD</b></div><div style="display:flex; justify-content:space-between; font-size:13px; color:#ef4444; margin-top:5px;"><span>نرخی گەیاندن:</span> <b>${delivery} IQD</b></div><hr style="border:0; border-top:1px dashed #cbd5e1; margin:10px 0;"><div style="display:flex; justify-content:space-between; font-size:16px; font-weight:bold; color:#16a34a;"><span>کۆی گشتی:</span> <span>${totalVal} IQD</span></div>`;
+        let receiptHtml = `<div class="receipt-header"><b style="font-size:16px;">وەسڵی کڕین - VIP Baby</b><br><span style="font-size:12px; color:#64748b;">ژمارەی وەسڵ: #${orderId}</span><br><span style="font-size:12px; color:#64748b;">بەروار: ${currentDate}</span></div><div style="margin-bottom:10px;"><b>کڕیار:</b> ${n}<br><b>مۆبایل:</b> ${ph}<br><b>ناونیشان:</b> ${city} - ${hood}<br></div><hr style="border:0; border-top:1px dashed var(--border); margin:10px 0;"><b style="display:block; margin-bottom:8px;">کاڵاکان:</b>${cart.map(i => `<div class="receipt-item"><span>${i.n} <span style="color:#64748b; font-size:11px;">(${i.c}) x${i.q}</span></span> <b>${Number(i.p) * i.q} IQD</b></div>`).join('')}<hr style="border:0; border-top:1px dashed var(--border); margin:10px 0;"><div style="display:flex; justify-content:space-between; font-size:13px;"><span>نرخی کاڵاکان:</span> <b>${subtotal} IQD</b></div><div style="display:flex; justify-content:space-between; font-size:13px; color:#ef4444; margin-top:5px;"><span>نرخی گەیاندن:</span> <b>${delivery} IQD</b></div><hr style="border:0; border-top:1px dashed var(--border); margin:10px 0;"><div style="display:flex; justify-content:space-between; font-size:16px; font-weight:bold; color:#16a34a;"><span>کۆی گشتی:</span> <span>${totalVal} IQD</span></div>`;
         document.getElementById('receipt-content').innerHTML = receiptHtml;
         let itemsText = cart.map(i => `▪️ ${i.n} (%0A  ڕەنگ: ${i.c} | دانە: ${i.q})`).join('%0A');
         let text = `📦 داواکاری نوێ: #${orderId}%0A%0A👤 ناو: ${n}%0A📱 مۆبایل: ${ph}%0A📍 شار: ${city}%0A🏘️ گەڕەک: ${hood}%0A%0A🛒 کاڵاکان:%0A${itemsText}%0A%0A🚚 گەیاندن: ${delivery} IQD%0A💰 کۆی گشتی: ${totalVal} IQD`;
@@ -645,8 +715,8 @@
         document.getElementById('admin-orders-list').innerHTML = orders.map((o, i) => `
             <div class="admin-section" style="font-size:14px;">
                 <b style="color:var(--accent); font-size:16px;">وەسڵ: #${o.id}</b><br>👤 ناو: ${o.name}<br>📱 مۆبایل: ${o.phone}<br>📍 ناونیشان: ${o.city} - ${o.neighborhood}<br>
-                <div style="background:#f1f5f9; padding:8px; margin:8px 0; border-radius:5px; border:1px solid #e2e8f0;">
-                    ${o.items.map(it => `<div style="margin-bottom:5px; border-bottom:1px solid #cbd5e1; padding-bottom:5px;">${it.n}<br><span style="color:#64748b; font-size:12px;">ڕەنگ: ${it.c} | دانە: ${it.q}</span></div>`).join('')}
+                <div style="background:var(--bg); padding:8px; margin:8px 0; border-radius:5px; border:1px solid var(--border);">
+                    ${o.items.map(it => `<div style="margin-bottom:5px; border-bottom:1px solid var(--border); padding-bottom:5px;">${it.n}<br><span style="color:#64748b; font-size:12px;">ڕەنگ: ${it.c} | دانە: ${it.q}</span></div>`).join('')}
                 </div>
                 🚚 گەیاندن: ${o.delivery} IQD<br>💰 کۆی گشتی: <b>${o.total} IQD</b>
                 <button onclick="deleteOrder(${i})" style="color:white; background:#ef4444; border:none; padding:8px; border-radius:5px; margin-top:10px; cursor:pointer; width:100%; font-family:inherit;">سڕینەوەی ئەم داواکارییە</button>
@@ -693,7 +763,7 @@
 
     function renderAdminPages() {
         document.getElementById('admin-pages-list').innerHTML = pages.map((p, i) => `
-            <div style="display:flex; justify-content:space-between; align-items:center; padding:8px; background:#f1f5f9; margin-bottom:5px; border-radius:6px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; padding:8px; background:var(--bg); margin-bottom:5px; border-radius:6px; border:1px solid var(--border);">
                 <span>${p.title}</span> 
                 <div>
                     <button onclick="editPage(${i})" style="color:#0284c7; cursor:pointer; border:none; background:none; font-family:inherit; margin-left:10px;">دەستکاری</button>
@@ -706,10 +776,10 @@
     function deletePage(i) { pages.splice(i,1); localStorage.setItem('pages', JSON.stringify(pages)); renderAdminPages(); renderMenu(); }
 
     function renderMenu() {
-        let menu = `<button class="add-btn" style="background:#f1f5f9; color:var(--main); margin-bottom:5px;" onclick="showPage('p-home')">🏠 پەرەی سەرەکی</button>`;
+        let menu = `<button class="add-btn" style="background:var(--bg); color:var(--text); border:1px solid var(--border); margin-bottom:5px;" onclick="showPage('p-home')">🏠 پەرەی سەرەکی</button>`;
         let content = '';
         pages.forEach((p, i) => {
-            menu += `<button class="add-btn" style="background:#f1f5f9; color:var(--main); margin-bottom:5px;" onclick="showPage('page-${i}')">📄 ${p.title}</button>`;
+            menu += `<button class="add-btn" style="background:var(--bg); color:var(--text); border:1px solid var(--border); margin-bottom:5px;" onclick="showPage('page-${i}')">📄 ${p.title}</button>`;
             content += `<div id="page-${i}" class="page"><h3>${p.title}</h3><hr><p style="white-space: pre-wrap;">${p.content}</p></div>`;
         });
         document.getElementById('dynamic-menu-list').innerHTML = menu; document.getElementById('dynamic-pages').innerHTML = content;
