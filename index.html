@@ -24,12 +24,17 @@
 
         .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 15px; padding: 15px; }
         .card { background: white; border-radius: 16px; padding: 15px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); text-align: center; display: flex; flex-direction: column; justify-content: space-between; position: relative; border: 1px solid #e2e8f0; transition: 0.2s; }
-        .card img { width: 100%; height: 130px; object-fit: contain; margin-bottom: 10px; }
         .card h4 { margin: 0 0 5px 0; font-size: 16px; color: #0f172a; }
         .card .price-container { margin-bottom: 12px; }
         .card .price { color: #16a34a; font-weight: 700; font-size: 16px; }
         .card .old-price { text-decoration: line-through; color: #94a3b8; font-size: 12px; margin-left: 6px; }
         
+        /* ستایلی نوێ بۆ سلایدی وێنە و ڤیدیۆکان */
+        .media-scroller { display: flex; overflow-x: auto; gap: 5px; margin-bottom: 10px; scroll-snap-type: x mandatory; scrollbar-width: none; border-radius: 8px; }
+        .media-scroller::-webkit-scrollbar { display: none; }
+        .media-item { flex: 0 0 100%; scroll-snap-align: start; }
+        .media-item img, .media-item video { width: 100%; height: 130px; object-fit: contain; background: #f8fafc; border-radius: 8px; }
+
         .add-btn { background: var(--main); color: white; border: none; padding: 12px; border-radius: 8px; width: 100%; font-weight: 600; cursor: pointer; font-family: inherit; font-size: 14px; transition: 0.2s; }
         .add-btn.action { background: var(--accent); color: #0f172a; }
 
@@ -58,6 +63,10 @@
         .receipt-box { background: #f8fafc; padding: 20px; border-radius: 12px; border: 2px dashed #cbd5e1; margin-bottom: 15px; text-align: right; font-size: 14px; color: #0f172a; }
         .receipt-header { text-align: center; border-bottom: 1px solid #e2e8f0; padding-bottom: 10px; margin-bottom: 10px; }
         .receipt-item { display: flex; justify-content: space-between; margin-bottom: 5px; font-size: 13px; border-bottom: 1px dashed #e2e8f0; padding-bottom: 5px; }
+
+        /* دوگمەی کڕیاران لەناو ئادمین بۆ چات */
+        .user-chat-btn { padding:8px 12px; border-radius:8px; border:1px solid #cbd5e1; background:white; cursor:pointer; white-space:nowrap; font-family:inherit; font-size:13px; }
+        .user-chat-btn.active { background:#e2e8f0; font-weight:bold; border-color:#94a3b8; }
     </style>
 </head>
 <body id="mainBody">
@@ -76,7 +85,7 @@
                 <option value="en">EN</option>
             </select>
             <div onclick="contactWhatsApp()" style="cursor:pointer; font-size: 22px; color: #22c55e;" title="پەیوەندی بە واتسئەپ">📞</div>
-            <div onclick="openModal('chat-modal')" style="cursor:pointer; font-size: 22px;">💬</div>
+            <div onclick="openUserChat()" style="cursor:pointer; font-size: 22px;">💬</div>
             <div onclick="openModal('cart-modal')" style="cursor:pointer; font-size: 22px; position:relative;">
                 🛒 <span id="cart-count" style="position:absolute; top:-6px; right:-10px; background:#ef4444; color:white; border-radius:50%; width: 18px; height: 18px; display: flex; align-items: center; justify-content: center; font-size:11px; font-weight: bold;">0</span>
             </div>
@@ -118,7 +127,9 @@
         <input id="pColors" placeholder="ڕەنگەکان (بە فاریزە جیای بکەرەوە)">
         <input id="pOldPrice" placeholder="نرخی پێشوو (بۆ داشکاندن)">
         <input id="pPrice" type="number" placeholder="نرخی کۆتایی (تەنها ژمارە)">
-        <input id="pImage" placeholder="لینکی وێنە">
+        <input id="pImage" placeholder="لینکی وێنەی سەرەکی">
+        <input id="pExtraMedia" placeholder="لینکی ڤیدیۆ یان وێنەی زیاتر (بە فاریزە جیای بکەرەوە)">
+        
         <button onclick="saveProduct()" class="add-btn" style="background:#16a34a;">بڵاوکردنەوە</button>
     </div>
 
@@ -136,10 +147,23 @@
     </div>
 
     <div class="admin-section">
-        <h4>💬 چاتی کڕیاران:</h4>
-        <div id="admin-chat-box" class="chat-box"></div>
+        <h4>💬 چاتی کڕیاران (تایبەت):</h4>
+        <p style="font-size:12px; color:#64748b; margin-top:0;">کلیک لە ناوی هەر کڕیارێک بکە بۆ بینینی نامەکانی و وەڵامدانەوەی.</p>
+        <div id="admin-chat-users" style="display:flex; gap:10px; overflow-x:auto; margin-bottom:10px; padding-bottom:5px;"></div>
+        <div id="admin-chat-box" class="chat-box" style="height: 200px;"></div>
         <input id="adminMsg" placeholder="وەڵام بنووسە...">
         <button onclick="sendMsg('admin')" class="add-btn">ناردن</button>
+    </div>
+</div>
+
+<div id="user-login-modal" class="modal">
+    <div class="modal-content" style="text-align: center;">
+        <h3 style="color:var(--main); margin-top:0;">👤 چوونەژوورەوە / هەژمار</h3>
+        <p style="font-size:13px; color:#64748b; margin-bottom:15px;">پێویستە زانیارییەکانت بنووسیت پێش کڕین یان چاتکردن</p>
+        <input id="loginName" placeholder="ناوی سیانی بنووسە...">
+        <input id="loginPhone" type="tel" placeholder="ژمارەی مۆبایل بنووسە...">
+        <button onclick="userLogin()" class="add-btn action">چوونەژوورەوە</button>
+        <button onclick="closeModal('user-login-modal')" class="add-btn" style="background:#ef4444; margin-top:8px;">دواتر</button>
     </div>
 </div>
 
@@ -231,9 +255,14 @@
     
     let pages = JSON.parse(localStorage.getItem('pages')) || [];
     let orders = JSON.parse(localStorage.getItem('orders')) || [];
-    let chats = JSON.parse(localStorage.getItem('chats')) || [];
+    // چات گۆڕدرا بۆ ئۆبجێکت بۆ ئەوەی هەر کڕیارە و بە جیا پاشەکەوت بکرێت
+    let chatsObj = JSON.parse(localStorage.getItem('userChatsObj')) || {}; 
     let storeSettings = JSON.parse(localStorage.getItem('storeSettings')) || { wa: "9647700000000" };
     
+    // سیستەمی یوزەر
+    let currentUserName = localStorage.getItem('currentUserName') || null;
+    let activeAdminChatUser = null;
+
     let cart = [];
     let isAdmin = false;
 
@@ -246,6 +275,30 @@
     function openModal(id) { document.getElementById(id).style.display='flex'; }
     function closeModal(id) { document.getElementById(id).style.display='none'; }
     
+    // مەرجدارکردنی چوونەژوورەوە بۆ کڕیار
+    function requireLogin(callback) {
+        if(currentUserName) {
+            callback();
+        } else {
+            openModal('user-login-modal');
+        }
+    }
+
+    function userLogin() {
+        let n = document.getElementById('loginName').value.trim();
+        let p = document.getElementById('loginPhone').value.trim();
+        if(n && p) {
+            currentUserName = n + " (" + p + ")";
+            localStorage.setItem('currentUserName', currentUserName);
+            closeModal('user-login-modal');
+            showToast("بەخێربێیت " + n);
+            // ئەگەر کڕیار ویستبێتی چات بکات یەکسەر چاتەکەی بۆ دەکرێتەوە
+            renderUserChat();
+        } else {
+            showToast("پێویستە ناو و ژمارەی مۆبایل بنووسیت");
+        }
+    }
+
     function closeAdmin() { 
         isAdmin = false; 
         document.getElementById('admin-panel').style.display='none'; 
@@ -266,9 +319,11 @@
             closeModal('admin-login-modal');
             document.getElementById('admin-panel').style.display='block';
             document.getElementById('adminWaNum').value = storeSettings.wa;
-            renderOrders(); renderAdminPages(); renderChats();
+            renderOrders(); 
+            renderAdminPages(); 
             renderProducts(allProds);
-            renderAdminProducts(); // ڕێندەرکردنی لیستی سڕینەوە
+            renderAdminProducts();
+            renderAdminChatUsers(); // نیشاندانی ناوی کڕیارەکان لە چاتی ئادمین
             document.getElementById('adminPassInput').value = '';
             showToast("بەخێربێیتەوە ئادمین!");
         } else { showToast("کۆدەکە هەڵەیە یان بەسەرچووە!"); }
@@ -297,10 +352,20 @@
                     ${p.colors.map(c => `<option value="${c}">${c}</option>`).join('')}
                 </select>` : `<input type="hidden" id="color-${p.id}" value="وەک خۆی">`;
             
+            // دروستکردنی سلاید بۆ ڤیدیۆ و وێنەکان
+            let mediaHtml = `<div class="media-scroller">
+                <div class="media-item"><img src="${p.image}"></div>
+                ${(p.extraMedia || []).map(m => `
+                    <div class="media-item">
+                        ${m.match(/\.(mp4|webm|ogg|mov)/i) ? `<video src="${m}" controls></video>` : `<img src="${m}">`}
+                    </div>
+                `).join('')}
+            </div>`;
+            
             return `
             <div class="card">
                 ${p.oldPrice ? `<div class="discount-badge">داشکاندن</div>` : ''}
-                <img src="${p.image}">
+                ${mediaHtml}
                 <h4>${p.name}</h4>
                 <div class="price-container">
                     <span class="price">${p.price} IQD</span>
@@ -316,12 +381,10 @@
                 </div>
 
                 <button class="add-btn" onclick="addToCart('${p.id}')">کڕین</button>
-                ${isAdmin ? `<button onclick="deleteProd('${p.id}')" style="background:#ef4444; color:white; border:none; padding:8px; border-radius:6px; margin-top:10px; cursor:pointer; width:100%; font-family:inherit;">سڕینەوەی بەرهەم 🗑️</button>` : ''}
             </div>`
         }).join('');
     }
 
-    // فەنکشنە نوێیەکە بۆ پیشاندانی کاڵاکان لە پەناڵی ئادمین بۆ سڕینەوە
     function renderAdminProducts() {
         let container = document.getElementById('admin-products-list');
         if(!container) return;
@@ -351,15 +414,17 @@
         let op = document.getElementById('pOldPrice').value;
         let img = document.getElementById('pImage').value;
         let c = document.getElementById('pColors').value;
+        let em = document.getElementById('pExtraMedia').value; // ڤیدیۆ یان وێنەی زیاتر
         
         let colorArray = c ? c.split(',').map(x => x.trim()).filter(x => x !== "") : [];
+        let extraMediaArray = em ? em.split(',').map(x => x.trim()).filter(x => x !== "") : []; // بۆ مێدیای زیاتر
 
         if(n && p) {
             let newId = 'P' + Math.floor(Math.random()*999999);
-            allProds.push({id: newId, name:n, price:p, oldPrice:op, image:img, colors: colorArray});
+            allProds.push({id: newId, name:n, price:p, oldPrice:op, image:img, colors: colorArray, extraMedia: extraMediaArray});
             localStorage.setItem('products', JSON.stringify(allProds));
             renderProducts(allProds);
-            renderAdminProducts(); // ئەپدەیتکردنی لیستەکەی ئادمین
+            renderAdminProducts();
             showToast("بڵاوکرایەوە!");
         } else {
             showToast("پێویستە ناو و نرخی بەرهەم بنووسیت");
@@ -371,7 +436,7 @@
             allProds = allProds.filter(p => p.id !== pid);
             localStorage.setItem('products', JSON.stringify(allProds));
             renderProducts(allProds);
-            renderAdminProducts(); // ئەپدەیتکردنی لیستەکەی ئادمین
+            renderAdminProducts();
             showToast("بەرهەمەکە سڕایەوە!");
         }
     }
@@ -448,13 +513,22 @@
     }
 
     function openCheckout() {
-        if(cart.length > 0) { 
-            updateCartUI();
-            closeModal('cart-modal'); 
-            openModal('checkout-modal'); 
-        } else {
-            showToast("سەبەتەکەت بەتاڵە!");
-        }
+        requireLogin(() => {
+            if(cart.length > 0) { 
+                updateCartUI();
+                closeModal('cart-modal'); 
+                openModal('checkout-modal'); 
+                
+                // پڕکردنەوەی خۆکارانەی ناو و ژمارەی مۆبایل لەسەر بنەمای هەژمارەکە
+                if(currentUserName) {
+                    let parts = currentUserName.split(" (");
+                    if(parts.length > 0) document.getElementById('cName').value = parts[0];
+                    if(parts.length > 1) document.getElementById('cPhone').value = parts[1].replace(")", "");
+                }
+            } else {
+                showToast("سەبەتەکەت بەتاڵە!");
+            }
+        });
     }
 
     function submitOrder() {
@@ -536,7 +610,7 @@
         
         updateCartUI();
         closeModal('checkout-modal');
-        openModal('receipt-modal'); // کردنەوەی وەسڵەکە
+        openModal('receipt-modal');
         showToast("داواکارییەکەت سەرکەوتوو بوو!");
     }
 
@@ -601,23 +675,66 @@
         closeModal('menu-modal');
     }
 
+    // بەشی چاتی تایبەت (کڕیار و ئادمین)
+    function openUserChat() {
+        requireLogin(() => {
+            openModal('chat-modal');
+            renderUserChat();
+        });
+    }
+
     function sendMsg(type) {
-        let inp = type === 'user' ? 'userMsg' : 'adminMsg';
-        let val = document.getElementById(inp).value;
-        if(val) {
-            chats.push({type, text: val});
-            localStorage.setItem('chats', JSON.stringify(chats));
-            document.getElementById(inp).value = '';
-            renderChats();
+        if(type === 'user') {
+            let val = document.getElementById('userMsg').value;
+            if(val && currentUserName) {
+                if(!chatsObj[currentUserName]) chatsObj[currentUserName] = [];
+                chatsObj[currentUserName].push({type: 'user', text: val});
+                localStorage.setItem('userChatsObj', JSON.stringify(chatsObj));
+                document.getElementById('userMsg').value = '';
+                renderUserChat();
+            }
+        } else if(type === 'admin') {
+            let val = document.getElementById('adminMsg').value;
+            if(val && activeAdminChatUser) {
+                if(!chatsObj[activeAdminChatUser]) chatsObj[activeAdminChatUser] = [];
+                chatsObj[activeAdminChatUser].push({type: 'admin', text: val});
+                localStorage.setItem('userChatsObj', JSON.stringify(chatsObj));
+                document.getElementById('adminMsg').value = '';
+                renderAdminChatThread(activeAdminChatUser);
+            } else {
+                showToast("کڕیارێک هەڵبژێرە بۆ وەڵامدانەوە");
+            }
         }
     }
 
-    function renderChats() {
-        let h = chats.map(m => `<div class="msg ${m.type}">${m.text}</div>`).join('');
+    function renderUserChat() {
+        if(!currentUserName) return;
+        let userChats = chatsObj[currentUserName] || [];
+        let h = userChats.map(m => `<div class="msg ${m.type}">${m.text}</div>`).join('');
         document.getElementById('user-chat-box').innerHTML = h;
-        document.getElementById('admin-chat-box').innerHTML = h;
         let ub = document.getElementById('user-chat-box'); ub.scrollTop = ub.scrollHeight;
-        let ab = document.getElementById('admin-chat-box'); ab.scrollTop = ab.scrollHeight;
+    }
+
+    function renderAdminChatUsers() {
+        let users = Object.keys(chatsObj);
+        if(users.length === 0) {
+            document.getElementById('admin-chat-users').innerHTML = '<span style="font-size:12px; color:#94a3b8;">هیچ نامەیەک نییە</span>';
+            return;
+        }
+        document.getElementById('admin-chat-users').innerHTML = users.map(u => 
+            `<button class="user-chat-btn ${activeAdminChatUser === u ? 'active' : ''}" onclick="renderAdminChatThread('${u}')">${u}</button>`
+        ).join('');
+    }
+
+    function renderAdminChatThread(user) {
+        activeAdminChatUser = user;
+        renderAdminChatUsers(); // بۆ ئەوەی دوگمەی کڕیارەکە ببێت بە ڕەساسی تۆخ تا بزانیت کێ وەڵام دەدەیتەوە
+        let userChats = chatsObj[user] || [];
+        let h = userChats.map(m => `<div class="msg ${m.type}">${m.text}</div>`).join('');
+        
+        let adminBox = document.getElementById('admin-chat-box');
+        adminBox.innerHTML = h;
+        adminBox.scrollTop = adminBox.scrollHeight;
     }
 
     function filterProds() {
@@ -636,7 +753,6 @@
 
     renderProducts(allProds);
     renderMenu();
-    renderChats();
     updateCartUI();
 </script>
 </body>
