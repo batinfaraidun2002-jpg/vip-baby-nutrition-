@@ -508,7 +508,170 @@
             document.getElementById('admin-panel').style.display='block';
         }
     }
+<!DOCTYPE html>
+<html lang="ku" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VIP Baby Store - Official</title>
+    
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 
+    <style>
+        :root { --main: #1e293b; --accent: #f59e0b; --bg: #f8fafc; --text: #334155; --card-bg: #ffffff; --border: #e2e8f0; --input-bg: #ffffff; }
+        [data-theme="dark"] { --bg: #0f172a; --text: #f8fafc; --card-bg: #1e293b; --border: #334155; --input-bg: #334155; }
+        body { font-family: Tahoma, Arial, sans-serif; background: var(--bg); color: var(--text); margin: 0; padding-bottom: 50px; transition: 0.3s; }
+        .header { background: var(--main); color: white; padding: 15px 20px; position: sticky; top: 0; z-index: 1000; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); }
+        .nav-row { display: flex; justify-content: space-between; align-items: center; }
+        .logo-container { display: flex; align-items: center; gap: 10px; padding: 5px; }
+        .logo { width: 45px; height: 45px; border-radius: 50%; border: 2px solid white; object-fit: cover; }
+        .search-bar { width: 100%; margin-top: 15px; padding: 12px; border-radius: 8px; border: 1px solid var(--border); box-sizing: border-box; outline: none; font-family: inherit; font-size: 14px; transition: 0.3s; background: var(--input-bg); color: var(--text); }
+        .page { display: none; padding: 20px; background: var(--card-bg); margin: 15px; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
+        .active-page { display: block; }
+        .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 15px; padding: 15px; }
+        .card { background: var(--card-bg); border-radius: 16px; padding: 15px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); text-align: center; position: relative; border: 1px solid var(--border); transition: 0.2s; }
+        .media-scroller { display: flex; overflow-x: auto; gap: 5px; margin-bottom: 10px; scroll-snap-type: x mandatory; border-radius: 8px; }
+        .media-item { flex: 0 0 100%; scroll-snap-align: start; }
+        .media-item img { width: 100%; height: 130px; object-fit: contain; }
+        .add-btn { background: var(--main); color: white; border: none; padding: 12px; border-radius: 8px; width: 100%; font-weight: 600; cursor: pointer; }
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 3000; align-items: center; justify-content: center; }
+        .modal-content { background: var(--card-bg); padding: 25px; border-radius: 16px; width: 90%; max-width: 420px; max-height: 90vh; overflow-y: auto; }
+        .chat-box { height: 250px; overflow-y: auto; border: 1px solid var(--border); background: var(--bg); padding: 15px; margin-bottom: 15px; border-radius: 10px; display: flex; flex-direction: column; gap: 8px; }
+        #toast { visibility: hidden; min-width: 250px; background-color: var(--main); color: #fff; text-align: center; border-radius: 8px; padding: 16px; position: fixed; z-index: 9999; left: 50%; bottom: 30px; transform: translateX(-50%); }
+        #toast.show { visibility: visible; opacity: 1; }
+        .admin-section { border: 1px solid var(--border); padding: 20px; border-radius: 12px; margin-bottom: 20px; background: var(--card-bg); }
+        #admin-panel { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg); z-index: 5000; overflow-y: auto; padding: 20px; box-sizing: border-box; }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <div class="nav-row">
+        <button onclick="openModal('menu-modal')" style="background:none; border:none; color:white; font-size:24px;">☰</button>
+        <div class="logo-container" onclick="openAdminLogin()">
+            <img src="https://i.postimg.cc/RWNMnJDG/image.jpg" class="logo">
+            <h2 style="margin:0; font-size:18px;">VIP Baby</h2>
+        </div>
+        <div style="display:flex; gap:15px; font-size:20px;">
+            <div onclick="toggleTheme()" id="themeIcon">🌙</div>
+            <div onclick="openModal('chat-modal')">💬</div>
+            <div onclick="openModal('cart-modal')" style="position:relative;">🛒<span id="cart-count" style="position:absolute; top:-5px; right:-8px; background:red; font-size:10px; border-radius:50%; padding:2px 5px;">0</span></div>
+        </div>
+    </div>
+    <input type="text" id="searchInput" class="search-bar" placeholder="گەڕان..." onkeyup="filterProds()">
+</div>
+
+<div id="p-home" class="page active-page">
+    <div class="product-grid" id="products-container"></div>
+</div>
+
+<div id="admin-panel">
+    <button onclick="closeAdmin()" style="float:left; background:red; color:white; border:none; padding:10px; border-radius:8px;">داخستن</button>
+    <h2>🛠 بەڕێوەبردن</h2>
+    <div class="admin-section">
+        <h4>📦 زیادکردنی بەرهەم</h4>
+        <input id="pName" placeholder="ناوی بەرهەم">
+        <input id="pPrice" type="number" placeholder="نرخ">
+        <input id="pImage" placeholder="لینکی وێنە">
+        <button onclick="saveProduct()" class="add-btn">بڵاوکردنەوە</button>
+    </div>
+    <div class="admin-section">
+        <h4>💬 چاتی کڕیاران</h4>
+        <div id="admin-chat-list"></div>
+    </div>
+</div>
+
+<div id="cart-modal" class="modal"><div class="modal-content"><h3>🛒 سەبەتە</h3><div id="cart-items"></div><button onclick="closeModal('cart-modal')" class="add-btn" style="background:red;">داخستن</button></div></div>
+<div id="chat-modal" class="modal"><div class="modal-content"><h3>💬 چات</h3><div id="user-chat-box" class="chat-box"></div><input id="userMsg" placeholder="نامە..."><button onclick="sendMsg()" class="add-btn">ناردن</button></div></div>
+<div id="admin-login-modal" class="modal"><div class="modal-content"><h3>🔐 چوونەژوورە ئادمین</h3><input type="password" id="adminPass" placeholder="پاسۆرد"><button onclick="verifyAdmin()" class="add-btn">چوونەژوورە</button></div></div>
+
+<div id="toast"></div>
+
+<script>
+    // --- FIREBASE CONFIG ---
+    const firebaseConfig = {
+        apiKey: "YOUR_API_KEY",
+        authDomain: "YOUR_PROJECT.firebaseapp.com",
+        databaseURL: "https://YOUR_PROJECT-default-rtdb.firebaseio.com",
+        projectId: "YOUR_PROJECT",
+        storageBucket: "YOUR_PROJECT.appspot.com",
+        messagingSenderId: "YOUR_ID",
+        appId: "YOUR_APP_ID"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    let allProds = [];
+    let cart = [];
+    let isAdmin = false;
+
+    // Load Data
+    db.ref('products').on('value', snap => {
+        allProds = snap.val() ? Object.values(snap.val()) : [];
+        renderProducts(allProds);
+    });
+
+    function renderProducts(list) {
+        let container = document.getElementById('products-container');
+        container.innerHTML = list.map(p => `
+            <div class="card">
+                <div class="media-item"><img src="${p.image}"></div>
+                <h4>${p.name}</h4>
+                <p>${p.price} IQD</p>
+                <button class="add-btn" onclick="addToCart('${p.id}')">🛒 کڕین</button>
+            </div>
+        `).join('');
+    }
+
+    function addToCart(id) {
+        let p = allProds.find(x => x.id === id);
+        cart.push(p);
+        document.getElementById('cart-count').innerText = cart.length;
+        showToast("زیادکرا بۆ سەبەتە");
+    }
+
+    function saveProduct() {
+        let id = 'P' + Date.now();
+        let p = {
+            id: id,
+            name: document.getElementById('pName').value,
+            price: document.getElementById('pPrice').value,
+            image: document.getElementById('pImage').value
+        };
+        db.ref('products/' + id).set(p).then(() => {
+            showToast("سەرکەوتوو بوو");
+            document.getElementById('pName').value = '';
+        });
+    }
+
+    function openAdminLogin() { openModal('admin-login-modal'); }
+    function verifyAdmin() {
+        if(document.getElementById('adminPass').value === "2024") {
+            isAdmin = true; closeModal('admin-login-modal');
+            document.getElementById('admin-panel').style.display = 'block';
+        }
+    }
+    function closeAdmin() { document.getElementById('admin-panel').style.display = 'none'; }
+
+    function toggleTheme() {
+        let body = document.body;
+        let theme = body.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+        body.setAttribute('data-theme', theme);
+        document.getElementById('themeIcon').innerText = theme === 'dark' ? '☀️' : '🌙';
+    }
+
+    function showToast(m) { let t = document.getElementById('toast'); t.innerText=m; t.className='show'; setTimeout(()=>t.className='', 2000); }
+    function openModal(id) { document.getElementById(id).style.display='flex'; }
+    function closeModal(id) { document.getElementById(id).style.display='none'; }
+    function filterProds() {
+        let val = document.getElementById('searchInput').value.toLowerCase();
+        renderProducts(allProds.filter(p => p.name.toLowerCase().includes(val)));
+    }
+</script>
+</body>
+</html>
 </script>
 </body>
 </html>
