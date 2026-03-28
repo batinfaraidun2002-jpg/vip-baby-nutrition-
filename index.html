@@ -107,16 +107,8 @@
     </div>
 
     <div class="admin-section">
-        <h4>📦 داواکارییەکان:</h4>
-        <div id="admin-orders-list"></div>
-    </div>
-
-    <div class="admin-section">
-        <h4>📄 بەڕێوەبردنی لاپەڕەکان:</h4>
-        <input id="pageTitle" placeholder="ناوی لاپەڕە">
-        <textarea id="pageContent" rows="4" placeholder="ناوەڕۆک"></textarea>
-        <button onclick="savePage()" class="add-btn" style="background:#2563eb;">دروستکردنی لاپەڕە</button>
-        <div id="admin-pages-list" style="margin-top:15px;"></div>
+        <h4>🗑️ لیستی بەرهەمەکان بۆ سڕینەوە:</h4>
+        <div id="admin-products-list"></div>
     </div>
 
     <div class="admin-section">
@@ -128,6 +120,19 @@
         <input id="pPrice" type="number" placeholder="نرخی کۆتایی (تەنها ژمارە)">
         <input id="pImage" placeholder="لینکی وێنە">
         <button onclick="saveProduct()" class="add-btn" style="background:#16a34a;">بڵاوکردنەوە</button>
+    </div>
+
+    <div class="admin-section">
+        <h4>📦 داواکارییەکان:</h4>
+        <div id="admin-orders-list"></div>
+    </div>
+
+    <div class="admin-section">
+        <h4>📄 بەڕێوەبردنی لاپەڕەکان:</h4>
+        <input id="pageTitle" placeholder="ناوی لاپەڕە">
+        <textarea id="pageContent" rows="4" placeholder="ناوەڕۆک"></textarea>
+        <button onclick="savePage()" class="add-btn" style="background:#2563eb;">دروستکردنی لاپەڕە</button>
+        <div id="admin-pages-list" style="margin-top:15px;"></div>
     </div>
 
     <div class="admin-section">
@@ -263,6 +268,7 @@
             document.getElementById('adminWaNum').value = storeSettings.wa;
             renderOrders(); renderAdminPages(); renderChats();
             renderProducts(allProds);
+            renderAdminProducts(); // ڕێندەرکردنی لیستی سڕینەوە
             document.getElementById('adminPassInput').value = '';
             showToast("بەخێربێیتەوە ئادمین!");
         } else { showToast("کۆدەکە هەڵەیە یان بەسەرچووە!"); }
@@ -283,7 +289,6 @@
         window.open(`https://wa.me/${storeSettings.wa}`, '_blank');
     }
 
-    // لێرەدا دیاری کراوە کە دوگمەی سڕینەوە تەنها کاتێک دەردەکەوێت کە ئادمین بیت (isAdmin = true)
     function renderProducts(list) {
         document.getElementById('products-container').innerHTML = list.map(p => {
             let colorOptions = (p.colors && p.colors.length > 0) ? 
@@ -316,6 +321,30 @@
         }).join('');
     }
 
+    // فەنکشنە نوێیەکە بۆ پیشاندانی کاڵاکان لە پەناڵی ئادمین بۆ سڕینەوە
+    function renderAdminProducts() {
+        let container = document.getElementById('admin-products-list');
+        if(!container) return;
+        
+        if(allProds.length === 0) {
+            container.innerHTML = '<p style="font-size:13px; color:#64748b; text-align:center;">هیچ بەرهەمێک نییە</p>';
+            return;
+        }
+
+        container.innerHTML = allProds.map(p => `
+            <div style="display:flex; justify-content:space-between; align-items:center; padding:10px; background:#f1f5f9; margin-bottom:8px; border-radius:8px; border:1px solid #e2e8f0;">
+                <div style="display:flex; align-items:center; gap:10px;">
+                    <img src="${p.image}" style="width:40px; height:40px; border-radius:4px; object-fit:cover;">
+                    <div style="font-size:13px; text-align:right;">
+                        <b>${p.name}</b><br>
+                        <span style="color:#16a34a; font-weight:bold;">${p.price} IQD</span>
+                    </div>
+                </div>
+                <button onclick="deleteProd('${p.id}')" style="background:#ef4444; color:white; border:none; padding:6px 12px; border-radius:6px; cursor:pointer; font-family:inherit; font-size:12px;">سڕینەوە 🗑️</button>
+            </div>
+        `).join('');
+    }
+
     function saveProduct() {
         let n = document.getElementById('pName').value;
         let p = document.getElementById('pPrice').value;
@@ -330,9 +359,20 @@
             allProds.push({id: newId, name:n, price:p, oldPrice:op, image:img, colors: colorArray});
             localStorage.setItem('products', JSON.stringify(allProds));
             renderProducts(allProds);
+            renderAdminProducts(); // ئەپدەیتکردنی لیستەکەی ئادمین
             showToast("بڵاوکرایەوە!");
         } else {
             showToast("پێویستە ناو و نرخی بەرهەم بنووسیت");
+        }
+    }
+
+    function deleteProd(pid) {
+        if(confirm("دڵنیایت لە سڕینەوەی ئەم بەرهەمە؟")) {
+            allProds = allProds.filter(p => p.id !== pid);
+            localStorage.setItem('products', JSON.stringify(allProds));
+            renderProducts(allProds);
+            renderAdminProducts(); // ئەپدەیتکردنی لیستەکەی ئادمین
+            showToast("بەرهەمەکە سڕایەوە!");
         }
     }
 
@@ -592,15 +632,6 @@
         }
 
         renderProducts(allProds.filter(p => p.name.toLowerCase().includes(v)));
-    }
-
-    function deleteProd(pid) {
-        if(confirm("دڵنیایت لە سڕینەوەی ئەم بەرهەمە؟")) {
-            allProds = allProds.filter(p => p.id !== pid);
-            localStorage.setItem('products', JSON.stringify(allProds));
-            renderProducts(allProds);
-            showToast("بەرهەمەکە سڕایەوە!");
-        }
     }
 
     renderProducts(allProds);
