@@ -420,7 +420,18 @@
         let t = document.getElementById("toast"); t.innerText = msg; t.className = "show";
         setTimeout(() => t.className = "", 3000);
     }
-
+if (db) {
+    db.ref('products').on('value', (snapshot) => {
+        const data = snapshot.val();
+        if (data) {
+            allProds = Object.keys(data).map(key => ({
+                ...data[key],
+                id: key
+            }));
+            renderProducts(allProds);
+        }
+    });
+}
     function openModal(id) { document.getElementById(id).style.display='flex'; }
     function closeModal(id) { document.getElementById(id).style.display='none'; }
     function requireLogin(callback) { if(currentUserName) { callback(); } else { openModal('user-login-modal'); } }
