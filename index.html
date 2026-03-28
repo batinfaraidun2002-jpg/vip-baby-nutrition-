@@ -9,7 +9,7 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 
     <style>
-        /* گۆڕانکاری بۆ دارک مۆد و ڕەنگە گۆڕدراوەکان */
+‎        /* گۆڕانکاری بۆ دارک مۆد و ڕەنگە گۆڕدراوەکان */
         :root { 
             --main: #1e293b; 
             --accent: #f59e0b; 
@@ -118,7 +118,7 @@
             </div>
         </div>
     </div>
-    <input type="text" id="searchInput" class="search-bar" data-i18n="search" placeholder="گەڕان بۆبەرهەمەکان..." onkeyup="filterProds()">
+    <input type="text" id="searchInput" class="search-bar" data-i18n="search" placeholder="گەڕان بۆ بەرهەمەکان..." onkeyup="filterProds()">
 </div>
 
 <div id="p-home" class="page active-page" style="background:transparent; box-shadow:none; padding:0;">
@@ -161,7 +161,7 @@
 
     <div class="admin-section">
         <h4>🔐 گۆڕینی پاسۆردی ئادمین:</h4>
-        <label style="font-size:12px; color:#64748b;">دەتوانیت پاسۆردی چوونەژوورەوەت بگۆڕیت (خۆکارانە20242024ـە)</label>
+        <label style="font-size:12px; color:#64748b;">دەتوانیت پاسۆردی چوونەژوورەوەت بگۆڕیت (خۆکارانە 20242024ـە)</label>
         <input type="text" id="newAdminPass" placeholder="پاسۆردی نوێ بنووسە...">
         <button onclick="changePassword()" class="add-btn" style="background:#f59e0b;">گۆڕینی پاسۆرد</button>
     </div>
@@ -209,7 +209,7 @@
 
     <div class="admin-section">
         <h4>💬 چاتی کڕیاران (تایبەت):</h4>
-        <p style="font-size:12px; color:#64748b; margin-top:0;">کلیک لە ناوی هەر کڕیارێک بکە بۆ بینینی نامەکانی وەڵامدانەوەی.</p>
+        <p style="font-size:12px; color:#64748b; margin-top:0;">کلیک لە ناوی هەر کڕیارێک بکە بۆ بینینی نامەکانی و وەڵامدانەوەی.</p>
         <div id="admin-chat-users" style="display:flex; gap:10px; overflow-x:auto; margin-bottom:10px; padding-bottom:5px;"></div>
         <div id="admin-chat-box" class="chat-box" style="height: 200px;"></div>
         <input id="adminMsg" placeholder="وەڵام بنووسە...">
@@ -310,7 +310,7 @@
 
 <div id="receipt-modal" class="modal">
     <div class="modal-content">
-        <h3 style="text-align:center; color:#16a34a; margin-top:0;" data-i18n="order_success">✅داواکارییەکەت سەرکەوتوو بوو</h3>
+        <h3 style="text-align:center; color:#16a34a; margin-top:0;" data-i18n="order_success">✅ داواکارییەکەت سەرکەوتوو بوو</h3>
         <p style="text-align:center; font-size:12px; color:#64748b;" data-i18n="screenshot_note">تکایە سکرین شۆتی ئەم وەسڵە بکە بۆ دڵنیایی زیاتر</p>
         
         <div id="receipt-content" class="receipt-box"></div>
@@ -330,21 +330,7 @@
 </div>
 
 <script>
-    // --- FIREBASE CONFIG (لێرە زانیارییەکانت بنووسە) ---
-    const firebaseConfig = {
-        apiKey: "YOUR_API_KEY",
-        authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-        databaseURL: "https://YOUR_PROJECT_ID-default-rtdb.firebaseio.com",
-        projectId: "YOUR_PROJECT_ID",
-        storageBucket: "YOUR_PROJECT_ID.appspot.com",
-        messagingSenderId: "YOUR_MESSAGING_ID",
-        appId: "YOUR_APP_ID"
-    };
-
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.database();
-
-    // --- باری دارک مۆد و ڕەنگەکان ---
+‎    // --- بەشی نوێ: کۆنترۆڵی ڕەنگ و دارک مۆد ---
     let currentTheme = localStorage.getItem('theme') || 'light';
     let customColors = JSON.parse(localStorage.getItem('customColors')) || { main: '#1e293b', accent: '#f59e0b' };
 
@@ -352,15 +338,18 @@
         document.documentElement.style.setProperty('--main', customColors.main);
         document.documentElement.style.setProperty('--accent', customColors.accent);
     }
+
     function applyThemeMode() {
         document.documentElement.setAttribute('data-theme', currentTheme);
         document.getElementById('themeToggleBtn').innerText = currentTheme === 'dark' ? '☀️' : '🌙';
     }
+
     function toggleTheme() {
         currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
         localStorage.setItem('theme', currentTheme);
         applyThemeMode();
     }
+
     function saveThemeColors() {
         customColors.main = document.getElementById('mainColorPick').value;
         customColors.accent = document.getElementById('accentColorPick').value;
@@ -368,48 +357,61 @@
         applyColors();
         showToast("ڕەنگەکان گۆڕدران! 🎨");
     }
+
     function resetThemeColors() {
         customColors = { main: '#1e293b', accent: '#f59e0b' };
         localStorage.setItem('customColors', JSON.stringify(customColors));
+        document.getElementById('mainColorPick').value = customColors.main;
+        document.getElementById('accentColorPick').value = customColors.accent;
         applyColors();
-        showToast("ڕەنگەکان گەڕێندرانەوە!");
+        showToast("ڕەنگەکان گەڕێندرانەوە باری ئاسایی!");
     }
 
+‎    // جێبەجێکردنی ڕەنگەکان لەگەڵ کردنەوەی سایت
     applyColors();
     applyThemeMode();
+    // ----------------------------------------
 
-    // --- متغیرەکان (سەرچاوە ئێستا فایربەیسە) ---
-    let allProds = [];
-    let pages = [];
-    let orders = [];
-    let chatsObj = {};
-    let storeSettings = { wa: "9647700000000" };
-    let categories = ["گشتی"];
+    const firebaseConfig = {};
+    let db = null;
+    if(firebaseConfig.apiKey) { firebase.initializeApp(firebaseConfig); db = firebase.database(); }
+
+    let allProds = JSON.parse(localStorage.getItem('products')) || [];
+    allProds = allProds.map(p => ({...p, id: p.id || 'P' + Math.floor(Math.random()*999999), reviews: p.reviews || []}));
+    
+    let pages = JSON.parse(localStorage.getItem('pages')) || [];
+    let orders = JSON.parse(localStorage.getItem('orders')) || [];
+    let chatsObj = JSON.parse(localStorage.getItem('userChatsObj')) || {}; 
+    let storeSettings = JSON.parse(localStorage.getItem('storeSettings')) || { wa: "9647700000000" };
+    let categories = JSON.parse(localStorage.getItem('categories')) || ["گشتی"];
     let adminPass = localStorage.getItem('adminPass') || "20242024";
+    
+    let currentCategoryFilter = "گشتی";
     let currentUserName = localStorage.getItem('currentUserName') || null;
-    let isAdmin = false;
+    let activeAdminChatUser = null;
     let cart = [];
-    let currentLang = 'ku';
+    let isAdmin = false;
 
-    // وەرگرتنی داتا لە فایربەیس (Real-time)
-    db.ref('products').on('value', snap => { allProds = snap.val() ? Object.values(snap.val()) : []; renderProducts(allProds); });
-    db.ref('categories').on('value', snap => { categories = snap.val() || ["گشتی"]; renderAdminCategories(); });
-    db.ref('pages').on('value', snap => { pages = snap.val() || []; renderAdminPages(); renderMenu(); });
-    db.ref('settings').on('value', snap => { if(snap.val()) storeSettings = snap.val(); });
+    let editingPageIndex = -1;
+    let adminFailedAttempts = 0;
+    let adminLockedOut = false;
 
-    // --- فۆنکشنەکانی زمان و مینیۆ ---
     const dict = {
         ku: { search: "گەڕان بۆ بەرهەمەکان...", footer: "© 2026 VIP Baby Store. گشت مافەکان پارێزراون.", login_title: "👤 چوونەژوورەوە / هەژمار", login_desc: "پێویستە زانیارییەکانت بنووسیت پێش کڕین یان چاتکردن", login_name: "ناوی سیانی بنووسە...", login_phone: "ژمارەی مۆبایل بنووسە...", login_btn: "چوونەژوورەوە", later: "دواتر", menu: "مینیۆی سەرەکی", close: "داخستن", reviews_title: "کۆمێنتەکان ⭐️", write_review: "ڕای خۆت بنووسە:", send: "ناردن", cart_title: "🛒 سەبەتەی کڕین", cart_subtotal: "نرخی کاڵاکان:", delivery: "گەیاندن:", delivery_calc: "لە کاتی کڕین دیاری دەکرێت", total: "کۆی گشتی:", checkout_btn: "تەواوکردنی داواکاری", receiver_info: "📝 زانیاری وەرگر", c_name: "ناوی سیانی پێویستە", c_phone: "ژمارەی مۆبایل پێویستە", c_hood: "ناوی گەڕەک و شوێنی نزیک پێویستە", send_wa: "ناردنی داواکاری بۆ واتسئەپ", back: "گەڕانەوە", order_success: "✅ داواکارییەکەت سەرکەوتوو بوو", screenshot_note: "تکایە سکرین شۆتی ئەم وەسڵە بکە بۆ دڵنیایی زیاتر", close_receipt: "داخستنی وەسڵ", cs_title: "💬 خزمەتگوزاری کڕیاران", chat_placeholder: "چی دەپرسی؟", buy: "کڕین" },
-        ar: { /* ... وەک ئەوەی ناردت ... */ },
-        en: { /* ... وەک ئەوەی ناردت ... */ }
+        ar: { search: "البحث عن المنتجات...", footer: "© 2026 VIP Baby Store. جميع الحقوق محفوظة.", login_title: "👤 تسجيل الدخول / حساب", login_desc: "يجب إدخال معلوماتك قبل الشراء أو الدردشة", login_name: "اكتب اسمك الثلاثي...", login_phone: "اكتب رقم الموبايل...", login_btn: "دخول", later: "لاحقاً", menu: "القائمة الرئيسية", close: "إغلاق", reviews_title: "التعليقات ⭐️", write_review: "اكتب رأيك:", send: "إرسال", cart_title: "🛒 سلة التسوق", cart_subtotal: "سعر المنتجات:", delivery: "التوصيل:", delivery_calc: "يتم التحديد عند الشراء", total: "المجموع الكلي:", checkout_btn: "إتمام الطلب", receiver_info: "📝 معلومات المستلم", c_name: "الاسم الثلاثي مطلوب", c_phone: "رقم الهاتف مطلوب", c_hood: "اسم الحي وأقرب نقطة دالة", send_wa: "إرسال الطلب للواتساب", back: "رجوع", order_success: "✅ تمت عملية الطلب بنجاح", screenshot_note: "يرجى أخذ لقطة شاشة لهذا الوصل لمزيد من التأكيد", close_receipt: "إغلاق الوصل", cs_title: "💬 خدمة العملاء", chat_placeholder: "بماذا تسأل؟", buy: "شراء" },
+        en: { search: "Search products...", footer: "© 2026 VIP Baby Store. All rights reserved.", login_title: "👤 Login / Account", login_desc: "Please enter your details before buying or chatting", login_name: "Enter Full Name...", login_phone: "Enter Mobile Number...", login_btn: "Login", later: "Later", menu: "Main Menu", close: "Close", reviews_title: "Reviews ⭐️", write_review: "Write your review:", send: "Send", cart_title: "🛒 Shopping Cart", cart_subtotal: "Products Price:", delivery: "Delivery:", delivery_calc: "Determined at checkout", total: "Total:", checkout_btn: "Checkout", receiver_info: "📝 Receiver Info", c_name: "Full Name required", c_phone: "Mobile Number required", c_hood: "Neighborhood / Nearest point required", send_wa: "Send Order via WhatsApp", back: "Back", order_success: "✅ Order Successful", screenshot_note: "Please screenshot this receipt for confirmation", close_receipt: "Close Receipt", cs_title: "💬 Customer Service", chat_placeholder: "What are you asking?", buy: "Buy" }
     };
 
+    let currentLang = 'ku';
     function changeLang(lang) {
         currentLang = lang;
         document.documentElement.dir = (lang === 'en') ? 'ltr' : 'rtl';
         document.querySelectorAll('[data-i18n]').forEach(el => {
             let key = el.getAttribute('data-i18n');
-            if(dict[lang][key]) { el.tagName === 'INPUT' ? el.placeholder = dict[lang][key] : el.innerText = dict[lang][key]; }
+            if(dict[lang][key]) {
+                if(el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') { el.placeholder = dict[lang][key]; } 
+                else { el.innerText = dict[lang][key]; }
+            }
         });
         renderProducts(allProds);
     }
@@ -421,420 +423,528 @@
 
     function openModal(id) { document.getElementById(id).style.display='flex'; }
     function closeModal(id) { document.getElementById(id).style.display='none'; }
+    function requireLogin(callback) { if(currentUserName) { callback(); } else { openModal('user-login-modal'); } }
 
     function userLogin() {
         let n = document.getElementById('loginName').value.trim();
         let p = document.getElementById('loginPhone').value.trim();
         if(n && p) {
             currentUserName = n + " (" + p + ")"; localStorage.setItem('currentUserName', currentUserName);
-            closeModal('user-login-modal'); showToast("بەخێربێیت");
+            closeModal('user-login-modal'); showToast("بەخێربێیت " + n); renderUserChat();
+        } else { showToast("پێویستە ناو و ژمارەی مۆبایل بنووسیت"); }
+    }
+
+    function closeAdmin() { isAdmin = false; document.getElementById('admin-panel').style.display='none'; renderProducts(allProds); showToast("لە ئادمین دەرچوویت"); }
+
+    let count = 0;
+    function adminLogic() {
+        count++;
+        if(count >= 3) { openModal('admin-login-modal'); count = 0; }
+        setTimeout(() => count = 0, 2000);
+    }
+
+    function verifyAdmin() {
+        if(adminLockedOut) { showToast("بەهۆی هەڵەی زۆرەوە بلۆک کراوی، کەمێکی تر هەوڵبدەرەوە 🔒"); return; }
+        let inputPass = document.getElementById('adminPassInput').value;
+        
+        if(inputPass === adminPass) {
+            isAdmin = true; adminFailedAttempts = 0;
+            closeModal('admin-login-modal'); document.getElementById('admin-panel').style.display='block';
+            document.getElementById('adminWaNum').value = storeSettings.wa;
+            
+‎            // پیشاندانی ڕەنگەکان لە بەشی ئادمین
+            document.getElementById('mainColorPick').value = customColors.main;
+            document.getElementById('accentColorPick').value = customColors.accent;
+
+            renderOrders(); renderAdminPages(); renderAdminCategories(); renderProducts(allProds); renderAdminProducts(); renderAdminChatUsers(); 
+            document.getElementById('adminPassInput').value = ''; showToast("بەخێربێیتەوە ئادمین!");
+        } else { 
+            adminFailedAttempts++;
+            if(adminFailedAttempts >= 3) {
+                adminLockedOut = true;
+                showToast("٣ جار هەڵەت کرد! بۆ ماوەی ٣٠ چرکە بلۆک کرایت 🔒");
+                setTimeout(() => { adminLockedOut = false; adminFailedAttempts = 0; }, 30000);
+            } else {
+                showToast("کۆدەکە هەڵەیە! (" + (3 - adminFailedAttempts) + " هەوڵی ترت ماوە)"); 
+            }
         }
     }
 
-    // --- فۆنکشنەکانی ئادمین (بەستراوە بە فایربەیس) ---
-    function saveProduct() {
-        let id = 'P' + Date.now();
-        let p = {
-            id: id,
-            name: document.getElementById('pName').value,
-            desc: document.getElementById('pDesc').value,
-            category: document.getElementById('pCategory').value,
-            price: document.getElementById('pPrice').value,
-            oldPrice: document.getElementById('pOldPrice').value,
-            stock: document.getElementById('pStock').value,
-            image: document.getElementById('pImage').value,
-            extra: document.getElementById('pExtraMedia').value,
-            colors: document.getElementById('pColors').value,
-            reviews: []
-        };
-        db.ref('products/' + id).set(p).then(() => showToast("بەرهەم زیادکرا!"));
+    function changePassword() {
+        let newVal = document.getElementById('newAdminPass').value.trim();
+        if(newVal) {
+            adminPass = newVal;
+            localStorage.setItem('adminPass', newVal);
+            document.getElementById('newAdminPass').value = '';
+            showToast("پاسۆردی ئادمین سەرکەوتووانە گۆڕدرا! 🔐");
+        } else {
+            showToast("تکایە پاسۆردی نوێ بنووسە");
+        }
     }
+
+    function saveStoreSettings() {
+        let val = document.getElementById('adminWaNum').value;
+        if(val) { storeSettings.wa = val; localStorage.setItem('storeSettings', JSON.stringify(storeSettings)); showToast("ژمارەی واتسئەپ پاشەکەوت کرا!"); } 
+        else { showToast("پێویستە ژمارە بنووسیت"); }
+    }
+
+    function contactWhatsApp() { window.open(`https://wa.me/${storeSettings.wa}`, '_blank'); }
+
+    function renderCategoryFilters() {
+        let cHTML = categories.map(c => `<div class="cat-pill ${c === currentCategoryFilter ? 'active' : ''}" onclick="setCategoryFilter('${c}')">${c}</div>`).join('');
+        document.getElementById('category-filters').innerHTML = cHTML;
+    }
+
+    function setCategoryFilter(cat) { currentCategoryFilter = cat; renderCategoryFilters(); renderProducts(allProds); }
 
     function addCategory() {
-        let cat = document.getElementById('newCategoryInput').value;
-        if(cat) {
-            categories.push(cat);
-            db.ref('categories').set(categories);
-            document.getElementById('newCategoryInput').value = '';
+        let v = document.getElementById('newCategoryInput').value.trim();
+        if(v && !categories.includes(v)) {
+            categories.push(v); localStorage.setItem('categories', JSON.stringify(categories));
+            document.getElementById('newCategoryInput').value = ''; renderAdminCategories(); renderCategoryFilters(); showToast("پۆلێن زیادکرا");
         }
+    }
+
+    function editCategory(idx) {
+        if(categories[idx] === "گشتی") { showToast("پۆلێنی گشتی دەستکاری ناکرێت"); return; }
+        let newVal = prompt("ناوی نوێی پۆلێنەکە بنووسە:", categories[idx]);
+        if(newVal && newVal.trim() !== "" && !categories.includes(newVal.trim())) {
+            let oldCat = categories[idx];
+            categories[idx] = newVal.trim();
+            allProds.forEach(p => { if(p.category === oldCat) p.category = newVal.trim(); });
+            localStorage.setItem('categories', JSON.stringify(categories));
+            localStorage.setItem('products', JSON.stringify(allProds));
+            renderAdminCategories(); renderCategoryFilters(); renderProducts(allProds);
+            showToast("پۆلێن گۆڕدرا");
+        }
+    }
+
+    function deleteCategory(idx) {
+        if(categories[idx] === "گشتی") { showToast("پۆلێنی گشتی نەسڕدرێتەوە باشترە"); return; }
+        if(confirm("دڵنیایت لە سڕینەوەی ئەم پۆلێنە؟")) {
+            categories.splice(idx, 1); localStorage.setItem('categories', JSON.stringify(categories));
+            renderAdminCategories(); renderCategoryFilters();
+        }
+    }
+
+    function renderAdminCategories() {
+        document.getElementById('admin-categories-list').innerHTML = categories.map((c, i) => `
+            <div style="display:flex; justify-content:space-between; align-items:center; padding:8px; background:var(--bg); margin-bottom:5px; border-radius:6px; border:1px solid var(--border);">
+                <span>${c}</span> 
+                <div>
+                    <button onclick="editCategory(${i})" style="color:#0284c7; cursor:pointer; border:none; background:none; font-family:inherit; margin-left:10px;">دەستکاری</button>
+                    <button onclick="deleteCategory(${i})" style="color:red; cursor:pointer; border:none; background:none; font-family:inherit;">سڕینەوە</button>
+                </div>
+            </div>
+        `).join('');
+        document.getElementById('pCategory').innerHTML = categories.map(c => `<option value="${c}">${c}</option>`).join('');
+    }
+
+    let tempRating = 5;
+    function setRating(r) {
+        tempRating = r; let stars = document.getElementById('star-selector').children;
+        for(let i=0; i<5; i++) { if(i < r) stars[i].classList.add('active'); else stars[i].classList.remove('active'); }
+    }
+
+    function openReviewModal(pid) {
+        requireLogin(() => {
+            document.getElementById('currentReviewPid').value = pid; setRating(5); document.getElementById('reviewText').value = '';
+            renderReviews(pid); openModal('review-modal');
+        });
+    }
+
+    function renderReviews(pid) {
+        let prod = allProds.find(p => p.id === pid); let listEl = document.getElementById('reviews-list');
+        if(!prod.reviews || prod.reviews.length === 0) { listEl.innerHTML = '<p style="text-align:center; font-size:12px; color:#94a3b8;">هیچ کۆمێنتێک نییە، یەکەم کەس بە!</p>'; return; }
+        listEl.innerHTML = prod.reviews.map(r => `
+            <div class="review-box">
+                <div style="display:flex; justify-content:space-between; margin-bottom:5px;">
+                    <b style="font-size:12px; color:var(--main);">${r.user.split(' (')[0]}</b>
+                    <span style="color:#f59e0b; font-size:11px;">${'★'.repeat(r.rating)}${'☆'.repeat(5-r.rating)}</span>
+                </div>
+                <div style="color:var(--text);">${r.text}</div>
+            </div>
+        `).join('');
+    }
+
+    function renderProducts(list) {
+        let filteredList = list;
+        if(currentCategoryFilter !== "گشتی") { 
+            filteredList = list.filter(p => p.category === currentCategoryFilter); 
+        }
+
+        document.getElementById('products-container').innerHTML = filteredList.map(p => {
+            let colorOptions = (p.colors && p.colors.length > 0) ? `<select id="color-${p.id}" style="flex:2;"><option value="">هەڵبژاردنی ڕەنگ</option>${p.colors.map(c => `<option value="${c}">${c}</option>`).join('')}</select>` : `<input type="hidden" id="color-${p.id}" value="وەک خۆی">`;
+            let mediaHtml = `<div class="media-scroller"><div class="media-item"><img src="${p.image}"></div>${(p.extraMedia || []).map(m => `<div class="media-item">${m.match(/\.(mp4|webm|ogg|mov)/i) ? `<video src="${m}" controls></video>` : `<img src="${m}">`}</div>`).join('')}</div>`;
+            
+            let avgRating = 0; let revCount = 0;
+            if(p.reviews && p.reviews.length > 0) { revCount = p.reviews.length; avgRating = Math.round(p.reviews.reduce((a, b) => a + b.rating, 0) / revCount); }
+            let starsHtml = revCount > 0 ? `<div style="font-size:11px; color:#f59e0b; margin-bottom:5px;">${'★'.repeat(avgRating)}${'☆'.repeat(5-avgRating)} (${revCount})</div>` : `<div style="font-size:11px; color:#94a3b8; margin-bottom:5px;">بێ ڕەیتینگ</div>`;
+            
+            let stockStatusHtml = '';
+            if(p.stock !== undefined) {
+                if(p.stock === 0) stockStatusHtml = `<div style="color:#ef4444; font-size:12px; font-weight:bold; margin-bottom:5px;">نەماوە (Out of Stock)</div>`;
+                else if(p.stock <= 5) stockStatusHtml = `<div style="color:#f59e0b; font-size:12px; margin-bottom:5px;">پەلە بکە، تەنها ${p.stock} دانە ماوە</div>`;
+            }
+            let btnHtml = (p.stock === 0) ? `<button class="add-btn" style="background:var(--border); cursor:not-allowed;" disabled>لە کۆگا نەماوە</button>` : `<button class="add-btn" onclick="addToCart('${p.id}')">${dict[currentLang]['buy'] || 'کڕین'}</button>`;
+
+            return `<div class="card">
+                ${p.oldPrice ? `<div class="discount-badge">داشکاندن</div>` : ''}
+                ${mediaHtml} <h4>${p.name}</h4> ${starsHtml} ${stockStatusHtml}
+                <div class="price-container"><span class="price">${p.price} IQD</span>${p.oldPrice ? `<span class="old-price">${p.oldPrice}</span>` : ''}</div>
+                <div class="opt-row">${colorOptions}<div style="flex:1; display:flex; align-items:center; gap:5px;"><span style="font-size:11px;">دانە:</span><input type="number" id="qty-${p.id}" value="1" min="1" style="width:100%;"></div></div>
+                ${btnHtml}
+                <button class="review-btn" onclick="openReviewModal('${p.id}')">کۆمێنتەکان ⭐️</button>
+            </div>`
+        }).join('');
+    }
+
+    function renderAdminProducts() {
+        let container = document.getElementById('admin-products-list'); if(!container) return;
+        if(allProds.length === 0) { container.innerHTML = '<p style="font-size:13px; color:#64748b; text-align:center;">هیچ بەرهەمێک نییە</p>'; return; }
+        container.innerHTML = allProds.map(p => `
+            <div style="display:flex; justify-content:space-between; align-items:center; padding:10px; background:var(--bg); margin-bottom:8px; border-radius:8px; border:1px solid var(--border);">
+                <div style="display:flex; align-items:center; gap:10px;">
+                    <img src="${p.image}" style="width:40px; height:40px; border-radius:4px; object-fit:cover;">
+                    <div style="font-size:13px; text-align:right;">
+                        <b>${p.name}</b> <span style="color:#64748b; font-size:11px;">(${p.category || 'گشتی'})</span><br>
+                        <span style="color:#16a34a; font-weight:bold;">${p.price} IQD</span><br>
+                        <span style="color:#f59e0b; font-size:11px;">ستۆکی ماوە: ${p.stock !== undefined ? p.stock : 'بێسنوور'}</span>
+                    </div>
+                </div>
+                <button onclick="deleteProd('${p.id}')" style="background:#ef4444; color:white; border:none; padding:6px 12px; border-radius:6px; cursor:pointer; font-family:inherit; font-size:12px;">سڕینەوە 🗑️</button>
+            </div>
+        `).join('');
+    }
+
+    function submitReview() {
+        let pid = document.getElementById('currentReviewPid').value; let text = document.getElementById('reviewText').value.trim();
+        if(text && currentUserName) {
+            let prod = allProds.find(p => p.id === pid); if(!prod.reviews) prod.reviews = [];
+            prod.reviews.push({ user: currentUserName, text: text, rating: tempRating });
+            localStorage.setItem('products', JSON.stringify(allProds));
+            renderReviews(pid); renderProducts(allProds); document.getElementById('reviewText').value = ''; showToast("کۆمێنتەکەت بڵاوکرایەوە!");
+        } else { showToast("تکایە کۆمێنتێک بنووسە"); }
+    }
+
+    function saveProduct() {
+        let n = document.getElementById('pName').value; let p = document.getElementById('pPrice').value; let op = document.getElementById('pOldPrice').value;
+        let img = document.getElementById('pImage').value; let c = document.getElementById('pColors').value; let em = document.getElementById('pExtraMedia').value; let cat = document.getElementById('pCategory').value;
+        let st = document.getElementById('pStock').value; let stockVal = st ? parseInt(st) : 1000;
+        let colorArray = c ? c.split(',').map(x => x.trim()).filter(x => x !== "") : [];
+        let extraMediaArray = em ? em.split(',').map(x => x.trim()).filter(x => x !== "") : []; 
+        
+        if(n && p) {
+            let newId = 'P' + Math.floor(Math.random()*999999);
+            allProds.push({id: newId, name:n, price:p, oldPrice:op, image:img, colors: colorArray, extraMedia: extraMediaArray, category: cat || "گشتی", reviews: [], stock: stockVal});
+            localStorage.setItem('products', JSON.stringify(allProds)); renderProducts(allProds); renderAdminProducts(); showToast("بڵاوکرایەوە!");
+        } else { showToast("پێویستە ناو و نرخی بەرهەم بنووسیت"); }
+    }
+
+    function deleteProd(pid) {
+        if(confirm("دڵنیایت لە سڕینەوەی ئەم بەرهەمە؟")) {
+            allProds = allProds.filter(p => p.id !== pid); localStorage.setItem('products', JSON.stringify(allProds)); renderProducts(allProds); renderAdminProducts(); showToast("بەرهەمەکە سڕایەوە!");
+        }
+    }
+
+    function addToCart(pid) {
+        let prod = allProds.find(p => p.id === pid); let colorEl = document.getElementById('color-'+pid); let qtyEl = document.getElementById('qty-'+pid);
+        let color = colorEl ? colorEl.value : "وەک خۆی"; let qty = parseInt(qtyEl.value) || 1;
+        let prodStock = prod.stock !== undefined ? prod.stock : 1000;
+        if(qty > prodStock) { showToast("ببورە، تەنها " + prodStock + " دانە لەم بەرهەمە ماوە لە کۆگا!"); return; }
+        
+        if(prod.colors && prod.colors.length > 0 && !color) { showToast("پێویستە سەرەتا ڕەنگێک هەڵبژێریت!"); return; }
+        cart.push({id: prod.id, n: prod.name, p: prod.price, c: color, q: qty}); document.getElementById('cart-count').innerText = cart.length; updateCartUI(); showToast("زیادکرا بۆ سەبەتە 🛒");
+    }
+
+    function removeFromCart(index) { cart.splice(index, 1); document.getElementById('cart-count').innerText = cart.length; updateCartUI(); }
+
+    function updateCartUI() {
+        let subtotal = cart.reduce((s, i) => s + (Number(i.p) * i.q), 0); let cityEl = document.getElementById('cCity'); let city = cityEl ? cityEl.value : "";
+        let deliveryFee = 0; if (subtotal > 0) { if (city === "سلێمانی") { deliveryFee = 3000; } else if (city !== "") { deliveryFee = 5000; } }
+        let deliveryDisplay = (city === "" && subtotal > 0) ? (dict[currentLang]['delivery_calc'] || "لە کاتی کڕین دیاری دەکرێت") : deliveryFee + " IQD";
+        let totalDisplay = (city === "" && subtotal > 0) ? subtotal + " (بێ گەیاندن)" : (subtotal + deliveryFee);
+        document.getElementById('cart-items').innerHTML = cart.map((i, idx) => `
+            <div style="display:flex; justify-content:space-between; padding:10px; border-bottom:1px solid var(--border);">
+                <div><b>${i.n}</b><br><span style="font-size:12px; color:#64748b;">ڕەنگ: ${i.c} | ${i.q} دانە</span></div>
+                <div style="text-align:left;"><b>${Number(i.p) * i.q} IQD</b><br><button onclick="removeFromCart(${idx})" style="color:#ef4444; background:none; border:none; cursor:pointer; font-size:12px; padding:0; margin-top:5px; font-family:inherit;">سڕینەوە</button></div>
+            </div>`).join('');
+        document.getElementById('cart-subtotal').innerText = subtotal; document.getElementById('cart-delivery').innerText = deliveryDisplay; document.getElementById('cart-total').innerText = totalDisplay;
+        let summaryEl = document.getElementById('checkout-summary');
+        if(summaryEl) { if(subtotal === 0) { summaryEl.innerText = ""; } else if(city === "") { summaryEl.innerText = "تکایە شار هەڵبژێرە بۆ بینینی کۆی گشتی"; } else { summaryEl.innerText = "کۆی گشتی بە گەیاندنەوە: " + (subtotal + deliveryFee) + " IQD"; } }
+    }
+
+    function openCheckout() {
+        requireLogin(() => {
+            if(cart.length > 0) { 
+                updateCartUI(); closeModal('cart-modal'); openModal('checkout-modal'); 
+                if(currentUserName) { let parts = currentUserName.split(" ("); if(parts.length > 0) document.getElementById('cName').value = parts[0]; if(parts.length > 1) document.getElementById('cPhone').value = parts[1].replace(")", ""); }
+            } else { showToast("سەبەتەکەت بەتاڵە!"); }
+        });
+    }
+
+    function submitOrder() {
+        let n = document.getElementById('cName').value; let ph = document.getElementById('cPhone').value; let city = document.getElementById('cCity').value; let hood = document.getElementById('cNeighborhood').value;
+        if(!n || !ph || !city || !hood) { showToast("پێویستە هەموو زانیارییەکان پڕ بکەیتەوە!"); return; }
+        
+        let subtotal = cart.reduce((s, i) => s + (Number(i.p) * i.q), 0); let delivery = (city === "سلێمانی") ? 3000 : 5000; let totalVal = subtotal + delivery; let orderId = Math.floor(Math.random()*99999); let currentDate = new Date().toLocaleString('en-GB');
+        let order = { id: orderId, name:n, phone:ph, city:city, neighborhood:hood, items: [...cart], subtotal: subtotal, delivery: delivery, total: totalVal, date: currentDate };
+        orders.push(order); localStorage.setItem('orders', JSON.stringify(orders));
+        
+        cart.forEach(item => {
+            let pIndex = allProds.findIndex(p => p.id === item.id);
+            if(pIndex !== -1 && allProds[pIndex].stock !== undefined) {
+                allProds[pIndex].stock -= item.q;
+                if(allProds[pIndex].stock < 0) allProds[pIndex].stock = 0;
+            }
+        });
+        localStorage.setItem('products', JSON.stringify(allProds));
+        renderProducts(allProds);
+        
+        let receiptHtml = `<div class="receipt-header"><b style="font-size:16px;">وەسڵی کڕین - VIP Baby</b><br><span style="font-size:12px; color:#64748b;">ژمارەی وەسڵ: #${orderId}</span><br><span style="font-size:12px; color:#64748b;">بەروار: ${currentDate}</span></div><div style="margin-bottom:10px;"><b>کڕیار:</b> ${n}<br><b>مۆبایل:</b> ${ph}<br><b>ناونیشان:</b> ${city} - ${hood}<br></div><hr style="border:0; border-top:1px dashed var(--border); margin:10px 0;"><b style="display:block; margin-bottom:8px;">کاڵاکان:</b>${cart.map(i => `<div class="receipt-item"><span>${i.n} <span style="color:#64748b; font-size:11px;">(${i.c}) x${i.q}</span></span> <b>${Number(i.p) * i.q} IQD</b></div>`).join('')}<hr style="border:0; border-top:1px dashed var(--border); margin:10px 0;"><div style="display:flex; justify-content:space-between; font-size:13px;"><span>نرخی کاڵاکان:</span> <b>${subtotal} IQD</b></div><div style="display:flex; justify-content:space-between; font-size:13px; color:#ef4444; margin-top:5px;"><span>نرخی گەیاندن:</span> <b>${delivery} IQD</b></div><hr style="border:0; border-top:1px dashed var(--border); margin:10px 0;"><div style="display:flex; justify-content:space-between; font-size:16px; font-weight:bold; color:#16a34a;"><span>کۆی گشتی:</span> <span>${totalVal} IQD</span></div>`;
+        document.getElementById('receipt-content').innerHTML = receiptHtml;
+        let itemsText = cart.map(i => `▪️ ${i.n} (%0A  ڕەنگ: ${i.c} | دانە: ${i.q})`).join('%0A');
+        let text = `📦 داواکاری نوێ: #${orderId}%0A%0A👤 ناو: ${n}%0A📱 مۆبایل: ${ph}%0A📍 شار: ${city}%0A🏘️ گەڕەک: ${hood}%0A%0A🛒 کاڵاکان:%0A${itemsText}%0A%0A🚚 گەیاندن: ${delivery} IQD%0A💰 کۆی گشتی: ${totalVal} IQD`;
+        setTimeout(() => { window.open(`https://wa.me/${storeSettings.wa}?text=${text}`, '_blank'); }, 500);
+        
+        cart = []; document.getElementById('cart-count').innerText = 0; document.getElementById('cCity').value = ""; document.getElementById('cName').value = ""; document.getElementById('cPhone').value = ""; document.getElementById('cNeighborhood').value = "";
+        updateCartUI(); closeModal('checkout-modal'); openModal('receipt-modal'); showToast("داواکارییەکەت سەرکەوتوو بوو!");
+    }
+
+    function renderOrders() {
+        document.getElementById('admin-orders-list').innerHTML = orders.map((o, i) => `
+            <div class="admin-section" style="font-size:14px;">
+                <b style="color:var(--accent); font-size:16px;">وەسڵ: #${o.id}</b><br>👤 ناو: ${o.name}<br>📱 مۆبایل: ${o.phone}<br>📍 ناونیشان: ${o.city} - ${o.neighborhood}<br>
+                <div style="background:var(--bg); padding:8px; margin:8px 0; border-radius:5px; border:1px solid var(--border);">
+                    ${o.items.map(it => `<div style="margin-bottom:5px; border-bottom:1px solid var(--border); padding-bottom:5px;">${it.n}<br><span style="color:#64748b; font-size:12px;">ڕەنگ: ${it.c} | دانە: ${it.q}</span></div>`).join('')}
+                </div>
+‎                🚚 گەیاندن: ${o.delivery} IQD<br>💰 کۆی گشتی: <b>${o.total} IQD</b>
+                <button onclick="deleteOrder(${i})" style="color:white; background:#ef4444; border:none; padding:8px; border-radius:5px; margin-top:10px; cursor:pointer; width:100%; font-family:inherit;">سڕینەوەی ئەم داواکارییە</button>
+            </div>`).reverse().join('');
+    }
+
+    function deleteOrder(i) { if(confirm("دڵنیایت لە سڕینەوەی ئەم داواکارییە؟")) { orders.splice(orders.length - 1 - i, 1); localStorage.setItem('orders', JSON.stringify(orders)); renderOrders(); } }
+
+    function editPage(index) {
+        document.getElementById('pageTitle').value = pages[index].title;
+        document.getElementById('pageContent').value = pages[index].content;
+        editingPageIndex = index;
+        document.getElementById('savePageBtn').innerText = "نوێکردنەوەی لاپەڕە";
+        document.getElementById('savePageBtn').style.background = "#f59e0b"; 
+        document.getElementById('cancelEditBtn').style.display = "block"; 
+    }
+
+    function cancelPageEdit() {
+        editingPageIndex = -1;
+        document.getElementById('pageTitle').value = '';
+        document.getElementById('pageContent').value = '';
+        document.getElementById('savePageBtn').innerText = "دروستکردنی لاپەڕە";
+        document.getElementById('savePageBtn').style.background = "#2563eb";
+        document.getElementById('cancelEditBtn').style.display = "none";
     }
 
     function savePage() {
-        let title = document.getElementById('pageTitle').value;
-        let content = document.getElementById('pageContent').value;
-        if(title && content) {
-            pages.push({title, content});
-            db.ref('pages').set(pages);
-            showToast("لاپەڕە دروستکرا");
+        let t = document.getElementById('pageTitle').value; let c = document.getElementById('pageContent').value;
+        if(t && c) {
+            if (editingPageIndex >= 0) {
+                pages[editingPageIndex] = {title: t, content: c};
+                showToast("لاپەڕە نوێکرایەوە");
+            } else {
+                pages.push({title: t, content: c});
+                showToast("لاپەڕە دروستکرا");
+            }
+            localStorage.setItem('pages', JSON.stringify(pages));
+            cancelPageEdit(); 
+            renderAdminPages(); renderMenu();
+        } else {
+            showToast("پێویستە ناو و ناوەڕۆک بنووسیت");
         }
     }
 
-    // --- ڕەندەرکردنی بەرهەمەکان ---
-    function renderProducts(list) {
-        let container = document.getElementById('products-container');
-        container.innerHTML = '';
-        list.forEach(p => {
-            container.innerHTML += `
-                <div class="card">
-                    ${p.oldPrice ? `<div class="discount-badge">داشکاندن</div>` : ''}
-                    <div class="media-scroller">
-                        <div class="media-item"><img src="${p.image}"></div>
-                    </div>
-                    <h4>${p.name}</h4>
-                    <div class="price-container">
-                        <span class="price">${p.price} IQD</span>
-                        ${p.oldPrice ? `<span class="old-price">${p.oldPrice}</span>` : ''}
-                    </div>
-                    <button class="add-btn" onclick="addToCart('${p.id}')">🛒 کڕین</button>
+    function renderAdminPages() {
+        document.getElementById('admin-pages-list').innerHTML = pages.map((p, i) => `
+            <div style="display:flex; justify-content:space-between; align-items:center; padding:8px; background:var(--bg); margin-bottom:5px; border-radius:6px; border:1px solid var(--border);">
+                <span>${p.title}</span> 
+                <div>
+                    <button onclick="editPage(${i})" style="color:#0284c7; cursor:pointer; border:none; background:none; font-family:inherit; margin-left:10px;">دەستکاری</button>
+                    <button onclick="deletePage(${i})" style="color:red; cursor:pointer; border:none; background:none; font-family:inherit;">سڕینەوە</button>
                 </div>
-            `;
-        });
-    }
-
-    function addToCart(id) {
-        let p = allProds.find(x => x.id === id);
-        cart.push(p);
-        document.getElementById('cart-count').innerText = cart.length;
-        showToast("زیادکرا بۆ سەبەتە");
-    }
-
-    // ... هەموو فۆنکشنەکانی تری وەک (submitOrder, sendMsg, verifyAdmin) وەک خۆی لێرە دێنەوە ...
-    // تەنها لەبری localStorage.setItem فەرمانی db.ref().set() بەکارهاتووە.
-
-    function adminLogic() { openModal('admin-login-modal'); }
-    function verifyAdmin() {
-        if(document.getElementById('adminPassInput').value === adminPass) {
-            isAdmin = true; closeModal('admin-login-modal'); 
-            document.getElementById('admin-panel').style.display='block';
-        }
-    }
-<!DOCTYPE html>
-<html lang="ku" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VIP Baby Store - Official</title>
-    
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
-
-    <style>
-        :root { --main: #1e293b; --accent: #f59e0b; --bg: #f8fafc; --text: #334155; --card-bg: #ffffff; --border: #e2e8f0; --input-bg: #ffffff; }
-        [data-theme="dark"] { --bg: #0f172a; --text: #f8fafc; --card-bg: #1e293b; --border: #334155; --input-bg: #334155; }
-        body { font-family: Tahoma, Arial, sans-serif; background: var(--bg); color: var(--text); margin: 0; padding-bottom: 50px; transition: 0.3s; }
-        .header { background: var(--main); color: white; padding: 15px 20px; position: sticky; top: 0; z-index: 1000; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); }
-        .nav-row { display: flex; justify-content: space-between; align-items: center; }
-        .logo-container { display: flex; align-items: center; gap: 10px; padding: 5px; }
-        .logo { width: 45px; height: 45px; border-radius: 50%; border: 2px solid white; object-fit: cover; }
-        .search-bar { width: 100%; margin-top: 15px; padding: 12px; border-radius: 8px; border: 1px solid var(--border); box-sizing: border-box; outline: none; font-family: inherit; font-size: 14px; transition: 0.3s; background: var(--input-bg); color: var(--text); }
-        .page { display: none; padding: 20px; background: var(--card-bg); margin: 15px; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
-        .active-page { display: block; }
-        .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 15px; padding: 15px; }
-        .card { background: var(--card-bg); border-radius: 16px; padding: 15px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); text-align: center; position: relative; border: 1px solid var(--border); transition: 0.2s; }
-        .media-scroller { display: flex; overflow-x: auto; gap: 5px; margin-bottom: 10px; scroll-snap-type: x mandatory; border-radius: 8px; }
-        .media-item { flex: 0 0 100%; scroll-snap-align: start; }
-        .media-item img { width: 100%; height: 130px; object-fit: contain; }
-        .add-btn { background: var(--main); color: white; border: none; padding: 12px; border-radius: 8px; width: 100%; font-weight: 600; cursor: pointer; }
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 3000; align-items: center; justify-content: center; }
-        .modal-content { background: var(--card-bg); padding: 25px; border-radius: 16px; width: 90%; max-width: 420px; max-height: 90vh; overflow-y: auto; }
-        .chat-box { height: 250px; overflow-y: auto; border: 1px solid var(--border); background: var(--bg); padding: 15px; margin-bottom: 15px; border-radius: 10px; display: flex; flex-direction: column; gap: 8px; }
-        #toast { visibility: hidden; min-width: 250px; background-color: var(--main); color: #fff; text-align: center; border-radius: 8px; padding: 16px; position: fixed; z-index: 9999; left: 50%; bottom: 30px; transform: translateX(-50%); }
-        #toast.show { visibility: visible; opacity: 1; }
-        .admin-section { border: 1px solid var(--border); padding: 20px; border-radius: 12px; margin-bottom: 20px; background: var(--card-bg); }
-        #admin-panel { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg); z-index: 5000; overflow-y: auto; padding: 20px; box-sizing: border-box; }
-    </style>
-</head>
-<body>
-
-<div class="header">
-    <div class="nav-row">
-        <button onclick="openModal('menu-modal')" style="background:none; border:none; color:white; font-size:24px;">☰</button>
-        <div class="logo-container" onclick="openAdminLogin()">
-            <img src="https://i.postimg.cc/RWNMnJDG/image.jpg" class="logo">
-            <h2 style="margin:0; font-size:18px;">VIP Baby</h2>
-        </div>
-        <div style="display:flex; gap:15px; font-size:20px;">
-            <div onclick="toggleTheme()" id="themeIcon">🌙</div>
-            <div onclick="openModal('chat-modal')">💬</div>
-            <div onclick="openModal('cart-modal')" style="position:relative;">🛒<span id="cart-count" style="position:absolute; top:-5px; right:-8px; background:red; font-size:10px; border-radius:50%; padding:2px 5px;">0</span></div>
-        </div>
-    </div>
-    <input type="text" id="searchInput" class="search-bar" placeholder="گەڕان..." onkeyup="filterProds()">
-</div>
-
-<div id="p-home" class="page active-page">
-    <div class="product-grid" id="products-container"></div>
-</div>
-
-<div id="admin-panel">
-    <button onclick="closeAdmin()" style="float:left; background:red; color:white; border:none; padding:10px; border-radius:8px;">داخستن</button>
-    <h2>🛠 بەڕێوەبردن</h2>
-    <div class="admin-section">
-        <h4>📦 زیادکردنی بەرهەم</h4>
-        <input id="pName" placeholder="ناوی بەرهەم">
-        <input id="pPrice" type="number" placeholder="نرخ">
-        <input id="pImage" placeholder="لینکی وێنە">
-        <button onclick="saveProduct()" class="add-btn">بڵاوکردنەوە</button>
-    </div>
-    <div class="admin-section">
-        <h4>💬 چاتی کڕیاران</h4>
-        <div id="admin-chat-list"></div>
-    </div>
-</div>
-
-<div id="cart-modal" class="modal"><div class="modal-content"><h3>🛒 سەبەتە</h3><div id="cart-items"></div><button onclick="closeModal('cart-modal')" class="add-btn" style="background:red;">داخستن</button></div></div>
-<div id="chat-modal" class="modal"><div class="modal-content"><h3>💬 چات</h3><div id="user-chat-box" class="chat-box"></div><input id="userMsg" placeholder="نامە..."><button onclick="sendMsg()" class="add-btn">ناردن</button></div></div>
-<div id="admin-login-modal" class="modal"><div class="modal-content"><h3>🔐 چوونەژوورە ئادمین</h3><input type="password" id="adminPass" placeholder="پاسۆرد"><button onclick="verifyAdmin()" class="add-btn">چوونەژوورە</button></div></div>
-
-<div id="toast"></div>
-
-<script>
-    // --- FIREBASE CONFIG ---
-    const firebaseConfig = {
-        apiKey: "YOUR_API_KEY",
-        authDomain: "YOUR_PROJECT.firebaseapp.com",
-        databaseURL: "https://YOUR_PROJECT-default-rtdb.firebaseio.com",
-        projectId: "YOUR_PROJECT",
-        storageBucket: "YOUR_PROJECT.appspot.com",
-        messagingSenderId: "YOUR_ID",
-        appId: "YOUR_APP_ID"
-    };
-
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.database();
-
-    let allProds = [];
-    let cart = [];
-    let isAdmin = false;
-
-    // Load Data
-    db.ref('products').on('value', snap => {
-        allProds = snap.val() ? Object.values(snap.val()) : [];
-        renderProducts(allProds);
-    });
-
-    function renderProducts(list) {
-        let container = document.getElementById('products-container');
-        container.innerHTML = list.map(p => `
-            <div class="card">
-                <div class="media-item"><img src="${p.image}"></div>
-                <h4>${p.name}</h4>
-                <p>${p.price} IQD</p>
-                <button class="add-btn" onclick="addToCart('${p.id}')">🛒 کڕین</button>
             </div>
         `).join('');
     }
 
-    function addToCart(id) {
-        let p = allProds.find(x => x.id === id);
-        cart.push(p);
-        document.getElementById('cart-count').innerText = cart.length;
-        showToast("زیادکرا بۆ سەبەتە");
-    }
+    function deletePage(i) { pages.splice(i,1); localStorage.setItem('pages', JSON.stringify(pages)); renderAdminPages(); renderMenu(); }
 
-    function saveProduct() {
-        let id = 'P' + Date.now();
-        let p = {
-            id: id,
-            name: document.getElementById('pName').value,
-            price: document.getElementById('pPrice').value,
-            image: document.getElementById('pImage').value
-        };
-        db.ref('products/' + id).set(p).then(() => {
-            showToast("سەرکەوتوو بوو");
-            document.getElementById('pName').value = '';
+    function renderMenu() {
+        let menu = `<button class="add-btn" style="background:var(--bg); color:var(--text); border:1px solid var(--border); margin-bottom:5px;" onclick="showPage('p-home')">🏠 پەرەی سەرەکی</button>`;
+        let content = '';
+        pages.forEach((p, i) => {
+            menu += `<button class="add-btn" style="background:var(--bg); color:var(--text); border:1px solid var(--border); margin-bottom:5px;" onclick="showPage('page-${i}')">📄 ${p.title}</button>`;
+            content += `<div id="page-${i}" class="page"><h3>${p.title}</h3><hr><p style="white-space: pre-wrap;">${p.content}</p></div>`;
         });
+        document.getElementById('dynamic-menu-list').innerHTML = menu; document.getElementById('dynamic-pages').innerHTML = content;
     }
 
-    function openAdminLogin() { openModal('admin-login-modal'); }
-    function verifyAdmin() {
-        if(document.getElementById('adminPass').value === "2024") {
-            isAdmin = true; closeModal('admin-login-modal');
-            document.getElementById('admin-panel').style.display = 'block';
+    function showPage(id) { document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page')); document.getElementById(id).classList.add('active-page'); closeModal('menu-modal'); }
+
+    function openUserChat() { requireLogin(() => { openModal('chat-modal'); renderUserChat(); }); }
+
+    function sendMsg(type) {
+        if(type === 'user') {
+            let val = document.getElementById('userMsg').value;
+            if(val && currentUserName) {
+                if(!chatsObj[currentUserName]) chatsObj[currentUserName] = [];
+                chatsObj[currentUserName].push({type: 'user', text: val}); localStorage.setItem('userChatsObj', JSON.stringify(chatsObj));
+                document.getElementById('userMsg').value = ''; renderUserChat();
+            }
+        } else if(type === 'admin') {
+            let val = document.getElementById('adminMsg').value;
+            if(val && activeAdminChatUser) {
+                if(!chatsObj[activeAdminChatUser]) chatsObj[activeAdminChatUser] = [];
+                chatsObj[activeAdminChatUser].push({type: 'admin', text: val}); localStorage.setItem('userChatsObj', JSON.stringify(chatsObj));
+                document.getElementById('adminMsg').value = ''; renderAdminChatThread(activeAdminChatUser);
+            } else { showToast("کڕیارێک هەڵبژێرە بۆ وەڵامدانەوە"); }
         }
     }
-    function closeAdmin() { document.getElementById('admin-panel').style.display = 'none'; }
 
-    function toggleTheme() {
-        let body = document.body;
-        let theme = body.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-        body.setAttribute('data-theme', theme);
-        document.getElementById('themeIcon').innerText = theme === 'dark' ? '☀️' : '🌙';
+    function renderUserChat() {
+        if(!currentUserName) return; let userChats = chatsObj[currentUserName] || []; let h = userChats.map(m => `<div class="msg ${m.type}">${m.text}</div>`).join('');
+        document.getElementById('user-chat-box').innerHTML = h; let ub = document.getElementById('user-chat-box'); ub.scrollTop = ub.scrollHeight;
     }
 
-    function showToast(m) { let t = document.getElementById('toast'); t.innerText=m; t.className='show'; setTimeout(()=>t.className='', 2000); }
-    function openModal(id) { document.getElementById(id).style.display='flex'; }
-    function closeModal(id) { document.getElementById(id).style.display='none'; }
+    function renderAdminChatUsers() {
+        let users = Object.keys(chatsObj); if(users.length === 0) { document.getElementById('admin-chat-users').innerHTML = '<span style="font-size:12px; color:#94a3b8;">هیچ نامەیەک نییە</span>'; return; }
+        document.getElementById('admin-chat-users').innerHTML = users.map(u => `<button class="user-chat-btn ${activeAdminChatUser === u ? 'active' : ''}" onclick="renderAdminChatThread('${u}')">${u}</button>`).join('');
+    }
+
+    function renderAdminChatThread(user) {
+        activeAdminChatUser = user; renderAdminChatUsers(); let userChats = chatsObj[user] || []; let h = userChats.map(m => `<div class="msg ${m.type}">${m.text}</div>`).join('');
+        let adminBox = document.getElementById('admin-chat-box'); adminBox.innerHTML = h; adminBox.scrollTop = adminBox.scrollHeight;
+    }
+
     function filterProds() {
-        let val = document.getElementById('searchInput').value.toLowerCase();
-        renderProducts(allProds.filter(p => p.name.toLowerCase().includes(val)));
+        let v = document.getElementById('searchInput').value.toLowerCase();
+        let filtered = allProds.filter(p => p.name.toLowerCase().includes(v));
+        if(currentCategoryFilter !== "گشتی") { filtered = filtered.filter(p => p.category === currentCategoryFilter); }
+        renderProducts(filtered);
     }
+
+    renderCategoryFilters(); renderProducts(allProds); renderMenu(); updateCartUI();
 </script>
-</body>
-</html>
-</script>
-</body>
-</html><!DOCTYPE html>
-<html lang="ku" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VIP Baby Store - Official</title>
-    
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+   // --- 1. Firebase Configuration ---
+// تێبینی: لێرە زانیارییەکانی خۆت دابنێ کە لە فایربەیس وەرتگرتووە
+const firebaseConfig = {
+    apiKey: "YOUR_API_KEY",
+    authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+    databaseURL: "https://YOUR_PROJECT_ID-default-rtdb.firebaseio.com",
+    projectId: "YOUR_PROJECT_ID",
+    storageBucket: "YOUR_PROJECT_ID.appspot.com",
+    messagingSenderId: "000000000000",
+    appId: "1:000000000000:web:abcdef123456"
+};
 
-    <style>
-        :root { --main: #1e293b; --accent: #f59e0b; --bg: #f8fafc; --text: #334155; --card-bg: #ffffff; --border: #e2e8f0; --input-bg: #ffffff; }
-        [data-theme="dark"] { --bg: #0f172a; --text: #f8fafc; --card-bg: #1e293b; --border: #334155; --input-bg: #334155; }
-        body { font-family: Tahoma, Arial, sans-serif; background: var(--bg); color: var(--text); margin: 0; padding-bottom: 50px; transition: 0.3s; }
-        .header { background: var(--main); color: white; padding: 15px 20px; position: sticky; top: 0; z-index: 1000; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); }
-        .nav-row { display: flex; justify-content: space-between; align-items: center; }
-        .logo-container { display: flex; align-items: center; gap: 10px; padding: 5px; }
-        .logo { width: 45px; height: 45px; border-radius: 50%; border: 2px solid white; object-fit: cover; }
-        .search-bar { width: 100%; margin-top: 15px; padding: 12px; border-radius: 8px; border: 1px solid var(--border); box-sizing: border-box; outline: none; font-family: inherit; font-size: 14px; transition: 0.3s; background: var(--input-bg); color: var(--text); }
-        .page { display: none; padding: 20px; background: var(--card-bg); margin: 15px; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
-        .active-page { display: block; }
-        .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 15px; padding: 15px; }
-        .card { background: var(--card-bg); border-radius: 16px; padding: 15px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); text-align: center; position: relative; border: 1px solid var(--border); transition: 0.2s; }
-        .media-scroller { display: flex; overflow-x: auto; gap: 5px; margin-bottom: 10px; scroll-snap-type: x mandatory; border-radius: 8px; }
-        .media-item { flex: 0 0 100%; scroll-snap-align: start; }
-        .media-item img { width: 100%; height: 130px; object-fit: contain; }
-        .add-btn { background: var(--main); color: white; border: none; padding: 12px; border-radius: 8px; width: 100%; font-weight: 600; cursor: pointer; }
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 3000; align-items: center; justify-content: center; }
-        .modal-content { background: var(--card-bg); padding: 25px; border-radius: 16px; width: 90%; max-width: 420px; max-height: 90vh; overflow-y: auto; }
-        .chat-box { height: 250px; overflow-y: auto; border: 1px solid var(--border); background: var(--bg); padding: 15px; margin-bottom: 15px; border-radius: 10px; display: flex; flex-direction: column; gap: 8px; }
-        #toast { visibility: hidden; min-width: 250px; background-color: var(--main); color: #fff; text-align: center; border-radius: 8px; padding: 16px; position: fixed; z-index: 9999; left: 50%; bottom: 30px; transform: translateX(-50%); }
-        #toast.show { visibility: visible; opacity: 1; }
-        .admin-section { border: 1px solid var(--border); padding: 20px; border-radius: 12px; margin-bottom: 20px; background: var(--card-bg); }
-        #admin-panel { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg); z-index: 5000; overflow-y: auto; padding: 20px; box-sizing: border-box; }
-    </style>
-</head>
-<body>
+// Initialize Firebase
+if (!firebase.apps.length) {
+    firebase.initializeApp(firebaseConfig);
+}
+const db = firebase.database();
 
-<div class="header">
-    <div class="nav-row">
-        <button onclick="openModal('menu-modal')" style="background:none; border:none; color:white; font-size:24px;">☰</button>
-        <div class="logo-container" onclick="openAdminLogin()">
-            <img src="https://i.postimg.cc/RWNMnJDG/image.jpg" class="logo">
-            <h2 style="margin:0; font-size:18px;">VIP Baby</h2>
-        </div>
-        <div style="display:flex; gap:15px; font-size:20px;">
-            <div onclick="toggleTheme()" id="themeIcon">🌙</div>
-            <div onclick="openModal('chat-modal')">💬</div>
-            <div onclick="openModal('cart-modal')" style="position:relative;">🛒<span id="cart-count" style="position:absolute; top:-5px; right:-8px; background:red; font-size:10px; border-radius:50%; padding:2px 5px;">0</span></div>
-        </div>
-    </div>
-    <input type="text" id="searchInput" class="search-bar" placeholder="گەڕان..." onkeyup="filterProds()">
-</div>
+// --- 2. Variables & Global State ---
+let allProds = [];
+let cart = [];
+let isAdmin = false;
 
-<div id="p-home" class="page active-page">
-    <div class="product-grid" id="products-container"></div>
-</div>
+// --- 3. Real-time Data Sync ---
+// وەرگرتنی بەرهەمەکان لە فایربەیس
+db.ref('products').on('value', snap => {
+    allProds = snap.val() ? Object.values(snap.val()) : [];
+    renderProducts(allProds); // فۆنکشنی نیشاندانی بەرهەمەکان بانگ دەکاتەوە
+});
 
-<div id="admin-panel">
-    <button onclick="closeAdmin()" style="float:left; background:red; color:white; border:none; padding:10px; border-radius:8px;">داخستن</button>
-    <h2>🛠 بەڕێوەبردن</h2>
-    <div class="admin-section">
-        <h4>📦 زیادکردنی بەرهەم</h4>
-        <input id="pName" placeholder="ناوی بەرهەم">
-        <input id="pPrice" type="number" placeholder="نرخ">
-        <input id="pImage" placeholder="لینکی وێنە">
-        <button onclick="saveProduct()" class="add-btn">بڵاوکردنەوە</button>
-    </div>
-    <div class="admin-section">
-        <h4>💬 چاتی کڕیاران</h4>
-        <div id="admin-chat-list"></div>
-    </div>
-</div>
+// وەرگرتنی نامەکانی چات
+db.ref('chats').on('child_added', snap => {
+    const m = snap.val();
+    const chatHtml = `<div class="msg ${m.sender}">${m.text}</div>`;
+    document.getElementById('user-chat-box').innerHTML += chatHtml;
+    document.getElementById('admin-chat-list').innerHTML += chatHtml;
+    // بردنە خوارەوەی سکڕۆڵی چاتەکە بە ئۆتۆماتیکی
+    const box = document.getElementById('user-chat-box');
+    box.scrollTop = box.scrollHeight;
+});
 
-<div id="cart-modal" class="modal"><div class="modal-content"><h3>🛒 سەبەتە</h3><div id="cart-items"></div><button onclick="closeModal('cart-modal')" class="add-btn" style="background:red;">داخستن</button></div></div>
-<div id="chat-modal" class="modal"><div class="modal-content"><h3>💬 چات</h3><div id="user-chat-box" class="chat-box"></div><input id="userMsg" placeholder="نامە..."><button onclick="sendMsg()" class="add-btn">ناردن</button></div></div>
-<div id="admin-login-modal" class="modal"><div class="modal-content"><h3>🔐 چوونەژوورە ئادمین</h3><input type="password" id="adminPass" placeholder="پاسۆرد"><button onclick="verifyAdmin()" class="add-btn">چوونەژوورە</button></div></div>
+// --- 4. Admin Functions (Saving Data) ---
+function saveProduct() {
+    const name = document.getElementById('pName').value;
+    const price = document.getElementById('pPrice').value;
+    const oldPrice = document.getElementById('pOldPrice').value;
+    const image = document.getElementById('pImage').value;
 
-<div id="toast"></div>
+    if(!name || !price || !image) return showToast("تکایە هەموو زانیارییەکان پڕ بکەرەوە!");
 
-<script>
-    // --- FIREBASE CONFIG ---
-    const firebaseConfig = {
-        apiKey: "YOUR_API_KEY",
-        authDomain: "YOUR_PROJECT.firebaseapp.com",
-        databaseURL: "https://YOUR_PROJECT-default-rtdb.firebaseio.com",
-        projectId: "YOUR_PROJECT",
-        storageBucket: "YOUR_PROJECT.appspot.com",
-        messagingSenderId: "YOUR_ID",
-        appId: "YOUR_APP_ID"
+    const id = 'P' + Date.now();
+    const productData = {
+        id: id,
+        name: name,
+        price: price,
+        oldPrice: oldPrice,
+        image: image,
+        time: Date.now()
     };
 
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.database();
-
-    let allProds = [];
-    let cart = [];
-    let isAdmin = false;
-
-    // Load Data
-    db.ref('products').on('value', snap => {
-        allProds = snap.val() ? Object.values(snap.val()) : [];
-        renderProducts(allProds);
+    db.ref('products/' + id).set(productData).then(() => {
+        showToast("بەرهەمەکە بە سەرکەوتوویی بڵاوکرایەوە ✅");
+        // پاککردنەوەی ئینپوتەکان
+        document.getElementById('pName').value = '';
+        document.getElementById('pPrice').value = '';
+        document.getElementById('pOldPrice').value = '';
+        document.getElementById('pImage').value = '';
+    }).catch(err => {
+        showToast("هەڵەیەک ڕوویدا: " + err.message);
     });
+}
 
-    function renderProducts(list) {
-        let container = document.getElementById('products-container');
-        container.innerHTML = list.map(p => `
-            <div class="card">
-                <div class="media-item"><img src="${p.image}"></div>
-                <h4>${p.name}</h4>
-                <p>${p.price} IQD</p>
-                <button class="add-btn" onclick="addToCart('${p.id}')">🛒 کڕین</button>
-            </div>
-        `).join('');
-    }
-
-    function addToCart(id) {
-        let p = allProds.find(x => x.id === id);
-        cart.push(p);
-        document.getElementById('cart-count').innerText = cart.length;
-        showToast("زیادکرا بۆ سەبەتە");
-    }
-
-    function saveProduct() {
-        let id = 'P' + Date.now();
-        let p = {
-            id: id,
-            name: document.getElementById('pName').value,
-            price: document.getElementById('pPrice').value,
-            image: document.getElementById('pImage').value
-        };
-        db.ref('products/' + id).set(p).then(() => {
-            showToast("سەرکەوتوو بوو");
-            document.getElementById('pName').value = '';
+// سڕینەوەی بەرهەم (بۆ ئادمین)
+function deleteProduct(id) {
+    if(confirm("ئایا دڵنیای لە سڕینەوەی ئەم بەرهەمە؟")) {
+        db.ref('products/' + id).remove().then(() => {
+            showToast("بەرهەمەکە سڕایەوە 🗑️");
         });
     }
+}
 
-    function openAdminLogin() { openModal('admin-login-modal'); }
-    function verifyAdmin() {
-        if(document.getElementById('adminPass').value === "2024") {
-            isAdmin = true; closeModal('admin-login-modal');
-            document.getElementById('admin-panel').style.display = 'block';
-        }
-    }
-    function closeAdmin() { document.getElementById('admin-panel').style.display = 'none'; }
+// --- 5. Messaging Functions ---
+function sendUserMsg() {
+    const input = document.getElementById('userMsg');
+    const text = input.value.trim();
+    if(!text) return;
 
-    function toggleTheme() {
-        let body = document.body;
-        let theme = body.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-        body.setAttribute('data-theme', theme);
-        document.getElementById('themeIcon').innerText = theme === 'dark' ? '☀️' : '🌙';
-    }
+    db.ref('chats').push({
+        sender: 'user',
+        text: text,
+        time: Date.now()
+    });
+    input.value = '';
+}
 
-    function showToast(m) { let t = document.getElementById('toast'); t.innerText=m; t.className='show'; setTimeout(()=>t.className='', 2000); }
-    function openModal(id) { document.getElementById(id).style.display='flex'; }
-    function closeModal(id) { document.getElementById(id).style.display='none'; }
-    function filterProds() {
-        let val = document.getElementById('searchInput').value.toLowerCase();
-        renderProducts(allProds.filter(p => p.name.toLowerCase().includes(val)));
-    }
-</script>
+function sendAdminReply() {
+    const input = document.getElementById('adminReply');
+    const text = input.value.trim();
+    if(!text) return;
+
+    db.ref('chats').push({
+        sender: 'admin',
+        text: text,
+        time: Date.now()
+    });
+    input.value = '';
+}
+
+// --- 6. Helper Functions ---
+function showToast(msg) {
+    const t = document.getElementById("toast");
+    t.innerText = msg;
+    t.className = "show";
+    setTimeout(() => { t.className = t.className.replace("show", ""); }, 3000);
+} 
 </body>
 </html>
