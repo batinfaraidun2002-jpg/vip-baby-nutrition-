@@ -938,7 +938,47 @@ function sendAdminReply() {
     });
     input.value = '';
 }
+function saveProduct() {
+    const pName = document.getElementById('pName').value.trim();
+    const pPrice = document.getElementById('pPrice').value.trim();
+    const pImage = document.getElementById('pImage').value.trim();
+    const pCategory = document.getElementById('pCategory').value;
+    const pOldPrice = document.getElementById('pOldPrice').value.trim();
+    const pDesc = document.getElementById('pDesc').value.trim();
 
+    if (!pName || !pPrice || !pImage) {
+        showToast("تکایە ناو و نرخ و وێنە بنووسە! ⚠️");
+        return;
+    }
+
+    const id = 'P' + Date.now();
+    const productData = {
+        id: id,
+        name: pName,
+        price: pPrice,
+        image: pImage,
+        category: pCategory,
+        oldPrice: pOldPrice || null,
+        desc: pDesc || ""
+    };
+
+    if (db) {
+        db.ref('products/' + id).set(productData).then(() => {
+            showToast("کاڵاکە بۆ هەمووان بڵاوکرایەوە! ✅");
+            document.getElementById('pName').value = '';
+            document.getElementById('pPrice').value = '';
+            document.getElementById('pImage').value = '';
+        });
+    }
+}
+
+function deleteProduct(id) {
+    if (confirm("دڵنیای لە سڕینەوەی ئەم کاڵایە؟")) {
+        db.ref('products/' + id).remove().then(() => {
+            showToast("کاڵاکە سڕایەوە 🗑️");
+        });
+    }
+}
 // --- 6. Helper Functions ---
 function showToast(msg) {
     const t = document.getElementById("toast");
@@ -946,5 +986,14 @@ function showToast(msg) {
     t.className = "show";
     setTimeout(() => { t.className = t.className.replace("show", ""); }, 3000);
 } 
+function removeFromCart(index) {
+    if (confirm("دڵنیای لە لادانی ئەم کاڵایە لە سەبەتەکەت؟")) {
+        cart.splice(index, 1); // لادانی کاڵاکە لە لیستەکە
+        saveCart(); // پاشەکەوتکردنەوەی سەبەتە
+        renderCart(); // نوێکردنەوەی شاشەی سەبەتەکە
+        updateCartBadge(); // نوێکردنەوەی ژمارەی سەر سەبەتەکە
+        showToast("کاڵاکە لادرا 🗑️");
+    }
+}
 </body>
 </html>
