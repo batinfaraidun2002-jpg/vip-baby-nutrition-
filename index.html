@@ -828,356 +828,123 @@
         if(currentCategoryFilter !== "گشتی") { filtered = filtered.filter(p => p.category === currentCategoryFilter); }
         renderProducts(filtered);
     }
-showToast("پێویستە ژمارەیەک بنووسیت!"); 
-    }
-}
 
-// --- بەڕێوەبردنی پۆلێنەکان (Categories) ---
-function renderAdminCategories() {
-    let list = document.getElementById('admin-categories-list');
-    let sel = document.getElementById('pCategory');
-    list.innerHTML = ''; sel.innerHTML = '';
-    
-    categories.forEach((cat, index) => {
-        list.innerHTML += `<div style="display:flex; justify-content:space-between; margin-bottom:5px; padding:8px; background:var(--bg); border-radius:6px;">
-            <span>${cat}</span>
-            <button onclick="deleteCategory(${index})" style="color:#ef4444; border:none; background:none; cursor:pointer;">❌</button>
-        </div>`;
-        sel.innerHTML += `<option value="${cat}">${cat}</option>`;
-    });
-}
+    renderCategoryFilters(); renderProducts(allProds); renderMenu(); updateCartUI();
+</script>
+   // --- 1. Firebase Configuration ---
+// تێبینی: لێرە زانیارییەکانی خۆت دابنێ کە لە فایربەیس وەرتگرتووە
+const firebaseConfig = {
+    apiKey: "YOUR_API_KEY",
+    authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+    databaseURL: "https://YOUR_PROJECT_ID-default-rtdb.firebaseio.com",
+    projectId: "YOUR_PROJECT_ID",
+    storageBucket: "YOUR_PROJECT_ID.appspot.com",
+    messagingSenderId: "000000000000",
+    appId: "1:000000000000:web:abcdef123456"
+};
 
-function addCategory() {
-    let val = document.getElementById('newCategoryInput').value.trim();
-    if(val && !categories.includes(val)) {
-        categories.push(val);
-        localStorage.setItem('categories', JSON.stringify(categories));
-        document.getElementById('newCategoryInput').value = '';
-        renderAdminCategories();
-        renderCategoryFilters();
-        showToast("پۆلێن زیادکرا ✅");
-    }
+// Initialize Firebase
+if (!firebase.apps.length) {
+    firebase.initializeApp(firebaseConfig);
 }
+const db = firebase.database();
 
-function deleteCategory(index) {
-    if(confirm("دڵنیای لە سڕینەوەی ئەم پۆلێنە؟")) {
-        categories.splice(index, 1);
-        localStorage.setItem('categories', JSON.stringify(categories));
-        renderAdminCategories();
-        renderCategoryFilters();
-    }
-}
+// --- 2. Variables & Global State ---
+let allProds = [];
+let cart = [];
+let isAdmin = false;
 
-// --- بەڕێوەبردنی بەرهەمەکان ---
+// --- 3. Real-time Data Sync ---
+// وەرگرتنی بەرهەمەکان لە فایربەیس
+db.ref('products').on('value', snap => {
+    allProds = snap.val() ? Object.values(snap.val()) : [];
+    renderProducts(allProds); // فۆنکشنی نیشاندانی بەرهەمەکان بانگ دەکاتەوە
+});
+
+// وەرگرتنی نامەکانی چات
+db.ref('chats').on('child_added', snap => {
+    const m = snap.val();
+    const chatHtml = `<div class="msg ${m.sender}">${m.text}</div>`;
+    document.getElementById('user-chat-box').innerHTML += chatHtml;
+    document.getElementById('admin-chat-list').innerHTML += chatHtml;
+    // بردنە خوارەوەی سکڕۆڵی چاتەکە بە ئۆتۆماتیکی
+    const box = document.getElementById('user-chat-box');
+    box.scrollTop = box.scrollHeight;
+});
+
+// --- 4. Admin Functions (Saving Data) ---
 function saveProduct() {
-    let p = {
-        id: 'P' + Date.now(),
-        name: document.getElementById('pName').value,
-        desc: document.getElementById('pDesc').value,
-        cat: document.getElementById('pCategory').value,
-        colors: document.getElementById('pColors').value.split(','),
-        oldPrice: document.getElementById('pOldPrice').value,
-        price: document.getElementById('pPrice').value,
-        stock: document.getElementById('pStock').value,
-        img: document.getElementById('pImage').value,
-        extra: document.getElementById('pExtraMedia').value.split(','),
-        reviews: []
+    const name = document.getElementById('pName').value;
+    const price = document.getElementById('pPrice').value;
+    const oldPrice = document.getElementById('pOldPrice').value;
+    const image = document.getElementById('pImage').value;
+
+    if(!name || !price || !image) return showToast("تکایە هەموو زانیارییەکان پڕ بکەرەوە!");
+
+    const id = 'P' + Date.now();
+    const productData = {
+        id: id,
+        name: name,
+        price: price,
+        oldPrice: oldPrice,
+        image: image,
+        time: Date.now()
     };
 
-    if(!p.name || !p.price || !p.img) { showToast("تکایە ناو و نرخ و وێنە بنووسە!"); return; }
-    
-    allProds.push(p);
-    localStorage.setItem('products', JSON.stringify(allProds));
-    renderProducts(allProds);
-    renderAdminProducts();
-    showToast("بەرهەمەکە بڵاوکرایەوە 🚀");
-    // پاککردنەوەی فۆرمەکە
-    ['pName', 'pDesc', 'pColors', 'pOldPrice', 'pPrice', 'pStock', 'pImage', 'pExtraMedia'].forEach(id => document.getElementById(id).value = '');
+    db.ref('products/' + id).set(productData).then(() => {
+        showToast("بەرهەمەکە بە سەرکەوتوویی بڵاوکرایەوە ✅");
+        // پاککردنەوەی ئینپوتەکان
+        document.getElementById('pName').value = '';
+        document.getElementById('pPrice').value = '';
+        document.getElementById('pOldPrice').value = '';
+        document.getElementById('pImage').value = '';
+    }).catch(err => {
+        showToast("هەڵەیەک ڕوویدا: " + err.message);
+    });
 }
 
+// سڕینەوەی بەرهەم (بۆ ئادمین)
 function deleteProduct(id) {
-    if(confirm("دڵنیای لە سڕینەوەی ئەم بەرهەمە؟")) {
-        allProds = allProds.filter(p => p.id !== id);
-        localStorage.setItem('products', JSON.stringify(allProds));
-        renderProducts(allProds);
-        renderAdminProducts();
-    }
-}
-
-function renderAdminProducts() {
-    let list = document.getElementById('admin-products-list');
-    list.innerHTML = '';
-    allProds.forEach(p => {
-        list.innerHTML += `<div style="display:flex; align-items:center; gap:10px; border-bottom:1px solid var(--border); padding:10px 0;">
-            <img src="${p.img}" width="40" height="40" style="border-radius:4px; object-fit:cover;">
-            <div style="flex:1; font-size:13px;">${p.name} - ${p.price} IQD</div>
-            <button onclick="deleteProduct('${p.id}')" style="background:#ef4444; color:white; border:none; padding:5px 10px; border-radius:4px; cursor:pointer;">سڕینەوە</button>
-        </div>`;
-    });
-}
-
-// --- پیشاندانی بەرهەمەکان لە ماڵەوە ---
-function renderCategoryFilters() {
-    let container = document.getElementById('category-filters');
-    container.innerHTML = `<div class="cat-pill ${currentCategoryFilter === 'گشتی' ? 'active' : ''}" onclick="filterByCategory('گشتی')">هەمووی</div>`;
-    categories.forEach(cat => {
-        container.innerHTML += `<div class="cat-pill ${currentCategoryFilter === cat ? 'active' : ''}" onclick="filterByCategory('${cat}')">${cat}</div>`;
-    });
-}
-
-function filterByCategory(cat) {
-    currentCategoryFilter = cat;
-    renderCategoryFilters();
-    let filtered = (cat === 'گشتی') ? allProds : allProds.filter(p => p.cat === cat);
-    renderProducts(filtered);
-}
-
-function filterProds() {
-    let val = document.getElementById('searchInput').value.toLowerCase();
-    let filtered = allProds.filter(p => p.name.toLowerCase().includes(val));
-    renderProducts(filtered);
-}
-
-function renderProducts(prods) {
-    let container = document.getElementById('products-container');
-    container.innerHTML = '';
-    prods.forEach(p => {
-        let discount = p.oldPrice ? Math.round(((p.oldPrice - p.price) / p.oldPrice) * 100) : 0;
-        let card = document.createElement('div');
-        card.className = 'card';
-        card.innerHTML = `
-            ${discount > 0 ? `<div class="discount-badge">-${discount}%</div>` : ''}
-            <div class="media-scroller">
-                <div class="media-item"><img src="${p.img}" loading="lazy"></div>
-                ${p.extra.filter(e => e.trim() !== '').map(e => `<div class="media-item">${e.includes('mp4') ? `<video src="${e}" muted loop onclick="this.play()"></video>` : `<img src="${e}" loading="lazy">`}</div>`).join('')}
-            </div>
-            <h4 style="font-size:14px; height:35px; overflow:hidden;">${p.name}</h4>
-            <div class="price-container">
-                <span class="price">${p.price} IQD</span>
-                ${p.oldPrice ? `<span class="old-price">${p.oldPrice}</span>` : ''}
-            </div>
-            <button class="review-btn" onclick="openReviews('${p.id}')">⭐️ (${p.reviews ? p.reviews.length : 0})</button>
-            <button class="add-btn" onclick="addToCart('${p.id}')">${dict[currentLang].buy}</button>
-        `;
-        container.appendChild(card);
-    });
-}
-
-// --- سەبەتەی کڕین (Cart) ---
-function addToCart(id) {
-    let p = allProds.find(x => x.id === id);
-    cart.push(p);
-    updateCartUI();
-    showToast("زیادکرا بۆ سەبەتە 🛒");
-}
-
-function updateCartUI() {
-    document.getElementById('cart-count').innerText = cart.length;
-    let list = document.getElementById('cart-items');
-    list.innerHTML = '';
-    let subtotal = 0;
-    
-    cart.forEach((item, index) => {
-        subtotal += parseInt(item.price);
-        list.innerHTML += `<div class="receipt-item" style="padding:10px 0;">
-            <span>${item.name}</span>
-            <b>${item.price} IQD <span onclick="removeFromCart(${index})" style="color:#ef4444; cursor:pointer; margin-right:10px;">✕</span></b>
-        </div>`;
-    });
-
-    let city = document.getElementById('cCity').value;
-    let delivery = 0;
-    if(city === "سلێمانی") delivery = 3000;
-    else if(city !== "") delivery = 5000;
-
-    document.getElementById('cart-subtotal').innerText = subtotal.toLocaleString();
-    document.getElementById('cart-delivery').innerText = city ? delivery.toLocaleString() + " IQD" : dict[currentLang].delivery_calc;
-    document.getElementById('cart-total').innerText = (subtotal + delivery).toLocaleString();
-    
-    if(city) {
-        document.getElementById('checkout-summary').innerText = `کۆی گشتی بە گەیاندنەوە: ${(subtotal + delivery).toLocaleString()} IQD`;
-    }
-}
-
-function removeFromCart(index) {
-    cart.splice(index, 1);
-    updateCartUI();
-}
-
-function openCheckout() {
-    if(cart.length === 0) { showToast("سەبەتەکەت خاڵییە!"); return; }
-    requireLogin(() => {
-        closeModal('cart-modal');
-        openModal('checkout-modal');
-        document.getElementById('cName').value = currentUserName.split(' (')[0];
-        document.getElementById('cPhone').value = currentUserName.split(' (')[1].replace(')', '');
-    });
-}
-
-// --- ناردنی داواکاری ---
-function submitOrder() {
-    let name = document.getElementById('cName').value;
-    let phone = document.getElementById('cPhone').value;
-    let city = document.getElementById('cCity').value;
-    let hood = document.getElementById('cNeighborhood').value;
-
-    if(!city || !hood) { showToast("تکایە هەموو زانیارییەکان پڕبکەرەوە"); return; }
-
-    let delivery = (city === "سلێمانی") ? 3000 : 5000;
-    let subtotal = cart.reduce((a, b) => a + parseInt(b.price), 0);
-    let total = subtotal + delivery;
-
-    let orderText = `📦 *داواکاری نوێ لە VIP Baby*\n\n`;
-    orderText += `👤 *کڕیار:* ${name}\n📞 *مۆبایل:* ${phone}\n📍 *ناونیشان:* ${city} - ${hood}\n\n`;
-    orderText += `🛍️ *کاڵاکان:* \n`;
-    cart.forEach(item => orderText += `- ${item.name} (${item.price} IQD)\n`);
-    orderText += `\n💵 *کۆی گشتی:* ${total.toLocaleString()} IQD`;
-
-    // پاشەکەوتکردن لە لیستی ئادمین
-    orders.push({ id: Date.now(), user: name, phone: phone, items: cart, total: total, date: new Date().toLocaleString() });
-    localStorage.setItem('orders', JSON.stringify(orders));
-
-    // وەسڵ بۆ کڕیار
-    let receipt = `
-        <div class="receipt-header"><h4>VIP Baby Store</h4><p>ژمارەی وەسڵ: #${Date.now().toString().slice(-6)}</p></div>
-        <p>ناوی کڕیار: ${name}</p>
-        <p>شوێن: ${city}</p><hr>
-        ${cart.map(i => `<div class="receipt-item"><span>${i.name}</span><span>${i.price}</span></div>`).join('')}
-        <div class="receipt-item"><b>گەیاندن</b><b>${delivery}</b></div><hr>
-        <div class="receipt-item" style="font-size:16px;"><b>کۆی گشتی</b><b>${total} IQD</b></div>
-    `;
-    document.getElementById('receipt-content').innerHTML = receipt;
-    
-    // ناردن بۆ واتسئەپ
-    let waUrl = `https://wa.me/${storeSettings.wa}?text=${encodeURIComponent(orderText)}`;
-    window.open(waUrl, '_blank');
-
-    cart = [];
-    updateCartUI();
-    closeModal('checkout-modal');
-    openModal('receipt-modal');
-}
-
-// --- سیستمی چاتی کڕیاران ---
-function openUserChat() {
-    requireLogin(() => {
-        openModal('chat-modal');
-        renderUserChat();
-    });
-}
-
-function sendMsg(type) {
-    let inputId = (type === 'user') ? 'userMsg' : 'adminMsg';
-    let text = document.getElementById(inputId).value.trim();
-    if(!text) return;
-
-    let userKey = (type === 'user') ? currentUserName : activeAdminChatUser;
-    if(!chatsObj[userKey]) chatsObj[userKey] = [];
-
-    chatsObj[userKey].push({ sender: type, text: text, time: new Date().toLocaleTimeString() });
-    localStorage.setItem('userChatsObj', JSON.stringify(chatsObj));
-    document.getElementById(inputId).value = '';
-    
-    if(type === 'user') renderUserChat(); else renderAdminChat();
-    if(db) db.ref('chats/' + userKey.replace(/[.#$[\]]/g, "_")).set(chatsObj[userKey]);
-}
-
-function renderUserChat() {
-    let box = document.getElementById('user-chat-box');
-    box.innerHTML = '';
-    let msgs = chatsObj[currentUserName] || [];
-    msgs.forEach(m => {
-        box.innerHTML += `<div class="msg ${m.sender}">${m.text}</div>`;
-    });
-    box.scrollTop = box.scrollHeight;
-}
-
-function renderAdminChatUsers() {
-    let container = document.getElementById('admin-chat-users');
-    container.innerHTML = '';
-    Object.keys(chatsObj).forEach(user => {
-        container.innerHTML += `<button class="user-chat-btn ${activeAdminChatUser === user ? 'active' : ''}" onclick="selectAdminChat('${user}')">${user}</button>`;
-    });
-}
-
-function selectAdminChat(user) {
-    activeAdminChatUser = user;
-    renderAdminChatUsers();
-    renderAdminChat();
-}
-
-function renderAdminChat() {
-    let box = document.getElementById('admin-chat-box');
-    box.innerHTML = '';
-    if(!activeAdminChatUser) return;
-    let msgs = chatsObj[activeAdminChatUser] || [];
-    msgs.forEach(m => {
-        box.innerHTML += `<div class="msg ${m.sender}">${m.text}</div>`;
-    });
-    box.scrollTop = box.scrollHeight;
-}
-
-// --- سیستمی کۆمێنت (Reviews) ---
-function openReviews(pid) {
-    document.getElementById('currentReviewPid').value = pid;
-    renderReviews(pid);
-    openModal('review-modal');
-}
-
-function setRating(n) {
-    let stars = document.querySelectorAll('#star-selector span');
-    stars.forEach((s, i) => s.className = (i < n) ? 'active' : '');
-    document.getElementById('star-selector').dataset.val = n;
-}
-
-function submitReview() {
-    requireLogin(() => {
-        let pid = document.getElementById('currentReviewPid').value;
-        let text = document.getElementById('reviewText').value;
-        let stars = document.getElementById('star-selector').dataset.val || 5;
-        
-        let p = allProds.find(x => x.id === pid);
-        if(!p.reviews) p.reviews = [];
-        p.reviews.push({ user: currentUserName, text: text, stars: stars });
-        
-        localStorage.setItem('products', JSON.stringify(allProds));
-        document.getElementById('reviewText').value = '';
-        renderReviews(pid);
-        renderProducts(allProds);
-        showToast("کۆمێنتەکەت ناردرا ⭐️");
-    });
-}
-
-function renderReviews(pid) {
-    let p = allProds.find(x => x.id === pid);
-    let list = document.getElementById('reviews-list');
-    list.innerHTML = (p.reviews && p.reviews.length) ? '' : '<p style="text-align:center; color:#94a3b8;">هیچ کۆمێنتێک نییە</p>';
-    if(p.reviews) {
-        p.reviews.forEach(r => {
-            list.innerHTML += `<div class="review-box">
-                <div style="color:#f59e0b;">${'★'.repeat(r.stars)}</div>
-                <b>${r.user.split(' (')[0]}</b>
-                <p style="margin:5px 0 0 0;">${r.text}</p>
-            </div>`;
+    if(confirm("ئایا دڵنیای لە سڕینەوەی ئەم بەرهەمە؟")) {
+        db.ref('products/' + id).remove().then(() => {
+            showToast("بەرهەمەکە سڕایەوە 🗑️");
         });
     }
 }
 
-// --- دەستپێکردنی سایت ---
-window.onload = () => {
-    changeLang('ku');
-    renderCategoryFilters();
-    renderProducts(allProds);
-    if(currentUserName) renderUserChat();
-};
+// --- 5. Messaging Functions ---
+function sendUserMsg() {
+    const input = document.getElementById('userMsg');
+    const text = input.value.trim();
+    if(!text) return;
 
-function contactWhatsApp() {
-    window.open(`https://wa.me/${storeSettings.wa}`, '_blank');
+    db.ref('chats').push({
+        sender: 'user',
+        text: text,
+        time: Date.now()
+    });
+    input.value = '';
 }
-</script>
-</body>
-</html>
-    renderCategoryFilters(); renderProducts(allProds); renderMenu(); updateCartUI();
-</script>
+
+function sendAdminReply() {
+    const input = document.getElementById('adminReply');
+    const text = input.value.trim();
+    if(!text) return;
+
+    db.ref('chats').push({
+        sender: 'admin',
+        text: text,
+        time: Date.now()
+    });
+    input.value = '';
+}
+
+// --- 6. Helper Functions ---
+function showToast(msg) {
+    const t = document.getElementById("toast");
+    t.innerText = msg;
+    t.className = "show";
+    setTimeout(() => { t.className = t.className.replace("show", ""); }, 3000);
+} 
 </body>
 </html>
