@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VIP Baby Store - Official</title>
+    
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+
     <style>
         :root { --main: #1e293b; --accent: #f59e0b; --bg: #f8fafc; --text: #334155; }
         body { font-family: Tahoma, Arial, sans-serif; background: var(--bg); color: var(--text); margin: 0; padding-bottom: 50px; transition: 0.3s; }
@@ -29,7 +33,6 @@
         .card .price { color: #16a34a; font-weight: 700; font-size: 16px; }
         .card .old-price { text-decoration: line-through; color: #94a3b8; font-size: 12px; margin-left: 6px; }
         
-        /* ستایلی نوێ بۆ سلایدی وێنە و ڤیدیۆکان */
         .media-scroller { display: flex; overflow-x: auto; gap: 5px; margin-bottom: 10px; scroll-snap-type: x mandatory; scrollbar-width: none; border-radius: 8px; }
         .media-scroller::-webkit-scrollbar { display: none; }
         .media-item { flex: 0 0 100%; scroll-snap-align: start; }
@@ -59,14 +62,20 @@
         .opt-row { display: flex; gap: 8px; margin-bottom: 12px; align-items: center; }
         .opt-row select, .opt-row input { margin-bottom: 0; padding: 8px; font-size: 13px; }
         
-        /* ستایلی تایبەت بە وەسڵ */
         .receipt-box { background: #f8fafc; padding: 20px; border-radius: 12px; border: 2px dashed #cbd5e1; margin-bottom: 15px; text-align: right; font-size: 14px; color: #0f172a; }
         .receipt-header { text-align: center; border-bottom: 1px solid #e2e8f0; padding-bottom: 10px; margin-bottom: 10px; }
         .receipt-item { display: flex; justify-content: space-between; margin-bottom: 5px; font-size: 13px; border-bottom: 1px dashed #e2e8f0; padding-bottom: 5px; }
 
-        /* دوگمەی کڕیاران لەناو ئادمین بۆ چات */
         .user-chat-btn { padding:8px 12px; border-radius:8px; border:1px solid #cbd5e1; background:white; cursor:pointer; white-space:nowrap; font-family:inherit; font-size:13px; }
         .user-chat-btn.active { background:#e2e8f0; font-weight:bold; border-color:#94a3b8; }
+
+        /* ستایلەکانی تازە زیادکراو (بێ سڕینەوەی هیچی تر) */
+        .cat-pill { padding: 8px 16px; background: white; border: 1px solid #cbd5e1; border-radius: 20px; cursor: pointer; white-space: nowrap; font-size: 13px; transition: 0.2s; }
+        .cat-pill.active { background: var(--main); color: white; border-color: var(--main); }
+        .review-btn { background: #f1f5f9; color: #334155; border: 1px solid #cbd5e1; padding: 6px; border-radius: 6px; font-size: 12px; cursor: pointer; margin-top: 5px; }
+        .star-rating span { cursor: pointer; font-size: 20px; color: #cbd5e1; }
+        .star-rating span.active { color: #f59e0b; }
+        .review-box { background: #f8fafc; padding: 10px; border-radius: 8px; border: 1px solid #e2e8f0; margin-bottom: 8px; font-size: 13px; text-align: right; }
     </style>
 </head>
 <body id="mainBody">
@@ -91,15 +100,17 @@
             </div>
         </div>
     </div>
-    <input type="text" id="searchInput" class="search-bar" placeholder="گەڕان بۆ بەرهەمەکان..." onkeyup="filterProds()">
+    <input type="text" id="searchInput" class="search-bar" data-i18n="search" placeholder="گەڕان بۆ بەرهەمەکان..." onkeyup="filterProds()">
 </div>
 
 <div id="p-home" class="page active-page" style="background:transparent; box-shadow:none; padding:0;">
+    <div id="category-filters" class="media-scroller" style="padding: 15px 15px 0 15px; gap: 10px;">
+        </div>
     <div class="product-grid" id="products-container"></div>
 </div>
 <div id="dynamic-pages"></div>
 
-<div class="footer">© 2026 VIP Baby Store. گشت مافەکان پارێزراون.</div>
+<div class="footer" data-i18n="footer">© 2026 VIP Baby Store. گشت مافەکان پارێزراون.</div>
 <div id="toast"></div>
 
 <div id="admin-panel">
@@ -116,6 +127,13 @@
     </div>
 
     <div class="admin-section">
+        <h4>📁 زیادکردنی پۆلێنی نوێ:</h4>
+        <input id="newCategoryInput" placeholder="ناوی پۆلێن (نموونە: جلی کوڕان)">
+        <button onclick="addCategory()" class="add-btn" style="background:#8b5cf6;">زیادکردنی پۆلێن</button>
+        <div id="admin-categories-list" style="margin-top: 15px;"></div>
+    </div>
+
+    <div class="admin-section">
         <h4>🗑️ لیستی بەرهەمەکان بۆ سڕینەوە:</h4>
         <div id="admin-products-list"></div>
     </div>
@@ -124,6 +142,8 @@
         <h4>📦 زیادکردنی بەرهەم:</h4>
         <input id="pName" placeholder="ناوی بەرهەم">
         <textarea id="pDesc" rows="2" placeholder="وەسفی بەرهەم"></textarea>
+        <select id="pCategory" style="margin-bottom:12px;">
+            </select>
         <input id="pColors" placeholder="ڕەنگەکان (بە فاریزە جیای بکەرەوە)">
         <input id="pOldPrice" placeholder="نرخی پێشوو (بۆ داشکاندن)">
         <input id="pPrice" type="number" placeholder="نرخی کۆتایی (تەنها ژمارە)">
@@ -158,12 +178,12 @@
 
 <div id="user-login-modal" class="modal">
     <div class="modal-content" style="text-align: center;">
-        <h3 style="color:var(--main); margin-top:0;">👤 چوونەژوورەوە / هەژمار</h3>
-        <p style="font-size:13px; color:#64748b; margin-bottom:15px;">پێویستە زانیارییەکانت بنووسیت پێش کڕین یان چاتکردن</p>
-        <input id="loginName" placeholder="ناوی سیانی بنووسە...">
-        <input id="loginPhone" type="tel" placeholder="ژمارەی مۆبایل بنووسە...">
-        <button onclick="userLogin()" class="add-btn action">چوونەژوورەوە</button>
-        <button onclick="closeModal('user-login-modal')" class="add-btn" style="background:#ef4444; margin-top:8px;">دواتر</button>
+        <h3 style="color:var(--main); margin-top:0;" data-i18n="login_title">👤 چوونەژوورەوە / هەژمار</h3>
+        <p style="font-size:13px; color:#64748b; margin-bottom:15px;" data-i18n="login_desc">پێویستە زانیارییەکانت بنووسیت پێش کڕین یان چاتکردن</p>
+        <input id="loginName" data-i18n="login_name" placeholder="ناوی سیانی بنووسە...">
+        <input id="loginPhone" type="tel" data-i18n="login_phone" placeholder="ژمارەی مۆبایل بنووسە...">
+        <button onclick="userLogin()" class="add-btn action" data-i18n="login_btn">چوونەژوورەوە</button>
+        <button onclick="closeModal('user-login-modal')" class="add-btn" style="background:#ef4444; margin-top:8px;" data-i18n="later">دواتر</button>
     </div>
 </div>
 
@@ -178,36 +198,54 @@
 
 <div id="menu-modal" class="modal">
     <div class="modal-content">
-        <h3 id="t-menu" style="text-align:center;">مینیۆی سەرەکی</h3>
+        <h3 id="t-menu" style="text-align:center;" data-i18n="menu">مینیۆی سەرەکی</h3>
         <div id="dynamic-menu-list"></div>
-        <button onclick="closeModal('menu-modal')" class="add-btn" style="background:#ef4444;">داخستن</button>
+        <button onclick="closeModal('menu-modal')" class="add-btn" style="background:#ef4444;" data-i18n="close">داخستن</button>
+    </div>
+</div>
+
+<div id="review-modal" class="modal">
+    <div class="modal-content">
+        <h3 style="text-align:center; color:var(--main);" data-i18n="reviews_title">کۆمێنتەکان ⭐️</h3>
+        <div id="reviews-list" style="max-height: 200px; overflow-y: auto; margin-bottom: 15px;"></div>
+        
+        <div style="background: #f1f5f9; padding: 15px; border-radius: 8px;">
+            <p style="margin-top:0; font-size:13px; font-weight:bold;" data-i18n="write_review">ڕای خۆت بنووسە:</p>
+            <div class="star-rating" id="star-selector" style="margin-bottom: 10px; text-align: center;">
+                <span onclick="setRating(1)">★</span><span onclick="setRating(2)">★</span><span onclick="setRating(3)">★</span><span onclick="setRating(4)">★</span><span onclick="setRating(5)">★</span>
+            </div>
+            <textarea id="reviewText" rows="2" placeholder="بۆچوونەکەت لێرە بنووسە..."></textarea>
+            <input type="hidden" id="currentReviewPid">
+            <button onclick="submitReview()" class="add-btn action" data-i18n="send">ناردن</button>
+        </div>
+        <button onclick="closeModal('review-modal')" class="add-btn" style="background:#ef4444; margin-top:8px;" data-i18n="close">داخستن</button>
     </div>
 </div>
 
 <div id="cart-modal" class="modal">
     <div class="modal-content">
-        <h3 id="t-cart">🛒 سەبەتەی کڕین</h3>
+        <h3 id="t-cart" data-i18n="cart_title">🛒 سەبەتەی کڕین</h3>
         <div id="cart-items"></div>
         <div style="font-size:14px; margin-top:15px; display:flex; justify-content:space-between;">
-            <span>نرخی کاڵاکان:</span> <b><span id="cart-subtotal">0</span> IQD</b>
+            <span data-i18n="cart_subtotal">نرخی کاڵاکان:</span> <b><span id="cart-subtotal">0</span> IQD</b>
         </div>
         <div style="font-size:14px; margin-top:5px; margin-bottom:10px; display:flex; justify-content:space-between; color:#64748b;">
-            <span>گەیاندن:</span> <b><span id="cart-delivery">لە کاتی کڕین دیاری دەکرێت</span></b>
+            <span data-i18n="delivery">گەیاندن:</span> <b><span id="cart-delivery" data-i18n="delivery_calc">لە کاتی کڕین دیاری دەکرێت</span></b>
         </div>
         <hr style="border:0; border-top:1px solid #e2e8f0;">
         <div style="font-weight:bold; margin-top:10px; font-size: 18px; display:flex; justify-content:space-between;">
-            <span>کۆی گشتی:</span> <span style="color:#16a34a;"><span id="cart-total">0</span> IQD</span>
+            <span data-i18n="total">کۆی گشتی:</span> <span style="color:#16a34a;"><span id="cart-total">0</span> IQD</span>
         </div>
-        <button onclick="openCheckout()" class="add-btn action" style="margin-top:15px;">تەواوکردنی داواکاری</button>
-        <button onclick="closeModal('cart-modal')" class="add-btn" style="background:#ef4444; margin-top:8px;">داخستن</button>
+        <button onclick="openCheckout()" class="add-btn action" style="margin-top:15px;" data-i18n="checkout_btn">تەواوکردنی داواکاری</button>
+        <button onclick="closeModal('cart-modal')" class="add-btn" style="background:#ef4444; margin-top:8px;" data-i18n="close">داخستن</button>
     </div>
 </div>
 
 <div id="checkout-modal" class="modal">
     <div class="modal-content">
-        <h3>📝 زانیاری وەرگر</h3>
-        <input id="cName" placeholder="ناوی سیانی پێویستە">
-        <input id="cPhone" type="tel" placeholder="ژمارەی مۆبایل پێویستە">
+        <h3 data-i18n="receiver_info">📝 زانیاری وەرگر</h3>
+        <input id="cName" placeholder="ناوی سیانی پێویستە" data-i18n="c_name">
+        <input id="cPhone" type="tel" placeholder="ژمارەی مۆبایل پێویستە" data-i18n="c_phone">
         
         <select id="cCity" style="margin-bottom:12px; padding:12px; width:100%; border-radius:8px; border:1px solid #cbd5e1;" onchange="updateCartUI()">
             <option value="">شار هەڵبژێرە... (پێویستە)</option>
@@ -220,51 +258,120 @@
             <option value="عێراق">شارەکانی تری عێراق (٥,٠٠٠ دینار)</option>
         </select>
         
-        <input id="cNeighborhood" placeholder="ناوی گەڕەک و شوێنی نزیک پێویستە">
+        <input id="cNeighborhood" placeholder="ناوی گەڕەک و شوێنی نزیک پێویستە" data-i18n="c_hood">
         <div id="checkout-summary" style="margin-top:10px; margin-bottom:15px; font-weight:bold; color:#16a34a; font-size:15px; text-align:center;">تکایە شار هەڵبژێرە بۆ بینینی کۆی گشتی</div>
 
-        <button onclick="submitOrder()" class="add-btn" style="background:#16a34a;">ناردنی داواکاری بۆ واتسئەپ</button>
-        <button onclick="closeModal('checkout-modal')" class="add-btn" style="background:#ef4444; margin-top:8px;">گەڕانەوە</button>
+        <button onclick="submitOrder()" class="add-btn" style="background:#16a34a;" data-i18n="send_wa">ناردنی داواکاری بۆ واتسئەپ</button>
+        <button onclick="closeModal('checkout-modal')" class="add-btn" style="background:#ef4444; margin-top:8px;" data-i18n="back">گەڕانەوە</button>
     </div>
 </div>
 
 <div id="receipt-modal" class="modal">
     <div class="modal-content">
-        <h3 style="text-align:center; color:#16a34a; margin-top:0;">✅ داواکارییەکەت سەرکەوتوو بوو</h3>
-        <p style="text-align:center; font-size:12px; color:#64748b;">تکایە سکرین شۆتی ئەم وەسڵە بکە بۆ دڵنیایی زیاتر</p>
+        <h3 style="text-align:center; color:#16a34a; margin-top:0;" data-i18n="order_success">✅ داواکارییەکەت سەرکەوتوو بوو</h3>
+        <p style="text-align:center; font-size:12px; color:#64748b;" data-i18n="screenshot_note">تکایە سکرین شۆتی ئەم وەسڵە بکە بۆ دڵنیایی زیاتر</p>
         
         <div id="receipt-content" class="receipt-box"></div>
         
-        <button onclick="closeModal('receipt-modal')" class="add-btn" style="background:#ef4444;">داخستنی وەسڵ</button>
+        <button onclick="closeModal('receipt-modal')" class="add-btn" style="background:#ef4444;" data-i18n="close_receipt">داخستنی وەسڵ</button>
     </div>
 </div>
 
 <div id="chat-modal" class="modal">
     <div class="modal-content">
-        <h3 id="t-chat">💬 خزمەتگوزاری کڕیاران</h3>
+        <h3 id="t-chat" data-i18n="cs_title">💬 خزمەتگوزاری کڕیاران</h3>
         <div id="user-chat-box" class="chat-box"></div>
-        <input id="userMsg" placeholder="چی دەپرسی؟">
-        <button onclick="sendMsg('user')" class="add-btn action">ناردن</button>
-        <button onclick="closeModal('chat-modal')" class="add-btn" style="background:#ef4444; margin-top:8px;">داخستن</button>
+        <input id="userMsg" placeholder="چی دەپرسی؟" data-i18n="chat_placeholder">
+        <button onclick="sendMsg('user')" class="add-btn action" data-i18n="send">ناردن</button>
+        <button onclick="closeModal('chat-modal')" class="add-btn" style="background:#ef4444; margin-top:8px;" data-i18n="close">داخستن</button>
     </div>
 </div>
 
 <script>
+    // --- بەشی دەیتابەیس (Firebase) ---
+    // ئەگەر کۆدەکانی فایەربەیسی خۆتت هەبوو لێرە دایبنێ. لە ئێستادا بەتاڵە بۆ ئەوەی LocalStorage کار بکات.
+    const firebaseConfig = {
+        // apiKey: "YOUR_API_KEY",
+        // authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+        // databaseURL: "https://YOUR_PROJECT_ID-default-rtdb.firebaseio.com",
+        // projectId: "YOUR_PROJECT_ID",
+    };
+    
+    let db = null;
+    if(firebaseConfig.apiKey) {
+        firebase.initializeApp(firebaseConfig);
+        db = firebase.database();
+        // ئەگەر فایەربەیس هەبێت ئەوا دەبێت داتاکان لەوێوە بهێنرێن (لێرەدا تەنها ئامادە کراوە بۆ داهاتووت)
+    }
+
+    // --- بەشی هێنان و پاشەکەوتکردن بە پاراستنی هی پێشوو ---
     let allProds = JSON.parse(localStorage.getItem('products')) || [];
-    allProds = allProds.map(p => ({...p, id: p.id || 'P' + Math.floor(Math.random()*999999)}));
+    allProds = allProds.map(p => ({...p, id: p.id || 'P' + Math.floor(Math.random()*999999), reviews: p.reviews || []})); // reviews زیاد کرا
     
     let pages = JSON.parse(localStorage.getItem('pages')) || [];
     let orders = JSON.parse(localStorage.getItem('orders')) || [];
-    // چات گۆڕدرا بۆ ئۆبجێکت بۆ ئەوەی هەر کڕیارە و بە جیا پاشەکەوت بکرێت
     let chatsObj = JSON.parse(localStorage.getItem('userChatsObj')) || {}; 
     let storeSettings = JSON.parse(localStorage.getItem('storeSettings')) || { wa: "9647700000000" };
     
-    // سیستەمی یوزەر
+    // بەشی پۆلێنەکان
+    let categories = JSON.parse(localStorage.getItem('categories')) || ["گشتی"];
+    let currentCategoryFilter = "گشتی";
+
     let currentUserName = localStorage.getItem('currentUserName') || null;
     let activeAdminChatUser = null;
-
     let cart = [];
     let isAdmin = false;
+
+    // --- بەشی وەرگێڕان (Multi-language) ---
+    const dict = {
+        ku: {
+            search: "گەڕان بۆ بەرهەمەکان...", footer: "© 2026 VIP Baby Store. گشت مافەکان پارێزراون.",
+            login_title: "👤 چوونەژوورەوە / هەژمار", login_desc: "پێویستە زانیارییەکانت بنووسیت پێش کڕین یان چاتکردن",
+            login_name: "ناوی سیانی بنووسە...", login_phone: "ژمارەی مۆبایل بنووسە...", login_btn: "چوونەژوورەوە", later: "دواتر",
+            menu: "مینیۆی سەرەکی", close: "داخستن", reviews_title: "کۆمێنتەکان ⭐️", write_review: "ڕای خۆت بنووسە:", send: "ناردن",
+            cart_title: "🛒 سەبەتەی کڕین", cart_subtotal: "نرخی کاڵاکان:", delivery: "گەیاندن:", delivery_calc: "لە کاتی کڕین دیاری دەکرێت",
+            total: "کۆی گشتی:", checkout_btn: "تەواوکردنی داواکاری", receiver_info: "📝 زانیاری وەرگر", c_name: "ناوی سیانی پێویستە",
+            c_phone: "ژمارەی مۆبایل پێویستە", c_hood: "ناوی گەڕەک و شوێنی نزیک پێویستە", send_wa: "ناردنی داواکاری بۆ واتسئەپ", back: "گەڕانەوە",
+            order_success: "✅ داواکارییەکەت سەرکەوتوو بوو", screenshot_note: "تکایە سکرین شۆتی ئەم وەسڵە بکە بۆ دڵنیایی زیاتر",
+            close_receipt: "داخستنی وەسڵ", cs_title: "💬 خزمەتگوزاری کڕیاران", chat_placeholder: "چی دەپرسی؟", buy: "کڕین"
+        },
+        ar: {
+            search: "البحث عن المنتجات...", footer: "© 2026 VIP Baby Store. جميع الحقوق محفوظة.",
+            login_title: "👤 تسجيل الدخول / حساب", login_desc: "يجب إدخال معلوماتك قبل الشراء أو الدردشة",
+            login_name: "اكتب اسمك الثلاثي...", login_phone: "اكتب رقم الموبايل...", login_btn: "دخول", later: "لاحقاً",
+            menu: "القائمة الرئيسية", close: "إغلاق", reviews_title: "التعليقات ⭐️", write_review: "اكتب رأيك:", send: "إرسال",
+            cart_title: "🛒 سلة التسوق", cart_subtotal: "سعر المنتجات:", delivery: "التوصيل:", delivery_calc: "يتم التحديد عند الشراء",
+            total: "المجموع الكلي:", checkout_btn: "إتمام الطلب", receiver_info: "📝 معلومات المستلم", c_name: "الاسم الثلاثي مطلوب",
+            c_phone: "رقم الهاتف مطلوب", c_hood: "اسم الحي وأقرب نقطة دالة", send_wa: "إرسال الطلب للواتساب", back: "رجوع",
+            order_success: "✅ تمت عملية الطلب بنجاح", screenshot_note: "يرجى أخذ لقطة شاشة لهذا الوصل لمزيد من التأكيد",
+            close_receipt: "إغلاق الوصل", cs_title: "💬 خدمة العملاء", chat_placeholder: "بماذا تسأل؟", buy: "شراء"
+        },
+        en: {
+            search: "Search products...", footer: "© 2026 VIP Baby Store. All rights reserved.",
+            login_title: "👤 Login / Account", login_desc: "Please enter your details before buying or chatting",
+            login_name: "Enter Full Name...", login_phone: "Enter Mobile Number...", login_btn: "Login", later: "Later",
+            menu: "Main Menu", close: "Close", reviews_title: "Reviews ⭐️", write_review: "Write your review:", send: "Send",
+            cart_title: "🛒 Shopping Cart", cart_subtotal: "Products Price:", delivery: "Delivery:", delivery_calc: "Determined at checkout",
+            total: "Total:", checkout_btn: "Checkout", receiver_info: "📝 Receiver Info", c_name: "Full Name required",
+            c_phone: "Mobile Number required", c_hood: "Neighborhood / Nearest point required", send_wa: "Send Order via WhatsApp", back: "Back",
+            order_success: "✅ Order Successful", screenshot_note: "Please screenshot this receipt for confirmation",
+            close_receipt: "Close Receipt", cs_title: "💬 Customer Service", chat_placeholder: "What are you asking?", buy: "Buy"
+        }
+    };
+
+    let currentLang = 'ku';
+    function changeLang(lang) {
+        currentLang = lang;
+        document.documentElement.dir = (lang === 'en') ? 'ltr' : 'rtl';
+        document.querySelectorAll('[data-i18n]').forEach(el => {
+            let key = el.getAttribute('data-i18n');
+            if(dict[lang][key]) {
+                if(el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') { el.placeholder = dict[lang][key]; } 
+                else { el.innerText = dict[lang][key]; }
+            }
+        });
+        renderProducts(allProds); // بۆ نوێکردنەوەی دوگمەی کڕین
+    }
 
     function showToast(msg) {
         let t = document.getElementById("toast");
@@ -275,13 +382,8 @@
     function openModal(id) { document.getElementById(id).style.display='flex'; }
     function closeModal(id) { document.getElementById(id).style.display='none'; }
     
-    // مەرجدارکردنی چوونەژوورەوە بۆ کڕیار
     function requireLogin(callback) {
-        if(currentUserName) {
-            callback();
-        } else {
-            openModal('user-login-modal');
-        }
+        if(currentUserName) { callback(); } else { openModal('user-login-modal'); }
     }
 
     function userLogin() {
@@ -292,11 +394,8 @@
             localStorage.setItem('currentUserName', currentUserName);
             closeModal('user-login-modal');
             showToast("بەخێربێیت " + n);
-            // ئەگەر کڕیار ویستبێتی چات بکات یەکسەر چاتەکەی بۆ دەکرێتەوە
             renderUserChat();
-        } else {
-            showToast("پێویستە ناو و ژمارەی مۆبایل بنووسیت");
-        }
+        } else { showToast("پێویستە ناو و ژمارەی مۆبایل بنووسیت"); }
     }
 
     function closeAdmin() { 
@@ -321,9 +420,10 @@
             document.getElementById('adminWaNum').value = storeSettings.wa;
             renderOrders(); 
             renderAdminPages(); 
+            renderAdminCategories(); // نیشاندانی پۆلێنەکان بۆ ئادمین
             renderProducts(allProds);
             renderAdminProducts();
-            renderAdminChatUsers(); // نیشاندانی ناوی کڕیارەکان لە چاتی ئادمین
+            renderAdminChatUsers(); 
             document.getElementById('adminPassInput').value = '';
             showToast("بەخێربێیتەوە ئادمین!");
         } else { showToast("کۆدەکە هەڵەیە یان بەسەرچووە!"); }
@@ -334,25 +434,130 @@
         if(val) {
             storeSettings.wa = val;
             localStorage.setItem('storeSettings', JSON.stringify(storeSettings));
+            // لێرە دەتوانیت db.ref('settings').set(storeSettings); بکەیت ئەگەر فایەربەیس کارا بوو
             showToast("ژمارەی واتسئەپ پاشەکەوت کرا!");
-        } else {
-            showToast("پێویستە ژمارە بنووسیت");
+        } else { showToast("پێویستە ژمارە بنووسیت"); }
+    }
+
+    function contactWhatsApp() { window.open(`https://wa.me/${storeSettings.wa}`, '_blank'); }
+
+    // --- لۆجیکی پۆلێنەکان (Categories) ---
+    function renderCategoryFilters() {
+        let cHTML = categories.map(c => `<div class="cat-pill ${c === currentCategoryFilter ? 'active' : ''}" onclick="setCategoryFilter('${c}')">${c}</div>`).join('');
+        document.getElementById('category-filters').innerHTML = cHTML;
+    }
+
+    function setCategoryFilter(cat) {
+        currentCategoryFilter = cat;
+        renderCategoryFilters();
+        renderProducts(allProds);
+    }
+
+    function addCategory() {
+        let v = document.getElementById('newCategoryInput').value.trim();
+        if(v && !categories.includes(v)) {
+            categories.push(v);
+            localStorage.setItem('categories', JSON.stringify(categories));
+            document.getElementById('newCategoryInput').value = '';
+            renderAdminCategories();
+            renderCategoryFilters();
+            showToast("پۆلێن زیادکرا");
         }
     }
 
-    function contactWhatsApp() {
-        window.open(`https://wa.me/${storeSettings.wa}`, '_blank');
+    function deleteCategory(idx) {
+        if(categories[idx] === "گشتی") { showToast("پۆلێنی گشتی نەسڕدرێتەوە باشترە"); return; }
+        if(confirm("دڵنیایت لە سڕینەوەی ئەم پۆلێنە؟")) {
+            categories.splice(idx, 1);
+            localStorage.setItem('categories', JSON.stringify(categories));
+            renderAdminCategories();
+            renderCategoryFilters();
+        }
     }
 
+    function renderAdminCategories() {
+        document.getElementById('admin-categories-list').innerHTML = categories.map((c, i) => `
+            <div style="display:flex; justify-content:space-between; padding:8px; background:#f1f5f9; margin-bottom:5px; border-radius:6px;">
+                <span>${c}</span> <button onclick="deleteCategory(${i})" style="color:red; cursor:pointer; border:none; background:none;">سڕینەوە</button>
+            </div>
+        `).join('');
+        
+        // پڕکردنەوەی درۆپداونی پۆلێنەکان لە کاتی زیادکردنی کاڵا
+        document.getElementById('pCategory').innerHTML = categories.map(c => `<option value="${c}">${c}</option>`).join('');
+    }
+
+    // --- لۆجیکی ڕەیتینگ و کۆمێنت ---
+    let tempRating = 5;
+    function setRating(r) {
+        tempRating = r;
+        let stars = document.getElementById('star-selector').children;
+        for(let i=0; i<5; i++) {
+            if(i < r) stars[i].classList.add('active');
+            else stars[i].classList.remove('active');
+        }
+    }
+
+    function openReviewModal(pid) {
+        requireLogin(() => {
+            document.getElementById('currentReviewPid').value = pid;
+            setRating(5); // دیفۆڵت ٥ ئەستێرە
+            document.getElementById('reviewText').value = '';
+            renderReviews(pid);
+            openModal('review-modal');
+        });
+    }
+
+    function renderReviews(pid) {
+        let prod = allProds.find(p => p.id === pid);
+        let listEl = document.getElementById('reviews-list');
+        if(!prod.reviews || prod.reviews.length === 0) {
+            listEl.innerHTML = '<p style="text-align:center; font-size:12px; color:#94a3b8;">هیچ کۆمێنتێک نییە، یەکەم کەس بە!</p>';
+            return;
+        }
+        listEl.innerHTML = prod.reviews.map(r => `
+            <div class="review-box">
+                <div style="display:flex; justify-content:space-between; margin-bottom:5px;">
+                    <b style="font-size:12px; color:var(--main);">${r.user.split(' (')[0]}</b>
+                    <span style="color:#f59e0b; font-size:11px;">${'★'.repeat(r.rating)}${'☆'.repeat(5-r.rating)}</span>
+                </div>
+                <div style="color:#334155;">${r.text}</div>
+            </div>
+        `).join('');
+    }
+
+    function submitReview() {
+        let pid = document.getElementById('currentReviewPid').value;
+        let text = document.getElementById('reviewText').value.trim();
+        if(text && currentUserName) {
+            let prod = allProds.find(p => p.id === pid);
+            if(!prod.reviews) prod.reviews = [];
+            prod.reviews.push({ user: currentUserName, text: text, rating: tempRating });
+            localStorage.setItem('products', JSON.stringify(allProds));
+            // db.ref('products').set(allProds); // بۆ فایەربەیس
+            renderReviews(pid);
+            renderProducts(allProds); // بۆ نوێکردنەوەی ئەستێرەی سەر کاڵاکە
+            document.getElementById('reviewText').value = '';
+            showToast("کۆمێنتەکەت بڵاوکرایەوە!");
+        } else {
+            showToast("تکایە کۆمێنتێک بنووسە");
+        }
+    }
+
+    // گۆڕانکاری کەم لە وێنەکردنی کاڵا بۆ نیشاندانی ئەستێرە و پۆلێن
     function renderProducts(list) {
-        document.getElementById('products-container').innerHTML = list.map(p => {
+        // فلتەرکردن بەپێی پۆلێنی هەڵبژێردراو
+        let filteredList = list;
+        if(currentCategoryFilter !== "گشتی") {
+            filteredList = list.filter(p => p.category === currentCategoryFilter);
+        }
+
+        document.getElementById('products-container').innerHTML = filteredList.map(p => {
             let colorOptions = (p.colors && p.colors.length > 0) ? 
                 `<select id="color-${p.id}" style="flex:2;">
                     <option value="">هەڵبژاردنی ڕەنگ</option>
                     ${p.colors.map(c => `<option value="${c}">${c}</option>`).join('')}
                 </select>` : `<input type="hidden" id="color-${p.id}" value="وەک خۆی">`;
             
-            // دروستکردنی سلاید بۆ ڤیدیۆ و وێنەکان
             let mediaHtml = `<div class="media-scroller">
                 <div class="media-item"><img src="${p.image}"></div>
                 ${(p.extraMedia || []).map(m => `
@@ -361,12 +566,22 @@
                     </div>
                 `).join('')}
             </div>`;
+
+            // هەژمارکردنی تێکڕای ڕەیتینگ
+            let avgRating = 0; let revCount = 0;
+            if(p.reviews && p.reviews.length > 0) {
+                revCount = p.reviews.length;
+                let sum = p.reviews.reduce((a, b) => a + b.rating, 0);
+                avgRating = Math.round(sum / revCount);
+            }
+            let starsHtml = revCount > 0 ? `<div style="font-size:11px; color:#f59e0b; margin-bottom:5px;">${'★'.repeat(avgRating)}${'☆'.repeat(5-avgRating)} (${revCount})</div>` : `<div style="font-size:11px; color:#94a3b8; margin-bottom:5px;">بێ ڕەیتینگ</div>`;
             
             return `
             <div class="card">
                 ${p.oldPrice ? `<div class="discount-badge">داشکاندن</div>` : ''}
                 ${mediaHtml}
                 <h4>${p.name}</h4>
+                ${starsHtml}
                 <div class="price-container">
                     <span class="price">${p.price} IQD</span>
                     ${p.oldPrice ? `<span class="old-price">${p.oldPrice}</span>` : ''}
@@ -380,7 +595,8 @@
                     </div>
                 </div>
 
-                <button class="add-btn" onclick="addToCart('${p.id}')">کڕین</button>
+                <button class="add-btn" onclick="addToCart('${p.id}')">${dict[currentLang]['buy'] || 'کڕین'}</button>
+                <button class="review-btn" onclick="openReviewModal('${p.id}')">کۆمێنتەکان ⭐️</button>
             </div>`
         }).join('');
     }
@@ -388,18 +604,14 @@
     function renderAdminProducts() {
         let container = document.getElementById('admin-products-list');
         if(!container) return;
-        
-        if(allProds.length === 0) {
-            container.innerHTML = '<p style="font-size:13px; color:#64748b; text-align:center;">هیچ بەرهەمێک نییە</p>';
-            return;
-        }
+        if(allProds.length === 0) { container.innerHTML = '<p style="font-size:13px; color:#64748b; text-align:center;">هیچ بەرهەمێک نییە</p>'; return; }
 
         container.innerHTML = allProds.map(p => `
             <div style="display:flex; justify-content:space-between; align-items:center; padding:10px; background:#f1f5f9; margin-bottom:8px; border-radius:8px; border:1px solid #e2e8f0;">
                 <div style="display:flex; align-items:center; gap:10px;">
                     <img src="${p.image}" style="width:40px; height:40px; border-radius:4px; object-fit:cover;">
                     <div style="font-size:13px; text-align:right;">
-                        <b>${p.name}</b><br>
+                        <b>${p.name}</b> <span style="color:#64748b; font-size:11px;">(${p.category || 'گشتی'})</span><br>
                         <span style="color:#16a34a; font-weight:bold;">${p.price} IQD</span>
                     </div>
                 </div>
@@ -414,15 +626,17 @@
         let op = document.getElementById('pOldPrice').value;
         let img = document.getElementById('pImage').value;
         let c = document.getElementById('pColors').value;
-        let em = document.getElementById('pExtraMedia').value; // ڤیدیۆ یان وێنەی زیاتر
+        let em = document.getElementById('pExtraMedia').value;
+        let cat = document.getElementById('pCategory').value; // وەرگرتنی پۆلێن
         
         let colorArray = c ? c.split(',').map(x => x.trim()).filter(x => x !== "") : [];
-        let extraMediaArray = em ? em.split(',').map(x => x.trim()).filter(x => x !== "") : []; // بۆ مێدیای زیاتر
+        let extraMediaArray = em ? em.split(',').map(x => x.trim()).filter(x => x !== "") : []; 
 
         if(n && p) {
             let newId = 'P' + Math.floor(Math.random()*999999);
-            allProds.push({id: newId, name:n, price:p, oldPrice:op, image:img, colors: colorArray, extraMedia: extraMediaArray});
+            allProds.push({id: newId, name:n, price:p, oldPrice:op, image:img, colors: colorArray, extraMedia: extraMediaArray, category: cat || "گشتی", reviews: []});
             localStorage.setItem('products', JSON.stringify(allProds));
+            // db.ref('products').set(allProds); // بۆ فایەربەیس
             renderProducts(allProds);
             renderAdminProducts();
             showToast("بڵاوکرایەوە!");
@@ -449,10 +663,7 @@
         let color = colorEl ? colorEl.value : "وەک خۆی";
         let qty = parseInt(qtyEl.value) || 1;
 
-        if(prod.colors && prod.colors.length > 0 && !color) {
-            showToast("پێویستە سەرەتا ڕەنگێک هەڵبژێریت!");
-            return;
-        }
+        if(prod.colors && prod.colors.length > 0 && !color) { showToast("پێویستە سەرەتا ڕەنگێک هەڵبژێریت!"); return; }
 
         cart.push({n: prod.name, p: prod.price, c: color, q: qty});
         document.getElementById('cart-count').innerText = cart.length;
@@ -473,14 +684,10 @@
         
         let deliveryFee = 0;
         if (subtotal > 0) {
-            if (city === "سلێمانی") {
-                deliveryFee = 3000;
-            } else if (city !== "") {
-                deliveryFee = 5000;
-            }
+            if (city === "سلێمانی") { deliveryFee = 3000; } else if (city !== "") { deliveryFee = 5000; }
         }
         
-        let deliveryDisplay = (city === "" && subtotal > 0) ? "لە کاتی کڕین دیاری دەکرێت" : deliveryFee + " IQD";
+        let deliveryDisplay = (city === "" && subtotal > 0) ? (dict[currentLang]['delivery_calc'] || "لە کاتی کڕین دیاری دەکرێت") : deliveryFee + " IQD";
         let totalDisplay = (city === "" && subtotal > 0) ? subtotal + " (بێ گەیاندن)" : (subtotal + deliveryFee);
 
         document.getElementById('cart-items').innerHTML = cart.map((i, idx) => `
@@ -502,13 +709,9 @@
 
         let summaryEl = document.getElementById('checkout-summary');
         if(summaryEl) {
-            if(subtotal === 0) {
-                summaryEl.innerText = "";
-            } else if(city === "") {
-                summaryEl.innerText = "تکایە شار هەڵبژێرە بۆ بینینی کۆی گشتی";
-            } else {
-                summaryEl.innerText = "کۆی گشتی بە گەیاندنەوە: " + (subtotal + deliveryFee) + " IQD";
-            }
+            if(subtotal === 0) { summaryEl.innerText = ""; } 
+            else if(city === "") { summaryEl.innerText = "تکایە شار هەڵبژێرە بۆ بینینی کۆی گشتی"; } 
+            else { summaryEl.innerText = "کۆی گشتی بە گەیاندنەوە: " + (subtotal + deliveryFee) + " IQD"; }
         }
     }
 
@@ -518,16 +721,12 @@
                 updateCartUI();
                 closeModal('cart-modal'); 
                 openModal('checkout-modal'); 
-                
-                // پڕکردنەوەی خۆکارانەی ناو و ژمارەی مۆبایل لەسەر بنەمای هەژمارەکە
                 if(currentUserName) {
                     let parts = currentUserName.split(" (");
                     if(parts.length > 0) document.getElementById('cName').value = parts[0];
                     if(parts.length > 1) document.getElementById('cPhone').value = parts[1].replace(")", "");
                 }
-            } else {
-                showToast("سەبەتەکەت بەتاڵە!");
-            }
+            } else { showToast("سەبەتەکەت بەتاڵە!"); }
         });
     }
 
@@ -537,10 +736,7 @@
         let city = document.getElementById('cCity').value;
         let hood = document.getElementById('cNeighborhood').value;
         
-        if(!n || !ph || !city || !hood) {
-            showToast("پێویستە هەموو زانیارییەکان پڕ بکەیتەوە!");
-            return;
-        }
+        if(!n || !ph || !city || !hood) { showToast("پێویستە هەموو زانیارییەکان پڕ بکەیتەوە!"); return; }
         
         let subtotal = cart.reduce((s, i) => s + (Number(i.p) * i.q), 0);
         let delivery = (city === "سلێمانی") ? 3000 : 5000;
@@ -548,20 +744,12 @@
         let orderId = Math.floor(Math.random()*99999);
         let currentDate = new Date().toLocaleString('en-GB');
         
-        let order = {
-            id: orderId, 
-            name:n, phone:ph, city:city, neighborhood:hood, 
-            items: [...cart], 
-            subtotal: subtotal,
-            delivery: delivery,
-            total: totalVal, 
-            date: currentDate
-        };
+        let order = { id: orderId, name:n, phone:ph, city:city, neighborhood:hood, items: [...cart], subtotal: subtotal, delivery: delivery, total: totalVal, date: currentDate };
         
         orders.push(order);
         localStorage.setItem('orders', JSON.stringify(orders));
+        // db.ref('orders').set(orders); // بۆ فایەربەیس
         
-        // دروستکردنی دیزاینی وەسڵەکە بۆ کڕیار
         let receiptHtml = `
             <div class="receipt-header">
                 <b style="font-size:16px;">وەسڵی کڕین - VIP Baby</b><br>
@@ -591,26 +779,15 @@
         `;
         document.getElementById('receipt-content').innerHTML = receiptHtml;
         
-        // ناردن بۆ واتسئەپ
         let itemsText = cart.map(i => `▪️ ${i.n} (%0A  ڕەنگ: ${i.c} | دانە: ${i.q})`).join('%0A');
         let text = `📦 داواکاری نوێ: #${orderId}%0A%0A👤 ناو: ${n}%0A📱 مۆبایل: ${ph}%0A📍 شار: ${city}%0A🏘️ گەڕەک: ${hood}%0A%0A🛒 کاڵاکان:%0A${itemsText}%0A%0A🚚 گەیاندن: ${delivery} IQD%0A💰 کۆی گشتی: ${totalVal} IQD`;
         
-        // واتسئەپ دەکرێتەوە
-        setTimeout(() => {
-            window.open(`https://wa.me/${storeSettings.wa}?text=${text}`, '_blank');
-        }, 500);
+        setTimeout(() => { window.open(`https://wa.me/${storeSettings.wa}?text=${text}`, '_blank'); }, 500);
 
-        // پاککردنەوەی سەبەتە و کردنەوەی شاشەی وەسڵ
-        cart = [];
-        document.getElementById('cart-count').innerText = 0;
-        document.getElementById('cCity').value = ""; 
-        document.getElementById('cName').value = "";
-        document.getElementById('cPhone').value = "";
-        document.getElementById('cNeighborhood').value = "";
+        cart = []; document.getElementById('cart-count').innerText = 0; document.getElementById('cCity').value = ""; 
+        document.getElementById('cName').value = ""; document.getElementById('cPhone').value = ""; document.getElementById('cNeighborhood').value = "";
         
-        updateCartUI();
-        closeModal('checkout-modal');
-        openModal('receipt-modal');
+        updateCartUI(); closeModal('checkout-modal'); openModal('receipt-modal');
         showToast("داواکارییەکەت سەرکەوتوو بوو!");
     }
 
@@ -638,13 +815,11 @@
     }
 
     function savePage() {
-        let t = document.getElementById('pageTitle').value;
-        let c = document.getElementById('pageContent').value;
+        let t = document.getElementById('pageTitle').value; let c = document.getElementById('pageContent').value;
         if(t && c) {
             pages.push({title:t, content:c});
             localStorage.setItem('pages', JSON.stringify(pages));
-            renderAdminPages(); renderMenu();
-            showToast("لاپەڕە دروستکرا");
+            renderAdminPages(); renderMenu(); showToast("لاپەڕە دروستکرا");
         }
     }
 
@@ -675,13 +850,7 @@
         closeModal('menu-modal');
     }
 
-    // بەشی چاتی تایبەت (کڕیار و ئادمین)
-    function openUserChat() {
-        requireLogin(() => {
-            openModal('chat-modal');
-            renderUserChat();
-        });
-    }
+    function openUserChat() { requireLogin(() => { openModal('chat-modal'); renderUserChat(); }); }
 
     function sendMsg(type) {
         if(type === 'user') {
@@ -690,8 +859,8 @@
                 if(!chatsObj[currentUserName]) chatsObj[currentUserName] = [];
                 chatsObj[currentUserName].push({type: 'user', text: val});
                 localStorage.setItem('userChatsObj', JSON.stringify(chatsObj));
-                document.getElementById('userMsg').value = '';
-                renderUserChat();
+                // db.ref('chats').set(chatsObj); // بۆ فایەربەیس
+                document.getElementById('userMsg').value = ''; renderUserChat();
             }
         } else if(type === 'admin') {
             let val = document.getElementById('adminMsg').value;
@@ -699,11 +868,8 @@
                 if(!chatsObj[activeAdminChatUser]) chatsObj[activeAdminChatUser] = [];
                 chatsObj[activeAdminChatUser].push({type: 'admin', text: val});
                 localStorage.setItem('userChatsObj', JSON.stringify(chatsObj));
-                document.getElementById('adminMsg').value = '';
-                renderAdminChatThread(activeAdminChatUser);
-            } else {
-                showToast("کڕیارێک هەڵبژێرە بۆ وەڵامدانەوە");
-            }
+                document.getElementById('adminMsg').value = ''; renderAdminChatThread(activeAdminChatUser);
+            } else { showToast("کڕیارێک هەڵبژێرە بۆ وەڵامدانەوە"); }
         }
     }
 
@@ -717,40 +883,30 @@
 
     function renderAdminChatUsers() {
         let users = Object.keys(chatsObj);
-        if(users.length === 0) {
-            document.getElementById('admin-chat-users').innerHTML = '<span style="font-size:12px; color:#94a3b8;">هیچ نامەیەک نییە</span>';
-            return;
-        }
-        document.getElementById('admin-chat-users').innerHTML = users.map(u => 
-            `<button class="user-chat-btn ${activeAdminChatUser === u ? 'active' : ''}" onclick="renderAdminChatThread('${u}')">${u}</button>`
-        ).join('');
+        if(users.length === 0) { document.getElementById('admin-chat-users').innerHTML = '<span style="font-size:12px; color:#94a3b8;">هیچ نامەیەک نییە</span>'; return; }
+        document.getElementById('admin-chat-users').innerHTML = users.map(u => `<button class="user-chat-btn ${activeAdminChatUser === u ? 'active' : ''}" onclick="renderAdminChatThread('${u}')">${u}</button>`).join('');
     }
 
     function renderAdminChatThread(user) {
-        activeAdminChatUser = user;
-        renderAdminChatUsers(); // بۆ ئەوەی دوگمەی کڕیارەکە ببێت بە ڕەساسی تۆخ تا بزانیت کێ وەڵام دەدەیتەوە
+        activeAdminChatUser = user; renderAdminChatUsers();
         let userChats = chatsObj[user] || [];
         let h = userChats.map(m => `<div class="msg ${m.type}">${m.text}</div>`).join('');
-        
-        let adminBox = document.getElementById('admin-chat-box');
-        adminBox.innerHTML = h;
-        adminBox.scrollTop = adminBox.scrollHeight;
+        let adminBox = document.getElementById('admin-chat-box'); adminBox.innerHTML = h; adminBox.scrollTop = adminBox.scrollHeight;
     }
 
     function filterProds() {
         let v = document.getElementById('searchInput').value.toLowerCase();
-        
-        // چوونەژوورەوەی شاراوەی ئادمین
         if(v === "20242024" || v === "admin2024") {
-            document.getElementById('searchInput').value = "";
-            document.getElementById('adminPassInput').value = "20242024";
-            verifyAdmin();
-            return;
+            document.getElementById('searchInput').value = ""; document.getElementById('adminPassInput').value = "20242024"; verifyAdmin(); return;
         }
-
-        renderProducts(allProds.filter(p => p.name.toLowerCase().includes(v)));
+        let filtered = allProds.filter(p => p.name.toLowerCase().includes(v));
+        // ئەگەر لە گەڕان بوو، با بەپێی پۆلێنیش فلتەر بکرێت
+        if(currentCategoryFilter !== "گشتی") { filtered = filtered.filter(p => p.category === currentCategoryFilter); }
+        renderProducts(filtered);
     }
 
+    // دەستپێک
+    renderCategoryFilters();
     renderProducts(allProds);
     renderMenu();
     updateCartUI();
