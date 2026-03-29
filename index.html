@@ -2,462 +2,931 @@
 <html lang="ku" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VIP Baby - Ultimate Full System 2026</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>VIP Baby Nutrition - فرۆشگای تایبەتی منداڵان</title>
     <style>
-        /* CSS FULL SECTION - ALL STYLES INCLUDED */
-        :root { 
-            --main: #1e293b; --accent: #f59e0b; --bg: #f8fafc; --text: #334155; 
-            --card-bg: #ffffff; --success: #10b981; --danger: #ef4444; --blue: #3b82f6;
-        }
-        .dark-mode { --main: #0f172a; --bg: #1e293b; --text: #f1f5f9; --card-bg: #334155; }
-
-        body { 
-            font-family: 'Segoe UI', Tahoma, sans-serif; background: var(--bg); color: var(--text); 
-            margin: 0; transition: 0.3s; padding-bottom: 90px; -webkit-tap-highlight-color: transparent;
-        }
-
-        /* Header UI */
-        .header { background: var(--main); color: white; padding: 15px; position: sticky; top: 0; z-index: 1000; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
-        .nav-row { display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto; }
-        .logo { width: 45px; height: 45px; border-radius: 50%; border: 2px solid var(--accent); }
-        #shop-name-btn { cursor: pointer; font-weight: bold; font-size: 20px; user-select: none; transition: 0.2s; padding: 5px 10px; border-radius: 8px; }
-        #shop-name-btn:active { background: rgba(255,255,255,0.1); }
-
-        /* Product Grid & Card */
-        .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; padding: 15px; max-width: 1200px; margin: 0 auto; }
-        .card { background: var(--card-bg); border-radius: 20px; padding: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.05); transition: 0.3s; text-align: center; position: relative; border: 1px solid rgba(0,0,0,0.05); overflow: hidden; }
-        .card:hover { transform: translateY(-5px); }
-        .card img, .card video { width: 100%; height: 180px; object-fit: contain; border-radius: 12px; margin-bottom: 10px; cursor: pointer; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         
-        .stock-badge { position: absolute; top: 10px; right: 10px; background: var(--main); color: white; padding: 4px 10px; border-radius: 10px; font-size: 11px; font-weight: bold; z-index: 10; }
-        .out-of-stock { filter: grayscale(1); opacity: 0.6; }
-        .sold-out-msg { color: var(--danger); font-weight: bold; margin: 10px 0; font-size: 14px; }
-
-        /* Admin Panel Styles */
-        #admin-panel { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg); z-index: 9999; overflow-y: auto; padding: 25px; box-sizing: border-box; }
-        .admin-section { background: white; padding: 20px; border-radius: 20px; margin-bottom: 25px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); color: #333; border-top: 4px solid var(--blue); }
-        .admin-section h3 { margin-top: 0; color: var(--main); display: flex; align-items: center; gap: 10px; }
-
-        /* Chat Window */
-        #chat-window { display: none; position: fixed; bottom: 85px; left: 20px; width: 320px; height: 450px; background: white; border-radius: 25px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); z-index: 4500; flex-direction: column; overflow: hidden; border: 1px solid #eee; }
-        .chat-header { background: var(--main); color: white; padding: 15px; display: flex; justify-content: space-between; align-items: center; }
-        .chat-body { flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; background: #f8fafc; }
-        .msg { padding: 10px 14px; border-radius: 15px; max-width: 80%; font-size: 14px; line-height: 1.4; }
-        .msg.user { background: var(--blue); color: white; align-self: flex-end; border-bottom-right-radius: 2px; }
-        .msg.admin { background: white; color: #333; align-self: flex-start; border-bottom-left-radius: 2px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
-
+        :root {
+            --primary: #8B5CF6;
+            --primary-dark: #7C3AED;
+            --accent: #F59E0B;
+            --bg: #F9FAFB;
+            --card: #FFFFFF;
+            --text: #1F2937;
+            --text-light: #6B7280;
+            --success: #10B981;
+            --danger: #EF4444;
+            --border: #E5E7EB;
+        }
+        
+        .dark-mode {
+            --primary: #A78BFA;
+            --primary-dark: #8B5CF6;
+            --bg: #111827;
+            --card: #1F2937;
+            --text: #F3F4F6;
+            --text-light: #9CA3AF;
+            --border: #374151;
+        }
+        
+        body {
+            font-family: 'Cairo', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            transition: all 0.3s ease;
+            padding-bottom: 75px;
+        }
+        
+        /* Header */
+        .header {
+            background: var(--primary);
+            padding: 12px 16px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+        }
+        
+        .logo {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            border: 2px solid var(--accent);
+            object-fit: cover;
+        }
+        
+        .shop-name {
+            font-size: 18px;
+            font-weight: bold;
+            color: white;
+        }
+        
+        .header-icons {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+        
+        .icon-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: white;
+            position: relative;
+        }
+        
+        .cart-badge {
+            position: absolute;
+            top: -8px;
+            right: -12px;
+            background: var(--accent);
+            color: black;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            font-size: 11px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+        
+        /* Search */
+        .search-section {
+            padding: 12px 16px;
+            background: var(--bg);
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .search-input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid var(--border);
+            border-radius: 30px;
+            background: var(--card);
+            color: var(--text);
+            font-size: 14px;
+            outline: none;
+            transition: all 0.3s;
+        }
+        
+        .search-input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+        }
+        
+        /* Categories */
+        .categories {
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            padding: 12px 16px;
+            background: var(--bg);
+            border-bottom: 1px solid var(--border);
+            scrollbar-width: none;
+        }
+        
+        .categories::-webkit-scrollbar {
+            display: none;
+        }
+        
+        .cat-btn {
+            padding: 8px 20px;
+            border-radius: 30px;
+            border: 1px solid var(--border);
+            background: var(--card);
+            color: var(--text);
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.3s;
+        }
+        
+        .cat-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+        
+        /* Products Grid */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            padding: 16px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        @media (min-width: 600px) {
+            .products-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+        
+        @media (min-width: 900px) {
+            .products-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+        
+        .product-card {
+            background: var(--card);
+            border-radius: 16px;
+            padding: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            transition: transform 0.3s, box-shadow 0.3s;
+            position: relative;
+            border: 1px solid var(--border);
+        }
+        
+        .product-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        }
+        
+        .product-img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 12px;
+            cursor: pointer;
+        }
+        
+        .product-name {
+            font-size: 14px;
+            font-weight: 600;
+            margin: 10px 0 5px;
+            height: 40px;
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+        }
+        
+        .product-price {
+            color: var(--success);
+            font-weight: bold;
+            font-size: 16px;
+        }
+        
+        .old-price {
+            color: var(--text-light);
+            font-size: 12px;
+            text-decoration: line-through;
+            margin-right: 8px;
+        }
+        
+        .wish-btn {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: rgba(255,255,255,0.9);
+            border: none;
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 18px;
+            color: #CBD5E1;
+            transition: all 0.3s;
+        }
+        
+        .wish-btn.active {
+            color: var(--danger);
+        }
+        
+        .add-to-cart {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .add-to-cart:active {
+            transform: scale(0.98);
+        }
+        
+        /* Floating Buttons */
+        .floating-buttons {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 200;
+        }
+        
+        .float-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            transition: transform 0.3s;
+            border: none;
+        }
+        
+        .float-btn:hover {
+            transform: scale(1.1);
+        }
+        
+        .btn-wa { background: #25D366; color: white; }
+        .btn-dark { background: var(--primary); color: white; }
+        
         /* Modals */
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 5000; align-items: center; justify-content: center; backdrop-filter: blur(5px); }
-        .modal-content { background: var(--card-bg); padding: 30px; border-radius: 30px; width: 90%; max-width: 480px; max-height: 85vh; overflow-y: auto; position: relative; }
-
-        input, select, textarea { width: 100%; padding: 14px; margin: 10px 0; border-radius: 12px; border: 1px solid #ddd; font-family: inherit; font-size: 15px; outline: none; transition: 0.3s; box-sizing: border-box; }
-        input:focus { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1); }
-        .required { border-right: 5px solid var(--danger) !important; }
-
-        .btn { border: none; padding: 14px; border-radius: 12px; cursor: pointer; font-weight: bold; width: 100%; font-family: inherit; transition: 0.3s; margin-top: 10px; font-size: 16px; }
-        .btn-main { background: var(--main); color: white; }
-        .btn-accent { background: var(--accent); color: black; }
-        .btn-danger { background: var(--danger); color: white; }
-        .btn-success { background: var(--success); color: white; }
-
-        /* Floating Action Buttons */
-        .f-btns { position: fixed; bottom: 25px; right: 25px; display: flex; flex-direction: column; gap: 12px; z-index: 4000; }
-        .f-btn { width: 60px; height: 60px; border-radius: 50%; background: var(--main); color: white; display: flex; align-items: center; justify-content: center; font-size: 26px; cursor: pointer; border: none; box-shadow: 0 5px 15px rgba(0,0,0,0.3); transition: 0.3s; }
-        .f-btn:hover { transform: scale(1.1); }
-
-        #toast { visibility: hidden; background: #333; color: white; padding: 15px 30px; border-radius: 50px; position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); z-index: 10000; font-weight: bold; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
-        #toast.show { visibility: visible; animation: slideUp 0.4s; }
-        @keyframes slideUp { from {bottom: 0; opacity: 0;} to {bottom: 30px; opacity: 1;} }
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal-content {
+            background: var(--card);
+            border-radius: 24px;
+            padding: 24px;
+            width: 90%;
+            max-width: 450px;
+            max-height: 85vh;
+            overflow-y: auto;
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--border);
+        }
+        
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--text-light);
+        }
+        
+        /* Cart Items */
+        .cart-item {
+            display: flex;
+            gap: 12px;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .cart-item-img {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+        
+        .cart-item-info {
+            flex: 1;
+        }
+        
+        .cart-item-name {
+            font-weight: 600;
+            font-size: 14px;
+        }
+        
+        .cart-item-price {
+            color: var(--success);
+            font-weight: bold;
+        }
+        
+        .remove-item {
+            color: var(--danger);
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 20px;
+        }
+        
+        /* Inputs */
+        input, textarea, select {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 12px;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            background: var(--bg);
+            color: var(--text);
+            font-family: inherit;
+        }
+        
+        textarea {
+            resize: vertical;
+        }
+        
+        /* Admin Panel */
+        .admin-panel {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--bg);
+            z-index: 2000;
+            overflow-y: auto;
+            padding: 20px;
+        }
+        
+        .admin-section {
+            background: var(--card);
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        /* Toast */
+        .toast {
+            visibility: hidden;
+            position: fixed;
+            bottom: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--text);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 50px;
+            z-index: 1100;
+            white-space: nowrap;
+        }
+        
+        .toast.show {
+            visibility: visible;
+            animation: fadeInOut 2.5s ease;
+        }
+        
+        @keyframes fadeInOut {
+            0% { opacity: 0; bottom: 0; }
+            15% { opacity: 1; bottom: 80px; }
+            85% { opacity: 1; bottom: 80px; }
+            100% { opacity: 0; bottom: 0; }
+        }
+        
+        button {
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
 
 <div class="header">
-    <div class="nav-row">
-        <button onclick="openModal('menu-modal')" style="background:none; border:none; color:white; font-size:30px; cursor:pointer;">☰</button>
-        <div style="text-align:center;">
-            <img src="https://i.postimg.cc/RWNMnJDG/image.jpg" class="logo"><br>
-            <span id="shop-name-btn" onclick="handleAdminTrigger()">VIP Baby</span>
+    <div class="header-content">
+        <div class="logo-area" onclick="adminLoginTrigger()">
+            <img src="https://i.postimg.cc/RWNMnJDG/image.jpg" class="logo" alt="VIP Baby">
+            <span class="shop-name" id="shopNameDisplay">VIP Baby Nutrition</span>
         </div>
-        <div onclick="openModal('cart-modal')" style="cursor:pointer; font-size:28px; position:relative;">
-            🛒 <span id="cart-count" style="position:absolute; top:-5px; right:-8px; background:var(--danger); color:white; border-radius:50%; width:22px; height:22px; font-size:12px; display:flex; align-items:center; justify-content:center; font-weight:bold;">0</span>
+        <div class="header-icons">
+            <button class="icon-btn" onclick="openModal('wishlistModal')">❤️</button>
+            <button class="icon-btn" onclick="openModal('cartModal')">
+                🛒
+                <span class="cart-badge" id="cartCount">0</span>
+            </button>
         </div>
     </div>
 </div>
 
-<div id="product-list" class="product-grid"></div>
+<div class="search-section">
+    <input type="text" class="search-input" id="searchInput" placeholder="🔍 گەڕان بەدوای بەرهەمەکان..." onkeyup="filterProducts()">
+</div>
 
-<div id="admin-panel">
-    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:25px;">
-        <h2 style="margin:0;">⚙️ بەڕێوەبردنی گشتی</h2>
-        <button onclick="closeAdmin()" class="btn-danger" style="width:auto; padding:10px 20px; margin:0;">داخستن</button>
+<div class="categories" id="categoriesList">
+    <button class="cat-btn active" onclick="filterByCategory('all', this)">✨ هەموو</button>
+</div>
+
+<div class="products-grid" id="productsGrid"></div>
+
+<div class="floating-buttons">
+    <button class="float-btn btn-dark" onclick="toggleDarkMode()">🌙</button>
+    <a href="https://wa.me/9647700000000" class="float-btn btn-wa" target="_blank">💬</a>
+</div>
+
+<!-- Cart Modal -->
+<div id="cartModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>🛒 سەبەتەی کڕین</h3>
+            <button class="close-modal" onclick="closeModal('cartModal')">&times;</button>
+        </div>
+        <div id="cartItemsList"></div>
+        <div style="margin-top: 20px; padding-top: 15px; border-top: 2px solid var(--border);">
+            <div style="display: flex; justify-content: space-between; font-weight: bold; font-size: 18px;">
+                <span>کۆی گشتی:</span>
+                <span id="cartTotal" style="color: var(--success);">0 IQD</span>
+            </div>
+            <button class="add-to-cart" style="background: var(--accent); color: black; margin-top: 15px;" onclick="goToCheckout()">📝 بەردەوامبوون بۆ کڕین</button>
+        </div>
     </div>
+</div>
 
+<!-- Wishlist Modal -->
+<div id="wishlistModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>❤️ دڵخوازەکان</h3>
+            <button class="close-modal" onclick="closeModal('wishlistModal')">&times;</button>
+        </div>
+        <div id="wishlistItems"></div>
+    </div>
+</div>
+
+<!-- Checkout Modal -->
+<div id="checkoutModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>📋 زانیاری کڕیار</h3>
+            <button class="close-modal" onclick="closeModal('checkoutModal')">&times;</button>
+        </div>
+        <input type="text" id="customerName" placeholder="ناوی تەواو">
+        <input type="tel" id="customerPhone" placeholder="ژمارەی مۆبایل">
+        <textarea id="customerAddress" rows="3" placeholder="ناونیشانی ورد (شار، گەڕەک، نزیک شوێنێک)"></textarea>
+        <button class="add-to-cart" style="background: var(--success);" onclick="submitOrder()">✅ تەواوکردنی داواکاری</button>
+    </div>
+</div>
+
+<!-- Admin Login Modal -->
+<div id="adminLoginModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>🔐 چوونە ژوورەوەی ئادمین</h3>
+            <button class="close-modal" onclick="closeModal('adminLoginModal')">&times;</button>
+        </div>
+        <input type="password" id="adminPassword" placeholder="پاسۆرد">
+        <button class="add-to-cart" onclick="adminLogin()">چوونە ژوورەوە</button>
+    </div>
+</div>
+
+<!-- Admin Panel -->
+<div id="adminPanel" class="admin-panel">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <h2>🛠️ پانێڵی ئادمین</h2>
+        <button class="icon-btn" style="color: var(--danger);" onclick="closeAdminPanel()">✖️ داخستن</button>
+    </div>
+    
     <div class="admin-section">
-        <h3>🎨 دیزاین و مینو</h3>
-        <label>ناوی فرۆشگا:</label>
-        <input id="set-name" placeholder="بۆ نموونە: VIP Kids">
-        <label>ڕەنگی مینو و دوگمەکان:</label>
-        <input id="set-color" type="color" style="height:50px; cursor:pointer;">
-        <button onclick="applySettings()" class="btn btn-success">جێبەجێکردن</button>
+        <h3>➕ زیادکردنی بەرهەمی نوێ</h3>
+        <input type="text" id="newProductName" placeholder="ناوی بەرهەم">
+        <input type="number" id="newProductPrice" placeholder="نرخ (IQD)">
+        <input type="text" id="newProductImage" placeholder="لینکی وێنە">
+        <select id="newProductCategory">
+            <option value="تغذیة">🍼 پێداویستی خۆراک</option>
+            <option value="ملابس">👕 جلوبەرگ</option>
+            <option value="العاب">🧸 یاری</option>
+            <option value="عربات">🛒 عەرەبانە</option>
+        </select>
+        <button class="add-to-cart" onclick="addProduct()">✨ زیادکردنی بەرهەم</button>
     </div>
-
+    
     <div class="admin-section">
-        <h3>📦 زیادکردن و ستۆک</h3>
-        <input id="p-id" type="hidden">
-        <input id="p-name" placeholder="ناوی کاڵا">
-        <input id="p-price" type="number" placeholder="نرخی کاڵا (بە دینار)">
-        <input id="p-stock" type="number" placeholder="بڕی بەردەست (Stock)">
-        <input id="p-img" placeholder="لینکی وێنە">
-        <input id="p-vid" placeholder="لینکی ڤیدیۆ (MP4 یان YouTube) - ئیختیاری">
-        <button onclick="saveProduct()" class="btn btn-main">بڵاوکردنەوەی کاڵا</button>
-        <div id="admin-p-list" style="margin-top:20px; border-top:1px solid #eee;"></div>
+        <h3>📦 بەڕێوەبردنی بەرهەمەکان</h3>
+        <div id="adminProductsList"></div>
     </div>
-
+    
     <div class="admin-section">
         <h3>📋 داواکارییەکان</h3>
-        <div id="admin-orders"></div>
-    </div>
-
-    <div class="admin-section">
-        <h3>💬 نامەکان</h3>
-        <div id="admin-chat-list"></div>
+        <div id="adminOrdersList"></div>
     </div>
 </div>
 
-<div id="cart-modal" class="modal"><div class="modal-content">
-    <div style="display:flex; justify-content:space-between; align-items:center;">
-        <h3 style="margin:0;">🛒 سەبەتەی تۆ</h3>
-        <button onclick="emptyCart()" class="btn-danger" style="width:auto; font-size:12px; padding:6px 12px; margin:0;">بەتاڵکردنەوەی گشتی</button>
-    </div>
-    <div id="cart-items" style="margin:20px 0; max-height:300px; overflow-y:auto;"></div>
-    <hr style="border:0; border-top:1px solid #eee;">
-    <div style="font-size:22px; font-weight:bold; margin:15px 0; display:flex; justify-content:space-between;">
-        <span>کۆی گشتی:</span>
-        <span><span id="total-price">0</span> IQD</span>
-    </div>
-    <button onclick="openCheckout()" class="btn btn-accent">بەردەوامبە بۆ داواکردن</button>
-    <button onclick="closeModal('cart-modal')" class="btn" style="background:#f1f5f9; color:#334155;">گەڕانەوە</button>
-</div></div>
-
-<div id="checkout-modal" class="modal"><div class="modal-content">
-    <h3 style="margin-top:0;">📝 زانیاری گەیاندن</h3>
-    <p style="font-size:13px; color:gray; margin-bottom:15px;">تکایە خانە سوورەکان بە تەواوی پڕ بکەرەوە بۆ ئەوەی داواکارییەکەت بنێردرێت.</p>
-    <input id="c-name" placeholder="ناوی کڕیار">
-    <input id="c-phone" class="required" placeholder="ژمارەی مۆبایل (ئیجباری)">
-    <textarea id="c-address" class="required" placeholder="ناونیشانی ورد (ئیجباری)"></textarea>
-    <button onclick="confirmOrder()" class="btn btn-success">ناردنی داواکاری بۆ ئادمین</button>
-    <button onclick="closeModal('checkout-modal')" class="btn" style="background:#f1f5f9;">گەڕانەوە</button>
-</div></div>
-
-<div id="login-modal" class="modal"><div class="modal-content">
-    <h3 style="margin-top:0;">🔒 چوونەژوورەوەی ئادمین</h3>
-    <input type="password" id="admin-pass" placeholder="پاسۆرد لێبدە">
-    <button onclick="checkAdmin()" class="btn btn-main">چوونەژوورەوە</button>
-</div></div>
-
-<div id="chat-window">
-    <div class="chat-header">
-        <span style="font-weight:bold;">💬 چاتی ڕاستەوخۆ</span> 
-        <span onclick="toggleChat()" style="cursor:pointer; font-size:20px;">✖</span>
-    </div>
-    <div class="chat-body" id="chat-msgs"></div>
-    <div style="padding:15px; display:flex; gap:8px; background:white; border-top:1px solid #eee;">
-        <input id="chat-inp" placeholder="نامەیەک بنووسە..." style="margin:0; padding:10px;">
-        <button onclick="sendMsg()" class="btn-main" style="width:auto; margin:0; padding:10px 15px; border-radius:10px;">ناردن</button>
-    </div>
-</div>
-
-<div class="f-btns">
-    <button class="f-btn" onclick="toggleDark()" title="دۆخی تاریک">🌓</button>
-    <button class="f-btn" onclick="toggleChat()" style="background:var(--blue);" title="چات">💬</button>
-</div>
-
-<div id="toast"></div>
+<div id="toast" class="toast"></div>
 
 <script>
-    /* JAVASCRIPT LOGIC - NO TRIMMING */
-    let products = JSON.parse(localStorage.getItem('vb_ult_prods')) || [];
-    let orders = JSON.parse(localStorage.getItem('vb_ult_orders')) || [];
-    let chats = JSON.parse(localStorage.getItem('vb_ult_chats')) || [];
-    let config = JSON.parse(localStorage.getItem('vb_ult_config')) || { name: "VIP Baby", color: "#1e293b" };
+    // ========== داتابەیس ==========
+    let products = JSON.parse(localStorage.getItem('vip_products')) || [
+        { id: 1, name: "شیری منداڵان VIP", price: 25000, image: "https://i.postimg.cc/RWNMnJDG/image.jpg", category: "تغذیة" },
+        { id: 2, name: "جلی منداڵان (کۆمپلێت)", price: 35000, image: "https://i.postimg.cc/RWNMnJDG/image.jpg", category: "ملابس" },
+        { id: 3, name: "عەرەبانەی تایبەت", price: 125000, image: "https://i.postimg.cc/RWNMnJDG/image.jpg", category: "عربات" },
+        { id: 4, name: "یاری پەروەردەیی", price: 15000, image: "https://i.postimg.cc/RWNMnJDG/image.jpg", category: "العاب" },
+        { id: 5, name: "پەمپێری منداڵ", price: 45000, image: "https://i.postimg.cc/RWNMnJDG/image.jpg", category: "تغذیة" },
+        { id: 6, name: "کۆرسی تایبەتی منداڵان", price: 85000, image: "https://i.postimg.cc/RWNMnJDG/image.jpg", category: "عربات" }
+    ];
+    
+    let orders = JSON.parse(localStorage.getItem('vip_orders')) || [];
+    let wishlist = JSON.parse(localStorage.getItem('vip_wishlist')) || [];
     let cart = [];
-
-    function init() {
-        applyUIConfig();
-        renderProducts();
-    }
-
-    function applyUIConfig() {
-        document.getElementById('shop-name-btn').innerText = config.name;
-        document.documentElement.style.setProperty('--main', config.color);
-        document.getElementById('set-name').value = config.name;
-        document.getElementById('set-color').value = config.color;
-    }
-
+    let currentCategory = 'all';
+    let shopName = localStorage.getItem('vip_shop_name') || 'VIP Baby Nutrition';
+    
+    // ========== فرۆشگا ==========
+    document.getElementById('shopNameDisplay').innerText = shopName;
+    
     function renderProducts() {
-        const container = document.getElementById('product-list');
-        if(products.length === 0) {
-            container.innerHTML = "<p style='grid-column:1/-1; text-align:center; padding:50px;'>هیچ کاڵایەک نییە بۆ پیشاندان.</p>";
-            return;
-        }
-        container.innerHTML = products.map((p, idx) => {
-            const isOut = p.stock <= 0;
-            return `
-            <div class="card ${isOut ? 'out-of-stock' : ''}">
-                <div class="stock-badge">ماوە: ${p.stock} دانە</div>
-                ${p.vid ? `<video src="${p.vid}" muted loop onmouseover="this.play()" onmouseout="this.pause()" playsinline></video>` : `<img src="${p.img || 'https://via.placeholder.com/200'}" alt="product">`}
-                <h4 style="margin:10px 0;">${p.name}</h4>
-                <div style="color:var(--success); font-weight:900; font-size:18px; margin-bottom:12px;">${parseInt(p.price).toLocaleString()} IQD</div>
-                ${isOut ? `<div class="sold-out-msg">تەواو بووە ❌</div>` : `<button class="btn btn-main" onclick="addToCart(${idx})">زیادکردن بۆ سەبەتە</button>`}
-            </div>`;
-        }).join("");
-        renderAdminProds();
-    }
-
-    function addToCart(idx) {
-        if(products[idx].stock > 0) {
-            cart.push({...products[idx], originalIndex: idx});
-            updateCartUI();
-            showToast("زیادکرا بۆ سەبەتە ✅");
-        }
-    }
-
-    function updateCartUI() {
-        document.getElementById('cart-count').innerText = cart.length;
-        let total = cart.reduce((s, item) => s + parseInt(item.price), 0);
-        document.getElementById('total-price').innerText = total.toLocaleString();
+        let filtered = currentCategory === 'all' ? products : products.filter(p => p.category === currentCategory);
+        let searchTerm = document.getElementById('searchInput').value.toLowerCase();
+        filtered = filtered.filter(p => p.name.toLowerCase().includes(searchTerm));
         
-        const container = document.getElementById('cart-items');
-        if(cart.length === 0) {
-            container.innerHTML = "<p style='text-align:center; color:gray;'>سەبەتەکەت خاڵییە.</p>";
-            return;
+        const grid = document.getElementById('productsGrid');
+        grid.innerHTML = filtered.map(product => `
+            <div class="product-card">
+                <button class="wish-btn ${wishlist.some(w => w.id === product.id) ? 'active' : ''}" onclick="toggleWishlist(${product.id})">❤️</button>
+                <img src="${product.image}" class="product-img" onclick="zoomImage('${product.image}')">
+                <div class="product-name">${product.name}</div>
+                <div class="product-price">${product.price.toLocaleString()} IQD</div>
+                <button class="add-to-cart" onclick="addToCart(${product.id})">🛒 زیادکردن بۆ سەبەتە</button>
+            </div>
+        `).join('');
+        
+        if(filtered.length === 0) {
+            grid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 50px;">هیچ بەرهەمێک نەدۆزرایەوە 😢</div>';
         }
-        container.innerHTML = cart.map((item, i) => `
-            <div style="display:flex; justify-content:space-between; align-items:center; padding:10px; border-bottom:1px solid #eee; background:#f9f9f9; border-radius:10px; margin-bottom:8px;">
-                <div style="text-align:right;">
-                    <div style="font-weight:bold;">${item.name}</div>
-                    <div style="font-size:12px; color:var(--success);">${parseInt(item.price).toLocaleString()} IQD</div>
-                </div>
-                <span onclick="removeFromCart(${i})" style="color:var(--danger); cursor:pointer; font-size:20px; padding:5px;">🗑️</span>
-            </div>`).join("");
     }
-
-    function removeFromCart(i) {
-        cart.splice(i, 1);
+    
+    function renderCategories() {
+        const categories = ['all', ...new Set(products.map(p => p.category))];
+        const catNames = {
+            'all': '✨ هەموو',
+            'تغذیة': '🍼 پێداویستی خۆراک',
+            'ملابس': '👕 جلوبەرگ',
+            'العاب': '🧸 یاری',
+            'عربات': '🛒 عەرەبانە'
+        };
+        
+        const container = document.getElementById('categoriesList');
+        container.innerHTML = categories.map(cat => `
+            <button class="cat-btn ${currentCategory === cat ? 'active' : ''}" onclick="filterByCategory('${cat}', this)">${catNames[cat] || cat}</button>
+        `).join('');
+    }
+    
+    function filterByCategory(category, btn) {
+        currentCategory = category;
+        document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        renderProducts();
+    }
+    
+    function filterProducts() {
+        renderProducts();
+    }
+    
+    // ========== سەبەتە ==========
+    function addToCart(productId) {
+        const product = products.find(p => p.id === productId);
+        cart.push(product);
         updateCartUI();
+        showToast(`${product.name} زیادکرا بۆ سەبەتە ✅`);
     }
-
-    function emptyCart() {
-        if(cart.length > 0 && confirm("دڵنیای لە سڕینەوەی هەموو کاڵاکانی ناو سەبەتە؟")) {
-            cart = [];
-            updateCartUI();
-            showToast("سەبەتە بەتاڵ کرایەوە");
-        }
-    }
-
-    function openCheckout() {
-        if(cart.length === 0) return alert("تکایە سەرەتا کاڵا زیاد بکە بۆ سەبەتە");
-        closeModal('cart-modal');
-        openModal('checkout-modal');
-    }
-
-    function confirmOrder() {
-        let phone = document.getElementById('c-phone').value;
-        let addr = document.getElementById('c-address').value;
-        let name = document.getElementById('c-name').value;
+    
+    function updateCartUI() {
+        document.getElementById('cartCount').innerText = cart.length;
         
-        if(!phone || !addr) {
-            alert("تکایە خانە ئیجبارییەکان (مۆبایل و ناونیشان) پڕ بکەرەوە");
+        const cartList = document.getElementById('cartItemsList');
+        let total = 0;
+        
+        if(cart.length === 0) {
+            cartList.innerHTML = '<p style="text-align: center; color: var(--text-light);">سەبەتەکەت خاڵییە 🛒</p>';
+            document.getElementById('cartTotal').innerText = '0 IQD';
             return;
         }
-
-        // Deduct Stock
-        cart.forEach(item => {
-            if(products[item.originalIndex]) {
-                products[item.originalIndex].stock--;
-            }
-        });
-
-        const newOrder = {
-            id: "#" + Math.floor(1000 + Math.random() * 9000),
-            customer: name || "کڕیار",
-            phone: phone,
-            address: addr,
-            items: cart.map(i => i.name),
-            total: document.getElementById('total-price').innerText,
-            date: new Date().toLocaleString()
-        };
-
-        orders.push(newOrder);
-        localStorage.setItem('vb_ult_orders', JSON.stringify(orders));
-        localStorage.setItem('vb_ult_prods', JSON.stringify(products));
         
-        alert("داواکارییەکەت نێردرا! ژمارەی وەسڵ: " + newOrder.id);
-        cart = []; 
-        updateCartUI(); 
-        closeModal('checkout-modal'); 
-        renderProducts();
-    }
-
-    // --- Admin Control Functions ---
-    let triggerCount = 0;
-    function handleAdminTrigger() {
-        triggerCount++;
-        if(triggerCount >= 3) {
-            openModal('login-modal');
-            triggerCount = 0;
-        }
-        setTimeout(() => triggerCount = 0, 2000);
-    }
-
-    function checkAdmin() {
-        if(document.getElementById('admin-pass').value === "1234") {
-            closeModal('login-modal');
-            document.getElementById('admin-panel').style.display = 'block';
-            renderAdminOrders();
-        } else {
-            alert("پاسۆرد هەڵەیە!");
-        }
-    }
-
-    function applySettings() {
-        config.name = document.getElementById('set-name').value || config.name;
-        config.color = document.getElementById('set-color').value;
-        localStorage.setItem('vb_ult_config', JSON.stringify(config));
-        applyUIConfig();
-        showToast("ڕێکخستنەکان گۆڕدران ✨");
-    }
-
-    function saveProduct() {
-        const id = document.getElementById('p-id').value;
-        const p = {
-            name: document.getElementById('p-name').value,
-            price: document.getElementById('p-price').value,
-            stock: parseInt(document.getElementById('p-stock').value) || 0,
-            img: document.getElementById('p-img').value,
-            vid: document.getElementById('p-vid').value
-        };
-
-        if(!p.name || !p.price) return alert("تکایە ناو و نرخ بنووسە");
-
-        if(id === "") products.push(p);
-        else products[id] = p;
-
-        localStorage.setItem('vb_ult_prods', JSON.stringify(products));
-        renderProducts();
-        clearProductForm();
-        showToast("کاڵا پاشەکەوت کرا ✅");
-    }
-
-    function renderAdminProds() {
-        document.getElementById('admin-p-list').innerHTML = products.map((p, i) => `
-            <div style="display:flex; justify-content:space-between; align-items:center; padding:12px; border-bottom:1px solid #eee;">
-                <span>${p.name} (ماوە: ${p.stock})</span>
-                <div>
-                    <button onclick="loadToEdit(${i})" style="color:var(--blue); border:none; background:none; cursor:pointer; font-weight:bold;">دەستکاری</button>
-                    <button onclick="deleteProduct(${i})" style="color:var(--danger); border:none; background:none; cursor:pointer; font-weight:bold; margin-right:10px;">سڕینەوە</button>
+        cartList.innerHTML = cart.map((item, index) => {
+            total += item.price;
+            return `
+                <div class="cart-item">
+                    <img src="${item.image}" class="cart-item-img">
+                    <div class="cart-item-info">
+                        <div class="cart-item-name">${item.name}</div>
+                        <div class="cart-item-price">${item.price.toLocaleString()} IQD</div>
+                    </div>
+                    <button class="remove-item" onclick="removeFromCart(${index})">🗑️</button>
                 </div>
-            </div>`).join("");
+            `;
+        }).join('');
+        
+        document.getElementById('cartTotal').innerText = total.toLocaleString() + ' IQD';
     }
-
-    function loadToEdit(i) {
-        const p = products[i];
-        document.getElementById('p-id').value = i;
-        document.getElementById('p-name').value = p.name;
-        document.getElementById('p-price').value = p.price;
-        document.getElementById('p-stock').value = p.stock;
-        document.getElementById('p-img').value = p.img;
-        document.getElementById('p-vid').value = p.vid;
-        window.scrollTo(0, 0);
+    
+    function removeFromCart(index) {
+        cart.splice(index, 1);
+        updateCartUI();
+        showToast('بەرهەم لە سەبەتە سڕایەوە');
     }
-
-    function deleteProduct(i) {
-        if(confirm("دڵنیای لە سڕینەوە؟")) {
-            products.splice(i, 1);
-            localStorage.setItem('vb_ult_prods', JSON.stringify(products));
-            renderProducts();
-        }
-    }
-
-    function clearProductForm() {
-        document.getElementById('p-id').value = "";
-        document.getElementById('p-name').value = "";
-        document.getElementById('p-price').value = "";
-        document.getElementById('p-stock').value = "";
-        document.getElementById('p-img').value = "";
-        document.getElementById('p-vid').value = "";
-    }
-
-    function renderAdminOrders() {
-        const container = document.getElementById('admin-orders');
-        if(orders.length === 0) {
-            container.innerHTML = "<p>هیچ داواکارییەک نەگەیشتووە.</p>";
+    
+    function goToCheckout() {
+        if(cart.length === 0) {
+            showToast('تکایە یەکێک لە بەرهەمەکان هەڵبژێرە');
             return;
         }
-        container.innerHTML = orders.slice().reverse().map((o, i) => `
-            <div style="background:#f1f5f9; padding:15px; border-radius:15px; margin-bottom:15px; position:relative;">
-                <div style="font-weight:bold; color:var(--blue); margin-bottom:5px;">داواکاری ${o.id}</div>
-                <div>👤 کڕیار: ${o.customer}</div>
-                <div>📞 مۆبایل: ${o.phone}</div>
-                <div>📍 ناونیشان: ${o.address}</div>
-                <div>📦 کاڵاکان: ${o.items.join(", ")}</div>
-                <div style="font-weight:bold; margin-top:5px;">💰 کۆی گشتی: ${o.total} IQD</div>
-                <div style="font-size:11px; color:gray; margin-top:5px;">📅 ${o.date}</div>
-                <button onclick="deleteOrder(${orders.length-1-i})" style="position:absolute; top:10px; left:10px; border:none; color:red; background:none; cursor:pointer;">سڕینەوە</button>
-            </div>`).join("");
+        closeModal('cartModal');
+        openModal('checkoutModal');
     }
-
-    function deleteOrder(i) {
-        if(confirm("سڕینەوەی وەسڵ؟")) {
-            orders.splice(i, 1);
-            localStorage.setItem('vb_ult_orders', JSON.stringify(orders));
+    
+    // ========== دڵخوازەکان ==========
+    function toggleWishlist(productId) {
+        const product = products.find(p => p.id === productId);
+        const exists = wishlist.some(w => w.id === productId);
+        
+        if(exists) {
+            wishlist = wishlist.filter(w => w.id !== productId);
+            showToast('لە لیستی دڵخوازەکان سڕایەوە 💔');
+        } else {
+            wishlist.push(product);
+            showToast('زیادکرا بۆ لیستی دڵخوازەکان ❤️');
+        }
+        
+        localStorage.setItem('vip_wishlist', JSON.stringify(wishlist));
+        renderProducts();
+        renderWishlist();
+    }
+    
+    function renderWishlist() {
+        const container = document.getElementById('wishlistItems');
+        if(wishlist.length === 0) {
+            container.innerHTML = '<p style="text-align: center; color: var(--text-light);">هیچ بەرهەمێک لە دڵخوازەکاندا نییە 💔</p>';
+            return;
+        }
+        
+        container.innerHTML = wishlist.map(item => `
+            <div class="cart-item">
+                <img src="${item.image}" class="cart-item-img">
+                <div class="cart-item-info">
+                    <div class="cart-item-name">${item.name}</div>
+                    <div class="cart-item-price">${item.price.toLocaleString()} IQD</div>
+                </div>
+                <button class="remove-item" onclick="addToCartFromWishlist(${item.id})">🛒</button>
+            </div>
+        `).join('');
+    }
+    
+    function addToCartFromWishlist(productId) {
+        addToCart(productId);
+        closeModal('wishlistModal');
+    }
+    
+    // ========== داواکاری ==========
+    function submitOrder() {
+        const name = document.getElementById('customerName').value;
+        const phone = document.getElementById('customerPhone').value;
+        const address = document.getElementById('customerAddress').value;
+        
+        if(!name || !phone || !address) {
+            showToast('تکایە هەموو زانیارییەکان پڕ بکەرەوە');
+            return;
+        }
+        
+        const order = {
+            id: Date.now(),
+            date: new Date().toLocaleString('ku-IQ'),
+            customer: name,
+            phone: phone,
+            address: address,
+            items: [...cart],
+            total: cart.reduce((sum, i) => sum + i.price, 0),
+            status: 'pending'
+        };
+        
+        orders.unshift(order);
+        localStorage.setItem('vip_orders', JSON.stringify(orders));
+        
+        // ناردن بۆ واتساپ
+        const message = `📦 *داواکاری نوێ*\n👤 ناو: ${name}\n📞 تەلەفۆن: ${phone}\n📍 ناونیشان: ${address}\n📋 بەرهەمەکان:\n${cart.map(i => `- ${i.name}: ${i.price.toLocaleString()} IQD`).join('\n')}\n💰 کۆی گشتی: ${cart.reduce((s,i)=>s+i.price,0).toLocaleString()} IQD`;
+        window.open(`https://wa.me/9647700000000?text=${encodeURIComponent(message)}`, '_blank');
+        
+        cart = [];
+        updateCartUI();
+        closeModal('checkoutModal');
+        showToast('داواکارییەکەت ڕەوانە کرا ✅');
+        
+        document.getElementById('customerName').value = '';
+        document.getElementById('customerPhone').value = '';
+        document.getElementById('customerAddress').value = '';
+    }
+    
+    // ========== ئادمین ==========
+    let adminClickCount = 0;
+    
+    function adminLoginTrigger() {
+        adminClickCount++;
+        if(adminClickCount >= 5) {
+            openModal('adminLoginModal');
+            adminClickCount = 0;
+        }
+        setTimeout(() => adminClickCount = 0, 2000);
+    }
+    
+    function adminLogin() {
+        const password = document.getElementById('adminPassword').value;
+        if(password === 'vip2026') {
+            closeModal('adminLoginModal');
+            document.getElementById('adminPanel').style.display = 'block';
+            renderAdminProducts();
             renderAdminOrders();
+            showToast('بەخێربێیت بۆ پانێڵی ئادمین');
+        } else {
+            showToast('پاسۆرد هەڵەیە!');
+        }
+        document.getElementById('adminPassword').value = '';
+    }
+    
+    function closeAdminPanel() {
+        document.getElementById('adminPanel').style.display = 'none';
+    }
+    
+    function renderAdminProducts() {
+        const container = document.getElementById('adminProductsList');
+        container.innerHTML = products.map((p, index) => `
+            <div class="cart-item" style="justify-content: space-between;">
+                <span>${p.name} - ${p.price.toLocaleString()} IQD</span>
+                <button class="remove-item" onclick="deleteProduct(${index})">🗑️</button>
+            </div>
+        `).join('');
+    }
+    
+    function deleteProduct(index) {
+        if(confirm('دڵنیای لە سڕینەوەی ئەم بەرهەمە؟')) {
+            products.splice(index, 1);
+            localStorage.setItem('vip_products', JSON.stringify(products));
+            renderProducts();
+            renderCategories();
+            renderAdminProducts();
+            showToast('بەرهەم سڕایەوە');
         }
     }
-
-    // --- Chat Logic ---
-    function toggleChat() {
-        const win = document.getElementById('chat-window');
-        win.style.display = win.style.display === 'flex' ? 'none' : 'flex';
-        renderChat();
-    }
-
-    function sendMsg() {
-        const inp = document.getElementById('chat-inp');
-        if(inp.value.trim()) {
-            chats.push({ sender: 'user', text: inp.value.trim(), time: new Date().toLocaleTimeString() });
-            localStorage.setItem('vb_ult_chats', JSON.stringify(chats));
-            inp.value = '';
-            renderChat();
+    
+    function addProduct() {
+        const name = document.getElementById('newProductName').value;
+        const price = document.getElementById('newProductPrice').value;
+        const image = document.getElementById('newProductImage').value;
+        const category = document.getElementById('newProductCategory').value;
+        
+        if(!name || !price) {
+            showToast('تکایە ناو و نرخ بنووسە');
+            return;
         }
+        
+        const newId = Math.max(...products.map(p => p.id), 0) + 1;
+        products.push({
+            id: newId,
+            name: name,
+            price: parseInt(price),
+            image: image || 'https://i.postimg.cc/RWNMnJDG/image.jpg',
+            category: category
+        });
+        
+        localStorage.setItem('vip_products', JSON.stringify(products));
+        renderProducts();
+        renderCategories();
+        renderAdminProducts();
+        
+        document.getElementById('newProductName').value = '';
+        document.getElementById('newProductPrice').value = '';
+        document.getElementById('newProductImage').value = '';
+        
+        showToast('بەرهەم بە سەرکەوتوویی زیادکرا ✅');
     }
-
-    function renderChat() {
-        const body = document.getElementById('chat-msgs');
-        body.innerHTML = chats.map(c => `
-            <div class="msg ${c.sender}">
-                ${c.text}
-                <div style="font-size:9px; opacity:0.6; margin-top:3px;">${c.time}</div>
-            </div>`).join("");
-        body.scrollTop = body.scrollHeight;
+    
+    function renderAdminOrders() {
+        const container = document.getElementById('adminOrdersList');
+        if(orders.length === 0) {
+            container.innerHTML = '<p>هیچ داواکارییەک نییە</p>';
+            return;
+        }
+        
+        container.innerHTML = orders.map(order => `
+            <div class="admin-section" style="margin-bottom: 10px;">
+                <div><strong>#${order.id}</strong> - ${order.date}</div>
+                <div>👤 ${order.customer} | 📞 ${order.phone}</div>
+                <div>📍 ${order.address}</div>
+                <div>📦 ${order.items.map(i => i.name).join(', ')}</div>
+                <div><strong>💰 ${order.total.toLocaleString()} IQD</strong></div>
+                <button class="remove-item" onclick="deleteOrder(${order.id})">سڕینەوە</button>
+            </div>
+        `).join('');
     }
-
-    // --- General Utilities ---
-    function showToast(m) {
-        const t = document.getElementById('toast');
-        t.innerText = m;
-        t.classList.add('show');
-        setTimeout(() => t.classList.remove('show'), 3000);
+    
+    function deleteOrder(orderId) {
+        orders = orders.filter(o => o.id !== orderId);
+        localStorage.setItem('vip_orders', JSON.stringify(orders));
+        renderAdminOrders();
+        showToast('داواکاری سڕایەوە');
     }
-
-    function openModal(id) { document.getElementById(id).style.display = 'flex'; }
-    function closeModal(id) { document.getElementById(id).style.display = 'none'; }
-    function closeAdmin() { document.getElementById('admin-panel').style.display = 'none'; }
-    function toggleDark() { document.body.classList.toggle('dark-mode'); }
-
-    window.onload = init;
+    
+    // ========== یارمەتیدەرەکان ==========
+    function openModal(id) {
+        document.getElementById(id).style.display = 'flex';
+        if(id === 'wishlistModal') renderWishlist();
+    }
+    
+    function closeModal(id) {
+        document.getElementById(id).style.display = 'none';
+    }
+    
+    function toggleDarkMode() {
+        document.body.classList.toggle('dark-mode');
+        localStorage.setItem('vip_dark_mode', document.body.classList.contains('dark-mode'));
+    }
+    
+    function zoomImage(src) {
+        const modal = document.createElement('div');
+        modal.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.9);z-index:3000;display:flex;align-items:center;justify-content:center;cursor:pointer;';
+        const img = document.createElement('img');
+        img.src = src;
+        img.style.cssText = 'max-width:90%;max-height:90%;border-radius:20px;';
+        modal.appendChild(img);
+        modal.onclick = () => modal.remove();
+        document.body.appendChild(modal);
+    }
+    
+    function showToast(message) {
+        const toast = document.getElementById('toast');
+        toast.innerText = message;
+        toast.classList.add('show');
+        setTimeout(() => toast.classList.remove('show'), 2500);
+    }
+    
+    // ========== دەستپێکردن ==========
+    if(localStorage.getItem('vip_dark_mode') === 'true') {
+        document.body.classList.add('dark-mode');
+    }
+    
+    renderProducts();
+    renderCategories();
+    renderWishlist();
+    updateCartUI();
 </script>
 </body>
 </html>
