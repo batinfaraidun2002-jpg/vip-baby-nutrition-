@@ -6,17 +6,17 @@
     <title>VIP Baby Nutrition</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;700;800&display=swap" rel="stylesheet">
     
     <script>
         tailwind.config = {
             darkMode: 'class',
-            theme: { extend: { fontFamily: { sans: ['Tajawal', 'sans-serif'] }, colors: { primary: '#8b5cf6', secondary: '#ec4899' } } }
+            theme: { extend: { fontFamily: { sans: ['Cairo', 'sans-serif'] }, colors: { primary: '#8b5cf6', secondary: '#ec4899' } } }
         }
     </script>
 
     <style>
-        body { font-family: 'Tajawal', sans-serif; transition: background-color 0.3s, color 0.3s; }
+        body { font-family: 'Cairo', sans-serif; transition: background-color 0.3s, color 0.3s; }
         .dark body { background-color: #111827; color: #f3f4f6; }
         .dark .bg-white { background-color: #1f2937 !important; }
         #loader { position: fixed; inset: 0; background: #fff; z-index: 9999; display: flex; justify-content: center; align-items: center; transition: opacity 0.5s; }
@@ -140,6 +140,7 @@
             <button id="close-admin" class="bg-red-500 text-white px-4 py-2 rounded-lg">داخستن</button>
         </div>
         <div class="container mx-auto p-4">
+            
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
                 <div class="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow border-l-4 border-primary">
                     <p class="text-gray-500">بەرهەمەکان</p><h2 class="text-3xl font-bold dark:text-white" id="stat-products">0</h2>
@@ -153,17 +154,36 @@
             </div>
 
             <div class="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow mb-8">
-                <h2 class="text-xl font-bold mb-4 dark:text-white">زیادکردنی بەرهەم (بە وێنەی مۆبایل/کۆمپیوتەر)</h2>
+                <h2 class="text-xl font-bold mb-4 dark:text-white">زیادکردنی بەرهەمی نوێ</h2>
                 <form id="add-product-form" class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <input type="text" id="admin-p-name" placeholder="ناوی بەرهەم" required class="border p-2 rounded dark:bg-gray-700 dark:text-white">
                     <input type="number" id="admin-p-price" placeholder="نرخ بە دینار" required class="border p-2 rounded dark:bg-gray-700 dark:text-white">
+                    <input type="number" id="admin-p-stock" placeholder="ژمارەی دانە لە کۆگا" required value="10" class="border p-2 rounded dark:bg-gray-700 dark:text-white">
                     <select id="admin-p-cat" class="border p-2 rounded dark:bg-gray-700 dark:text-white">
                         <option value="شیر">شیر</option><option value="پەمپێر">پەمپێر</option><option value="جلوبەرگ">جلوبەرگ</option>
                     </select>
-                    <input type="file" id="admin-p-image" accept="image/*" required class="border p-1 rounded dark:bg-gray-700 dark:text-white text-sm">
+                    <input type="file" id="admin-p-image" accept="image/*" required class="md:col-span-2 border p-1 rounded dark:bg-gray-700 dark:text-white text-sm">
                     <textarea id="admin-p-desc" placeholder="وەسفی بەرهەم" class="md:col-span-2 border p-2 rounded dark:bg-gray-700 dark:text-white"></textarea>
                     <button type="submit" class="md:col-span-2 bg-primary text-white py-2 rounded-xl font-bold">خەزنکردنی بەرهەم</button>
                 </form>
+            </div>
+
+            <div class="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow mb-8">
+                <h2 class="text-xl font-bold mb-4 dark:text-white">بەڕێوەبردنی بەرهەمەکان (دەستکاری و سڕینەوە)</h2>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-right text-sm dark:text-white">
+                        <thead class="bg-gray-50 dark:bg-gray-700 border-b dark:border-gray-600">
+                            <tr>
+                                <th class="p-2">وێنە</th>
+                                <th class="p-2">ناو</th>
+                                <th class="p-2">نرخ</th>
+                                <th class="p-2">کۆگا</th>
+                                <th class="p-2 text-center">کردارەکان</th>
+                            </tr>
+                        </thead>
+                        <tbody id="admin-manage-products-list"></tbody>
+                    </table>
+                </div>
             </div>
 
             <div class="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow">
@@ -171,11 +191,63 @@
                     <h2 class="text-xl font-bold dark:text-white">داواکارییەکان</h2>
                     <button id="export-csv" class="bg-green-600 text-white px-3 py-1 rounded text-sm"><i class="fa-solid fa-file-excel"></i> ئێکسڵ</button>
                 </div>
-                <table class="w-full text-right text-sm dark:text-white">
-                    <thead class="bg-gray-50 dark:bg-gray-700"><tr><th>کڕیار</th><th>کۆی پارە</th><th>بەروار</th><th>سڕینەوە</th></tr></thead>
-                    <tbody id="admin-orders-list"></tbody>
-                </table>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-right text-sm dark:text-white">
+                        <thead class="bg-gray-50 dark:bg-gray-700 border-b dark:border-gray-600">
+                            <tr><th class="p-2">کڕیار</th><th class="p-2">کۆی پارە</th><th class="p-2">بەروار</th><th class="p-2">سڕینەوە</th></tr>
+                        </thead>
+                        <tbody id="admin-orders-list"></tbody>
+                    </table>
+                </div>
             </div>
+        </div>
+    </div>
+
+    <div id="edit-product-modal" class="fixed inset-0 bg-black bg-opacity-60 z-[70] hidden justify-center items-center p-4">
+        <div class="bg-white dark:bg-gray-800 rounded-2xl w-full max-w-lg p-6 relative shadow-2xl">
+            <button id="close-edit-modal" class="absolute top-4 right-4 text-gray-500 hover:text-red-500 text-xl"><i class="fa-solid fa-xmark"></i></button>
+            <h2 class="text-2xl font-bold mb-4 dark:text-white text-primary">دەستکاریکردنی بەرهەم</h2>
+            <form id="edit-product-form" class="grid grid-cols-1 gap-4">
+                <input type="hidden" id="edit-p-id">
+                
+                <div>
+                    <label class="text-xs text-gray-500 dark:text-gray-400">ناوی بەرهەم</label>
+                    <input type="text" id="edit-p-name" required class="w-full border p-2 rounded dark:bg-gray-700 dark:text-white">
+                </div>
+                
+                <div class="flex gap-4">
+                    <div class="w-1/2">
+                        <label class="text-xs text-gray-500 dark:text-gray-400">نرخ (IQD)</label>
+                        <input type="number" id="edit-p-price" required class="w-full border p-2 rounded dark:bg-gray-700 dark:text-white">
+                    </div>
+                    <div class="w-1/2">
+                        <label class="text-xs text-gray-500 dark:text-gray-400">دانە لە کۆگا</label>
+                        <input type="number" id="edit-p-stock" required class="w-full border p-2 rounded dark:bg-gray-700 dark:text-white">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="text-xs text-gray-500 dark:text-gray-400">بەش</label>
+                    <select id="edit-p-cat" class="w-full border p-2 rounded dark:bg-gray-700 dark:text-white">
+                        <option value="شیر">شیر</option><option value="پەمپێر">پەمپێر</option><option value="جلوبەرگ">جلوبەرگ</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="text-xs text-gray-500 dark:text-gray-400 mb-1 block">گۆڕینی وێنە (ئارەزوومەندانە)</label>
+                    <div class="flex items-center gap-3">
+                        <img id="edit-p-img-preview" src="" class="w-14 h-14 rounded-lg object-cover border dark:border-gray-600">
+                        <input type="file" id="edit-p-image" accept="image/*" class="border p-1 rounded w-full dark:bg-gray-700 dark:text-white text-sm">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="text-xs text-gray-500 dark:text-gray-400">وەسف</label>
+                    <textarea id="edit-p-desc" class="w-full border p-2 rounded dark:bg-gray-700 dark:text-white" rows="3"></textarea>
+                </div>
+
+                <button type="submit" class="bg-green-500 hover:bg-green-600 text-white py-3 rounded-xl font-bold transition shadow-lg mt-2">پاشەکەوتکردنی گۆڕانکارییەکان</button>
+            </form>
         </div>
     </div>
 
@@ -186,9 +258,12 @@
     <script>
         // 1. Database Variables
         let products = JSON.parse(localStorage.getItem('vip_products')) || [
-            { id: 1, name: 'شیری ئاپتامیل ١', price: 15000, oldPrice: 18000, cat: 'شیر', image: 'https://cdn.arizbabystore.com/wp-content/uploads/2021/04/Aptamil-1-800g.jpg', desc: 'باشترین شیر', stock: 15, rating: 5, date: Date.now() },
-            { id: 2, name: 'پامپەرز قەبارە ٤', price: 25000, oldPrice: null, cat: 'پەمپێر', image: 'https://m.media-amazon.com/images/I/71u9t2bQ4vL._AC_UF1000,1000_QL80_.jpg', desc: 'پەمپێری ئەسڵی', stock: 10, rating: 4, date: Date.now() - 1000 }
+            { id: 1, name: 'شیری ئاپتامیل ١', price: 15000, oldPrice: 18000, cat: 'شیر', image: 'https://cdn.arizbabystore.com/wp-content/uploads/2021/04/Aptamil-1-800g.jpg', desc: 'باشترین شیر بۆ منداڵەکەت لە ٠ بۆ ٦ مانگ.', stock: 15, rating: 5, date: Date.now() },
+            { id: 2, name: 'پامپەرز قەبارە ٤', price: 25000, oldPrice: null, cat: 'پەمپێر', image: 'https://m.media-amazon.com/images/I/71u9t2bQ4vL._AC_UF1000,1000_QL80_.jpg', desc: 'پەمپێری ئەسڵی بۆ کێشی ٩ بۆ ١٤ کیلۆگرام.', stock: 10, rating: 4, date: Date.now() - 1000 },
+            { id: 3, name: 'جلوبەرگی خەوی منداڵان', price: 12000, oldPrice: 15000, cat: 'جلوبەرگ', image: 'https://m.media-amazon.com/images/I/71Xm7yD8QfL._AC_UY1000_.jpg', desc: 'لۆکەی ١٠٠٪ پاک، زۆر نەرمە بۆ پێستی منداڵ.', stock: 5, rating: 5, date: Date.now() - 2000 }
         ];
+        if(!localStorage.getItem('vip_products')) localStorage.setItem('vip_products', JSON.stringify(products));
+
         let cart = JSON.parse(localStorage.getItem('vip_cart')) || [];
         let favorites = JSON.parse(localStorage.getItem('vip_fav')) || [];
         let orders = JSON.parse(localStorage.getItem('vip_orders')) || [];
@@ -207,7 +282,7 @@
             setTimeout(() => { toast.classList.remove('show'); setTimeout(() => toast.remove(), 300); }, 3000);
         }
 
-        // 3. Render Products
+        // 3. Render Public Products
         function renderProducts(cat = 'هەمووی', sort = 'newest', search = '') {
             const grid = document.getElementById('products-grid');
             grid.innerHTML = '';
@@ -224,15 +299,17 @@
                     const isFav = favorites.includes(p.id);
                     grid.innerHTML += `
                         <div class="bg-white dark:bg-gray-800 rounded-2xl p-3 shadow-sm hover:shadow-xl transition relative border dark:border-gray-700">
-                            ${p.stock <= 0 ? `<span class="absolute top-2 right-2 bg-red-500 text-white text-xs px-2 py-1 rounded">نەماوە</span>` : ''}
+                            ${p.stock <= 0 ? `<span class="absolute top-2 right-2 bg-red-500 text-white text-xs px-2 py-1 rounded shadow">نەماوە</span>` : ''}
                             <button onclick="toggleFav(${p.id})" class="absolute top-2 left-2 text-xl ${isFav ? 'text-secondary' : 'text-gray-300'} z-10"><i class="fa-solid fa-heart"></i></button>
                             <div class="h-40 overflow-hidden rounded-xl mb-3 cursor-pointer" onclick="openQuickView(${p.id})">
                                 <img src="${p.image}" class="w-full h-full object-cover hover-zoom">
                             </div>
                             <h3 class="font-bold dark:text-white truncate cursor-pointer" onclick="openQuickView(${p.id})">${p.name}</h3>
                             <div class="text-yellow-400 text-xs mb-2">${'★'.repeat(p.rating)}${'☆'.repeat(5-p.rating)}</div>
-                            <div class="font-extrabold text-primary">${p.price.toLocaleString()} IQD ${p.oldPrice ? `<span class="text-xs text-gray-400 line-through">${p.oldPrice}</span>` : ''}</div>
-                            <button onclick="addToCart(${p.id})" class="w-full mt-3 py-2 rounded-xl font-bold text-white ${p.stock <= 0 ? 'bg-gray-400 cursor-not-allowed' : 'bg-primary'}" ${p.stock <= 0 ? 'disabled' : ''}>کڕین</button>
+                            <div class="font-extrabold text-primary">${p.price.toLocaleString()} IQD ${p.oldPrice ? `<span class="text-xs text-gray-400 line-through">${p.oldPrice.toLocaleString()}</span>` : ''}</div>
+                            <button onclick="addToCart(${p.id})" class="w-full mt-3 py-2 rounded-xl font-bold text-white transition ${p.stock <= 0 ? 'bg-gray-400 cursor-not-allowed' : 'bg-primary hover:bg-purple-700'}" ${p.stock <= 0 ? 'disabled' : ''}>
+                                <i class="fa-solid fa-cart-plus"></i> کڕین
+                            </button>
                         </div>`;
                 });
             }
@@ -245,18 +322,18 @@
             const itemsDiv = document.getElementById('cart-items');
             itemsDiv.innerHTML = '';
             let sub = 0;
-            if(cart.length === 0) itemsDiv.innerHTML = `<div class="text-center text-gray-400 mt-10">سەبەتە خاڵییە</div>`;
+            if(cart.length === 0) itemsDiv.innerHTML = `<div class="text-center text-gray-400 mt-10"><i class="fa-solid fa-cart-arrow-down text-4xl mb-2"></i><br>سەبەتە خاڵییە</div>`;
             cart.forEach(item => {
                 sub += item.price * item.qty;
                 itemsDiv.innerHTML += `
                     <div class="flex items-center gap-3 bg-gray-50 dark:bg-gray-700 p-2 rounded border dark:border-gray-600">
                         <img src="${item.image}" class="w-16 h-16 object-cover rounded">
                         <div class="flex-1">
-                            <h4 class="font-bold text-sm dark:text-white">${item.name}</h4>
-                            <p class="text-primary text-sm">${item.price.toLocaleString()} IQD</p>
-                            <div class="flex gap-2 mt-1"><button onclick="chgQty(${item.id}, -1)" class="bg-gray-200 px-2">-</button><span class="dark:text-white">${item.qty}</span><button onclick="chgQty(${item.id}, 1)" class="bg-gray-200 px-2">+</button></div>
+                            <h4 class="font-bold text-sm dark:text-white line-clamp-1">${item.name}</h4>
+                            <p class="text-primary text-sm font-bold">${item.price.toLocaleString()} IQD</p>
+                            <div class="flex gap-2 mt-1"><button onclick="chgQty(${item.id}, -1)" class="bg-gray-200 dark:bg-gray-600 px-2 rounded hover:bg-red-400 hover:text-white">-</button><span class="dark:text-white">${item.qty}</span><button onclick="chgQty(${item.id}, 1)" class="bg-gray-200 dark:bg-gray-600 px-2 rounded hover:bg-green-400 hover:text-white">+</button></div>
                         </div>
-                        <button onclick="rmCart(${item.id})" class="text-red-500"><i class="fa-solid fa-trash"></i></button>
+                        <button onclick="rmCart(${item.id})" class="text-red-500 hover:text-red-700 p-2"><i class="fa-solid fa-trash"></i></button>
                     </div>`;
             });
             let disc = sub * discountPercent; let finalSub = sub - disc; let tot = finalSub > 0 ? finalSub + DELIVERY_FEE : 0;
@@ -268,13 +345,22 @@
         }
         function addToCart(id) {
             const p = products.find(x => x.id === id);
-            if(!p || p.stock <= 0) return showToast('نەماوە', 'error');
+            if(!p || p.stock <= 0) return showToast('بەرهەمەکە نەماوە', 'error');
             const ex = cart.find(x => x.id === id);
-            if(ex) { if(ex.qty >= p.stock) return showToast('بڕی پێویست نییە','error'); ex.qty++; } else cart.push({...p, qty: 1});
+            if(ex) { if(ex.qty >= p.stock) return showToast('ئەو بڕە لە کۆگا نییە','error'); ex.qty++; } else cart.push({...p, qty: 1});
             showToast('خرایە سەبەتەوە'); updateCart();
             const btn = document.getElementById('cart-btn'); btn.classList.add('cart-shake'); setTimeout(()=>btn.classList.remove('cart-shake'), 500);
         }
-        function chgQty(id, d) { const i = cart.find(x=>x.id===id); if(i) { i.qty+=d; if(i.qty<=0) rmCart(id); updateCart(); } }
+        function chgQty(id, d) { 
+            const i = cart.find(x=>x.id===id); 
+            const p = products.find(x=>x.id===id);
+            if(i) { 
+                i.qty+=d; 
+                if(i.qty<=0) rmCart(id); 
+                else if (i.qty > p.stock) { i.qty = p.stock; showToast('بڕی زیاتر نییە', 'error'); }
+                updateCart(); 
+            } 
+        }
         function rmCart(id) { cart = cart.filter(x=>x.id!==id); updateCart(); }
         function toggleFav(id) { if(favorites.includes(id)) favorites = favorites.filter(x=>x!==id); else favorites.push(id); updateCart(); getActiveAndRender(); }
         function getActiveAndRender() { renderProducts(document.querySelector('#category-filters .bg-primary').innerText, document.getElementById('sort-select').value, document.getElementById('search-input').value); }
@@ -286,10 +372,10 @@
         document.getElementById('search-input').oninput = getActiveAndRender;
         document.getElementById('sort-select').onchange = getActiveAndRender;
         document.getElementById('category-filters').onclick = (e) => {
-            if(e.target.tagName === 'BUTTON') { document.querySelectorAll('#category-filters button').forEach(b => b.className = "bg-gray-200 text-gray-700 px-4 py-1 rounded-full text-sm dark:bg-gray-700 dark:text-gray-200"); e.target.className = "bg-primary text-white px-4 py-1 rounded-full text-sm"; getActiveAndRender(); }
+            if(e.target.tagName === 'BUTTON') { document.querySelectorAll('#category-filters button').forEach(b => b.className = "bg-gray-200 text-gray-700 px-4 py-1 rounded-full text-sm dark:bg-gray-700 dark:text-gray-200 hover:bg-gray-300"); e.target.className = "bg-primary text-white px-4 py-1 rounded-full text-sm"; getActiveAndRender(); }
         };
-        document.getElementById('apply-promo').onclick = () => { if(document.getElementById('promo-code').value.trim().toUpperCase() === 'VIP10') { discountPercent = 0.1; showToast('داشکاندن کرا'); } else { discountPercent = 0; showToast('هەڵەیە','error'); } updateCart(); };
-        document.getElementById('clear-cart-btn').onclick = () => { cart = []; updateCart(); };
+        document.getElementById('apply-promo').onclick = () => { if(document.getElementById('promo-code').value.trim().toUpperCase() === 'VIP10') { discountPercent = 0.1; showToast('داشکاندنی 10% کرا'); } else { discountPercent = 0; showToast('کۆدەکە هەڵەیە','error'); } updateCart(); };
+        document.getElementById('clear-cart-btn').onclick = () => { if(confirm('دڵنیایت؟')){ cart = []; updateCart(); } };
         
         // Quick view
         function openQuickView(id) {
@@ -297,21 +383,26 @@
             document.getElementById('qv-img').src = p.image; document.getElementById('qv-title').innerText = p.name;
             document.getElementById('qv-desc').innerText = p.desc; document.getElementById('qv-price').innerText = `${p.price.toLocaleString()} IQD`;
             document.getElementById('qv-stars').innerHTML = '★'.repeat(p.rating) + '☆'.repeat(5-p.rating);
-            document.getElementById('qv-add-cart').onclick = () => { addToCart(p.id); document.getElementById('quick-view-modal').classList.add('hidden'); };
+            const addBtn = document.getElementById('qv-add-cart');
+            addBtn.onclick = () => { addToCart(p.id); document.getElementById('quick-view-modal').classList.add('hidden'); };
+            if(p.stock <= 0) { addBtn.disabled = true; addBtn.className="w-full bg-gray-400 text-white py-3 rounded-xl font-bold cursor-not-allowed"; addBtn.innerText="نەماوە"; }
+            else { addBtn.disabled = false; addBtn.className="w-full bg-primary hover:bg-purple-700 text-white py-3 rounded-xl font-bold transition"; addBtn.innerText="زیادکردن بۆ سەبەتە"; }
             document.getElementById('quick-view-modal').classList.remove('hidden'); document.getElementById('quick-view-modal').classList.add('flex');
         }
         document.getElementById('close-quick-view').onclick = () => { document.getElementById('quick-view-modal').classList.add('hidden'); document.getElementById('quick-view-modal').classList.remove('flex'); };
 
         // Checkout
         document.getElementById('checkout-btn').onclick = () => {
-            if(cart.length===0) return showToast('سەبەتە خاڵییە','error');
-            let sub = 0; let m = `*داواکاری نوێ*\n\n`;
-            cart.forEach((i, x) => { m += `${x+1}. ${i.name} (x${i.qty}) = ${(i.price*i.qty).toLocaleString()}\n`; sub += (i.price*i.qty); });
+            if(cart.length===0) return showToast('سەبەتەکەت خاڵییە','error');
+            let sub = 0; let m = `*داواکاری نوێ - VIP Baby*\n\n`;
+            cart.forEach((i, x) => { m += `${x+1}. ${i.name} (x${i.qty}) = ${(i.price*i.qty).toLocaleString()} IQD\n`; sub += (i.price*i.qty); });
             let tot = (sub - (sub*discountPercent)) + DELIVERY_FEE;
-            m += `\nکۆی گشتی بە گەیاندنەوە: ${tot.toLocaleString()} IQD\nتکایە ناونیشان بنێرە.`;
+            m += `\nکرێی گەیاندن: 5,000 IQD`;
+            if(discountPercent>0) m += `\nداشکاندن کراوە!`;
+            m += `\n*کۆی گشتی بە گەیاندنەوە: ${tot.toLocaleString()} IQD*\n\nتکایە ناونیشان و ژمارە مۆبایل بنێرە.`;
             
             // Save to admin orders
-            orders.push({ id: Date.now(), total: tot, date: new Date().toLocaleDateString() });
+            orders.push({ id: Date.now(), total: tot, date: new Date().toLocaleDateString('ku-IQ') });
             localStorage.setItem('vip_orders', JSON.stringify(orders));
             updateAdmin();
             
@@ -323,11 +414,15 @@
         window.onscroll = () => { const b = document.getElementById('back-to-top'); if(window.scrollY > 300) { b.style.opacity='1'; b.style.pointerEvents='auto'; } else { b.style.opacity='0'; b.style.pointerEvents='none'; } };
         document.getElementById('back-to-top').onclick = () => window.scrollTo({top:0, behavior:'smooth'});
 
-        // 6. Admin Panel Logic (نهێنی: ٥ کلیک لەسەر لۆگۆ)
+        // ==========================================
+        // 6. ADMIN PANEL LOGIC (هەموو شتێک بەدەست ئادمینە)
+        // ==========================================
+        
         let clickCount = 0;
+        // چوونەژوورەوەی ئادمین بە ٣ کلیک
         document.getElementById('logo-btn').onclick = () => {
             clickCount++;
-            if(clickCount === 5) {
+            if(clickCount === 3) {
                 document.getElementById('admin-panel').classList.remove('hidden');
                 updateAdmin();
                 clickCount = 0;
@@ -341,15 +436,34 @@
             document.getElementById('stat-orders').innerText = orders.length;
             document.getElementById('stat-revenue').innerText = orders.reduce((s,o)=>s+o.total,0).toLocaleString() + ' IQD';
             
-            const tbody = document.getElementById('admin-orders-list');
-            tbody.innerHTML = '';
+            // پیشاندانی داواکارییەکان
+            const ordersBody = document.getElementById('admin-orders-list');
+            ordersBody.innerHTML = '';
             orders.forEach(o => {
-                tbody.innerHTML += `<tr class="border-b dark:border-gray-700"><td class="py-2">کڕیاری واتساپ</td><td>${o.total.toLocaleString()} IQD</td><td>${o.date}</td><td><button onclick="delOrder(${o.id})" class="text-red-500"><i class="fa-solid fa-trash"></i></button></td></tr>`;
+                ordersBody.innerHTML += `<tr class="border-b dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700"><td class="p-2">کڕیاری واتساپ</td><td class="p-2 font-bold">${o.total.toLocaleString()} IQD</td><td class="p-2">${o.date}</td><td class="p-2"><button onclick="delOrder(${o.id})" class="text-red-500 hover:text-red-700 bg-gray-200 dark:bg-gray-600 px-2 py-1 rounded"><i class="fa-solid fa-trash"></i></button></td></tr>`;
+            });
+
+            // پیشاندانی بەرهەمەکان لە ئادمین (بۆ دەستکاری و سڕینەوە)
+            const productsBody = document.getElementById('admin-manage-products-list');
+            productsBody.innerHTML = '';
+            products.forEach(p => {
+                productsBody.innerHTML += `
+                    <tr class="border-b dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700">
+                        <td class="p-2"><img src="${p.image}" class="w-10 h-10 object-cover rounded"></td>
+                        <td class="p-2 truncate max-w-[120px]" title="${p.name}">${p.name}</td>
+                        <td class="p-2 font-bold text-primary">${p.price.toLocaleString()}</td>
+                        <td class="p-2 ${p.stock <= 0 ? 'text-red-500 font-bold' : ''}">${p.stock}</td>
+                        <td class="p-2 text-center">
+                            <button onclick="openEditProduct(${p.id})" class="text-blue-500 hover:text-blue-700 bg-blue-100 dark:bg-gray-600 px-2 py-1 rounded mr-1" title="دەستکاریکردن"><i class="fa-solid fa-pen-to-square"></i></button>
+                            <button onclick="deleteProduct(${p.id})" class="text-red-500 hover:text-red-700 bg-red-100 dark:bg-gray-600 px-2 py-1 rounded" title="سڕینەوە"><i class="fa-solid fa-trash"></i></button>
+                        </td>
+                    </tr>
+                `;
             });
         }
-        function delOrder(id) { orders = orders.filter(o=>o.id!==id); localStorage.setItem('vip_orders', JSON.stringify(orders)); updateAdmin(); }
+        function delOrder(id) { if(confirm('ئەم داواکارییە بسڕێتەوە؟')){ orders = orders.filter(o=>o.id!==id); localStorage.setItem('vip_orders', JSON.stringify(orders)); updateAdmin(); } }
 
-        // بەرزکردنەوەی وێنە بۆ ئادمین و خەزنکردنی بەرهەم
+        // زیادکردنی بەرهەمی نوێ
         document.getElementById('add-product-form').onsubmit = (e) => {
             e.preventDefault();
             const file = document.getElementById('admin-p-image').files[0];
@@ -361,12 +475,13 @@
                     price: parseInt(document.getElementById('admin-p-price').value),
                     cat: document.getElementById('admin-p-cat').value,
                     desc: document.getElementById('admin-p-desc').value,
-                    image: event.target.result, // Base64 Image
-                    stock: 10, rating: 5, date: Date.now(), oldPrice: null
+                    image: event.target.result, // خەزنکردنی وێنەکە
+                    stock: parseInt(document.getElementById('admin-p-stock').value),
+                    rating: 5, date: Date.now(), oldPrice: null
                 };
                 products.push(newP);
                 localStorage.setItem('vip_products', JSON.stringify(products));
-                showToast('بەرهەم زیادکرا');
+                showToast('بەرهەم بەسەرکەوتوویی زیادکرا');
                 e.target.reset();
                 updateAdmin();
                 getActiveAndRender();
@@ -374,13 +489,103 @@
             if(file) reader.readAsDataURL(file);
         };
 
-        // دابەزاندنی ئێکسڵ
+        // سڕینەوەی بەرهەم
+        function deleteProduct(id) {
+            if(confirm('دڵنیایت لە سڕینەوەی ئەم بەرهەمە بەتەواوی؟')) {
+                products = products.filter(p => p.id !== id);
+                // ئەگەر لە سەبەتەش بوو لایببە
+                cart = cart.filter(c => c.id !== id);
+                localStorage.setItem('vip_products', JSON.stringify(products));
+                localStorage.setItem('vip_cart', JSON.stringify(cart));
+                showToast('بەرهەمەکە سڕایەوە', 'error');
+                updateAdmin();
+                getActiveAndRender();
+                updateCart();
+            }
+        }
+
+        // کردنەوەی مۆدێلی دەستکاریکردن و پڕکردنەوەی زانیارییەکان
+        function openEditProduct(id) {
+            const p = products.find(x => x.id === id);
+            if(!p) return;
+            
+            document.getElementById('edit-p-id').value = p.id;
+            document.getElementById('edit-p-name').value = p.name;
+            document.getElementById('edit-p-price').value = p.price;
+            document.getElementById('edit-p-stock').value = p.stock;
+            document.getElementById('edit-p-cat').value = p.cat;
+            document.getElementById('edit-p-desc').value = p.desc;
+            document.getElementById('edit-p-img-preview').src = p.image;
+            document.getElementById('edit-p-image').value = ''; // بەتاڵکردنی فایلی کۆن
+            
+            document.getElementById('edit-product-modal').classList.remove('hidden');
+            document.getElementById('edit-product-modal').classList.add('flex');
+        }
+
+        document.getElementById('close-edit-modal').onclick = () => {
+            document.getElementById('edit-product-modal').classList.add('hidden');
+            document.getElementById('edit-product-modal').classList.remove('flex');
+        };
+
+        // پاشەکەوتکردنی گۆڕانکارییەکانی بەرهەم
+        document.getElementById('edit-product-form').onsubmit = (e) => {
+            e.preventDefault();
+            const id = parseInt(document.getElementById('edit-p-id').value);
+            const pIndex = products.findIndex(x => x.id === id);
+            if(pIndex === -1) return;
+
+            const updateData = () => {
+                products[pIndex].name = document.getElementById('edit-p-name').value;
+                // گۆڕینی نرخی کۆن ئەگەر نرخی نوێ جیاواز بوو
+                const newPrice = parseInt(document.getElementById('edit-p-price').value);
+                if(products[pIndex].price !== newPrice) {
+                    products[pIndex].oldPrice = products[pIndex].price;
+                    products[pIndex].price = newPrice;
+                }
+                products[pIndex].stock = parseInt(document.getElementById('edit-p-stock').value);
+                products[pIndex].cat = document.getElementById('edit-p-cat').value;
+                products[pIndex].desc = document.getElementById('edit-p-desc').value;
+
+                // نوێکردنەوەی داتابەیس
+                localStorage.setItem('vip_products', JSON.stringify(products));
+                
+                // نوێکردنەوەی سەبەتە ئەگەر بەرهەمەکە لەوێش بوو نرخەکەی بگۆڕێت
+                cart = cart.map(c => c.id === id ? {...c, price: products[pIndex].price, name: products[pIndex].name, image: products[pIndex].image} : c);
+                // سڕینەوەی لە سەبەتە ئەگەر ستۆکی بوو بە ٠
+                cart = cart.filter(c => !(c.id === id && products[pIndex].stock <= 0));
+                localStorage.setItem('vip_cart', JSON.stringify(cart));
+
+                showToast('گۆڕانکارییەکان پاشەکەوت کران');
+                document.getElementById('close-edit-modal').click();
+                updateAdmin();
+                getActiveAndRender();
+                updateCart();
+            };
+
+            const file = document.getElementById('edit-p-image').files[0];
+            if(file) {
+                // ئەگەر وێنەی نوێی دانابوو
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    products[pIndex].image = event.target.result;
+                    updateData();
+                };
+                reader.readAsDataURL(file);
+            } else {
+                // ئەگەر وێنەکەی نەگۆڕیبوو
+                updateData();
+            }
+        };
+
+        // دابەزاندنی ئێکسڵی داواکارییەکان
         document.getElementById('export-csv').onclick = () => {
-            let csv = 'Total,Date\n';
+            if(orders.length === 0) return showToast('هیچ داواکارییەک نییە', 'error');
+            let csv = '\uFEFF'; // بۆ پشتگیریکردنی فۆنتی کوردی لە ئێکسڵ
+            csv += 'کۆی پارە,بەروار\n';
             orders.forEach(o => csv += `${o.total},${o.date}\n`);
-            const blob = new Blob([csv], { type: 'text/csv' });
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
             const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a'); a.href = url; a.download = 'orders.csv'; a.click();
+            const a = document.createElement('a'); a.href = url; a.download = 'dawakariekan.csv'; a.click();
         };
 
         // دەستپێکردن
