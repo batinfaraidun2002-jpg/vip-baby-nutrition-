@@ -1,3 +1,4 @@
+<script>
 // --- گۆڕاوە سەرەکییەکان و ڕێکخستنەکانی فرۆشگا ---
 let wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
 let appliedPromo = 0; 
@@ -112,7 +113,6 @@ function saveProduct() {
     if (!prodData.name || !prodData.price || !prodData.img) return showToast("داتا سەرەکییەکان پڕبکەرەوە");
     
     if (editingProductId) {
-        // نوێکردنەوەی بەرهەمی پێشوو
         let index = allProds.findIndex(x => x.id === editingProductId);
         if (index !== -1) {
             allProds[index] = { ...allProds[index], ...prodData };
@@ -121,7 +121,6 @@ function saveProduct() {
         if(document.getElementById('saveProductBtn')) document.getElementById('saveProductBtn').innerText = "زیادکردنی بەرهەم";
         showToast("بەرهەمەکە بە سەرکەوتوویی نوێکرایەوە ✏️");
     } else {
-        // زیادکردنی بەرهەمی نوێ
         prodData.id = 'P' + Date.now();
         prodData.reviews = [];
         prodData.dateAdded = Date.now();
@@ -140,7 +139,6 @@ function saveProduct() {
     filterProds();
 }
 
-// فەنکشنی نوێ: بۆ هێنانەوەی زانیارییەکانی بەرهەمەکە بۆ ناو فۆڕمەکە
 function editProductAdmin(id) {
     let p = allProds.find(x => x.id === id);
     if (!p) return;
@@ -160,7 +158,6 @@ function editProductAdmin(id) {
     if(document.getElementById('saveProductBtn')) document.getElementById('saveProductBtn').innerText = "هەڵگرتنی گۆڕانکارییەکان";
     
     showToast("زانیارییەکان هێنران، دەتوانیت دەستکاری بکەیت ✏️");
-    // گەڕانەوە بۆ سەرەوە بۆ بینینی فۆڕمەکە
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
@@ -186,7 +183,6 @@ function renderAdminData() {
 
     let pList = document.getElementById('admin-products-list');
     if(pList) {
-        // زیادکردنی دوگمەی 'دەستکاری' لە پاڵ دوگمەی 'سڕینەوە'
         pList.innerHTML = allProds.map(p => `<div style="display:flex; justify-content:space-between; align-items:center; padding:10px; border-bottom:1px solid var(--border);">
             <div style="display:flex; gap:10px;"><img src="${p.img}" width="40" height="40" style="border-radius:6px; object-fit:cover;"> <div>${p.name}<br><small>${p.price} IQD</small></div></div>
             <div style="display:flex; gap:5px;">
@@ -640,7 +636,6 @@ function updateCartUI() {
     let deliveryFee = 0;
     let cCityEl = document.getElementById('cCity');
     if(cCityEl && cCityEl.value) {
-        // بەکارهێنانی نرخە داینامیکییەکانی ئادمین
         deliveryFee = cCityEl.value === "سلێمانی" ? parseInt(storeSettings.feeSuli) : parseInt(storeSettings.feeOther);
         if(document.getElementById('cart-delivery')) document.getElementById('cart-delivery').innerText = deliveryFee.toLocaleString() + " IQD";
     } else {
@@ -689,7 +684,6 @@ function submitOrder() {
     let discountAmount = sub * appliedPromo;
     let subAfterPromo = sub - discountAmount;
     
-    // بەکارهێنانی نرخە داینامیکییەکانی ئادمین
     let deliveryFee = city === "سلێمانی" ? parseInt(storeSettings.feeSuli) : parseInt(storeSettings.feeOther);
     let total = subAfterPromo + deliveryFee;
 
@@ -764,3 +758,4 @@ if(typeof renderCategories === 'function') renderCategories();
 if(typeof filterProds === 'function') filterProds();
 if(typeof renderDynamicPages === 'function') renderDynamicPages();
 if(typeof updateCartUI === 'function') updateCartUI();
+</script>
