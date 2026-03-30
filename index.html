@@ -922,7 +922,6 @@
    let firebaseInitialized = false;
    let database = null;
    
-   // Initialize Firebase
    try {
        firebase.initializeApp(firebaseConfig);
        database = firebase.database();
@@ -930,47 +929,9 @@
        document.getElementById('onlineStatus').className = 'online-status connected';
        document.getElementById('statusText').innerText = 'Firebase: پەیوەندی هەیە ✅';
    } catch(e) {
-       console.error('Firebase initialization error:', e);
+       console.error('Firebase error:', e);
        document.getElementById('onlineStatus').className = 'online-status disconnected';
-       document.getElementById('statusText').innerText = 'Firebase: هەڵە لە پەیوەندیدا ❌';
-   }
-   
-   // ==================== Admin Password ====================
-   let adminPassword = localStorage.getItem('vip_admin_password') || 'admin2026';
-   
-   function changeAdminPassword() {
-       let oldPass = document.getElementById('oldPassword').value;
-       let newPass = document.getElementById('newPassword').value;
-       let confirmPass = document.getElementById('confirmPassword').value;
-       
-       if(!oldPass || !newPass || !confirmPass) {
-           showToast(currentLang === 'ku' ? 'تکایە هەموو خانەکان پڕ بکەرەوە' : 'Please fill all fields');
-           return;
-       }
-       
-       if(oldPass !== adminPassword) {
-           showToast(currentLang === 'ku' ? 'پاسۆردی کۆن هەڵەیە!' : 'Old password is wrong!');
-           return;
-       }
-       
-       if(newPass !== confirmPass) {
-           showToast(currentLang === 'ku' ? 'پاسۆردی نوێ لەگەڵ دووبارەکردنەوە ناگونجێت!' : 'New passwords do not match!');
-           return;
-       }
-       
-       if(newPass.length < 4) {
-           showToast(currentLang === 'ku' ? 'پاسۆرد دەبێت لانیکەم ٤ پیت بێت' : 'Password must be at least 4 characters');
-           return;
-       }
-       
-       adminPassword = newPass;
-       localStorage.setItem('vip_admin_password', adminPassword);
-       
-       document.getElementById('oldPassword').value = '';
-       document.getElementById('newPassword').value = '';
-       document.getElementById('confirmPassword').value = '';
-       
-       showToast(currentLang === 'ku' ? '✅ پاسۆرد بە سەرکەوتوویی گۆڕدرا' : '✅ Password changed successfully');
+       document.getElementById('statusText').innerText = 'Firebase: پەیوەندی نییە ❌';
    }
    
    // ==================== Data ====================
@@ -994,8 +955,9 @@
    let clickCount = 0;
    let currentProductForReview = null;
    let nextId = 1;
+   let adminPassword = localStorage.getItem('vip_admin_password') || 'admin2026';
    
-   // ==================== Firebase Listeners (Real-time Sync) ====================
+   // ==================== Firebase Listeners ====================
    function setupFirebaseListeners() {
        if (!database) return;
        
@@ -1019,83 +981,46 @@
        
        database.ref('categories').on('value', (snapshot) => {
            const data = snapshot.val();
-           if (data) {
-               categories = data;
-           } else {
-               categories = ['تغذیة', 'ملابس', 'العاب', 'عربات'];
-               saveCategoriesToFirebase();
-           }
+           if (data) categories = data;
+           else categories = ['تغذیة', 'ملابس', 'العاب', 'عربات'];
            refreshAllUI();
        });
        
        database.ref('sliderImages').on('value', (snapshot) => {
-           const data = snapshot.val();
-           if (data) {
-               sliderImages = data;
-           } else {
-               sliderImages = [];
-           }
+           sliderImages = snapshot.val() || [];
            renderSlider();
            renderSliderAdmin();
        });
        
        database.ref('shippingCities').on('value', (snapshot) => {
-           const data = snapshot.val();
-           if (data) {
-               shippingCities = data;
-           } else {
-               shippingCities = [{ city: "بغداد", cost: 3000 }, { city: "هەولێر", cost: 4000 }, { city: "بەسرە", cost: 5000 }];
-               saveShippingToFirebase();
-           }
+           shippingCities = snapshot.val() || [{ city: "بغداد", cost: 3000 }, { city: "هەولێر", cost: 4000 }, { city: "بەسرە", cost: 5000 }];
            renderShippingCities();
        });
        
        database.ref('orders').on('value', (snapshot) => {
            const data = snapshot.val();
-           if (data) {
-               orders = Object.values(data).sort((a,b) => b.id - a.id);
-           } else {
-               orders = [];
-           }
+           orders = data ? Object.values(data).sort((a,b) => b.id - a.id) : [];
            renderAdminOrders();
        });
        
        database.ref('coupons').on('value', (snapshot) => {
-           const data = snapshot.val();
-           if (data) {
-               coupons = data;
-           } else {
-               coupons = [];
-           }
+           coupons = snapshot.val() || [];
            renderCouponsAdmin();
        });
        
        database.ref('reviews').on('value', (snapshot) => {
-           const data = snapshot.val();
-           if (data) {
-               reviews = Object.values(data);
-           } else {
-               reviews = [];
-           }
+           reviews = snapshot.val() ? Object.values(snapshot.val()) : [];
            renderProducts();
        });
        
        database.ref('chatMessages').on('value', (snapshot) => {
-           const data = snapshot.val();
-           if (data) {
-               chatMessages = Object.values(data);
-           } else {
-               chatMessages = [];
-           }
+           chatMessages = snapshot.val() ? Object.values(snapshot.val()) : [];
            renderChatMessages();
        });
        
        database.ref('settings/autoReply').on('value', (snapshot) => {
-           const data = snapshot.val();
-           if (data) {
-               autoReply = data;
-               document.getElementById('autoReplyMsg').value = autoReply;
-           }
+           autoReply = snapshot.val() || "سوپاس بۆ پەیامەکەت! بەم زووانە پەیوەندیت پێدەکەین.";
+           document.getElementById('autoReplyMsg').value = autoReply;
        });
        
        database.ref('settings/shopName').on('value', (snapshot) => {
@@ -1109,6 +1034,7 @@
        database.ref('settings/whatsapp').on('value', (snapshot) => {
            const data = snapshot.val();
            if (data) {
+               localStorage.setItem('vip_whatsapp', data);
                document.getElementById('whatsappBtn').href = `https://wa.me/${data}`;
                document.getElementById('currentWhatsapp').innerText = data;
                document.getElementById('shopWhatsappInput').value = data;
@@ -1125,26 +1051,17 @@
    }
    
    // ==================== Firebase Save Functions ====================
-   function saveProductsToFirebase() { if (database) database.ref('products').set(products); }
-   function saveCategoriesToFirebase() { if (database) database.ref('categories').set(categories); }
-   function saveSliderToFirebase() { if (database) database.ref('sliderImages').set(sliderImages); }
-   function saveShippingToFirebase() { if (database) database.ref('shippingCities').set(shippingCities); }
-   function saveOrdersToFirebase() { if (database) database.ref('orders').set(orders); }
-   function saveCouponsToFirebase() { if (database) database.ref('coupons').set(coupons); }
-   function saveReviewsToFirebase() { if (database) database.ref('reviews').set(reviews); }
-   function saveChatToFirebase() { if (database) database.ref('chatMessages').set(chatMessages); }
-   function saveSettingsToFirebase() {
-       if (!database) return;
-       database.ref('settings').update({
-           autoReply: autoReply,
-           shopName: document.getElementById('shopNameDisplay').innerText,
-           whatsapp: localStorage.getItem('vip_whatsapp') || '9647700000000',
-           themeColor: document.documentElement.style.getPropertyValue('--primary')
-       });
-   }
+   function saveProductsToFirebase() { if(database) database.ref('products').set(products); }
+   function saveCategoriesToFirebase() { if(database) database.ref('categories').set(categories); }
+   function saveSliderToFirebase() { if(database) database.ref('sliderImages').set(sliderImages); }
+   function saveShippingToFirebase() { if(database) database.ref('shippingCities').set(shippingCities); }
+   function saveOrdersToFirebase() { if(database) database.ref('orders').set(orders); }
+   function saveCouponsToFirebase() { if(database) database.ref('coupons').set(coupons); }
+   function saveReviewsToFirebase() { if(database) database.ref('reviews').set(reviews); }
+   function saveChatToFirebase() { if(database) database.ref('chatMessages').set(chatMessages); }
    
    function saveAllData() {
-       if (database && firebaseInitialized) {
+       if(database && firebaseInitialized) {
            saveProductsToFirebase();
            saveCategoriesToFirebase();
            saveSliderToFirebase();
@@ -1153,7 +1070,12 @@
            saveCouponsToFirebase();
            saveReviewsToFirebase();
            saveChatToFirebase();
-           saveSettingsToFirebase();
+           database.ref('settings').update({
+               autoReply: autoReply,
+               shopName: document.getElementById('shopNameDisplay').innerText,
+               whatsapp: localStorage.getItem('vip_whatsapp') || '9647700000000',
+               themeColor: document.documentElement.style.getPropertyValue('--primary')
+           });
        } else {
            localStorage.setItem('vip_products', JSON.stringify(products));
            localStorage.setItem('vip_categories', JSON.stringify(categories));
@@ -1193,29 +1115,38 @@
        document.getElementById('offerText').innerHTML = t.offer;
        document.getElementById('timeLeftText').innerHTML = t.timeLeft;
        document.getElementById('chatInput').placeholder = t.chatPlaceholder;
-       
-       const changePasswordTitle = document.getElementById('changePasswordTitle');
-       if(changePasswordTitle) changePasswordTitle.innerHTML = `<i class="fas fa-key"></i> ${t.changePassword}`;
-       const changePasswordBtnText = document.getElementById('changePasswordBtnText');
-       if(changePasswordBtnText) changePasswordBtnText.innerText = t.changePasswordBtn;
-       const oldPasswordInput = document.getElementById('oldPassword');
-       if(oldPasswordInput) oldPasswordInput.placeholder = t.oldPassword;
-       const newPasswordInput = document.getElementById('newPassword');
-       if(newPasswordInput) newPasswordInput.placeholder = t.newPassword;
-       const confirmPasswordInput = document.getElementById('confirmPassword');
-       if(confirmPasswordInput) confirmPasswordInput.placeholder = t.confirmPassword;
-       const securityNote = document.getElementById('securityNote');
-       if(securityNote) securityNote.innerText = t.securityNote;
-       
+       document.getElementById('changePasswordTitle').innerHTML = `<i class="fas fa-key"></i> ${t.changePassword}`;
+       document.getElementById('changePasswordBtnText').innerText = t.changePasswordBtn;
+       document.getElementById('oldPassword').placeholder = t.oldPassword;
+       document.getElementById('newPassword').placeholder = t.newPassword;
+       document.getElementById('confirmPassword').placeholder = t.confirmPassword;
+       document.getElementById('securityNote').innerText = t.securityNote;
        renderProducts(); renderCategories(); updateCartUI(); renderWishlist();
-       if(document.getElementById('chatMessages').children.length === 0) document.getElementById('chatMessages').innerHTML = `<div class="message message-admin">${t.welcomeMsg}<div class="message-time"></div></div>`;
+       if(document.getElementById('chatMessages').children.length === 0) 
+           document.getElementById('chatMessages').innerHTML = `<div class="message message-admin">${t.welcomeMsg}<div class="message-time"></div></div>`;
    }
    
    function changeLanguage(lang) { currentLang = lang; document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active')); document.querySelector(`.lang-btn[data-lang="${lang}"]`).classList.add('active'); updateAllTexts(); showToast(currentLang === 'ku' ? 'زمان گۆڕدرا' : 'Language changed'); }
-   
    function showToast(msg) { let t = document.getElementById('toast'); t.innerText = msg; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 2500); }
    function openModal(id) { document.getElementById(id).style.display = 'flex'; if(id === 'wishlistModal') renderWishlist(); }
    function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+   
+   // ==================== Admin Password ====================
+   function changeAdminPassword() {
+       let oldPass = document.getElementById('oldPassword').value;
+       let newPass = document.getElementById('newPassword').value;
+       let confirmPass = document.getElementById('confirmPassword').value;
+       if(!oldPass || !newPass || !confirmPass) { showToast('تکایە هەموو خانەکان پڕ بکەرەوە'); return; }
+       if(oldPass !== adminPassword) { showToast('پاسۆردی کۆن هەڵەیە!'); return; }
+       if(newPass !== confirmPass) { showToast('پاسۆردەکان ناگونجێن!'); return; }
+       if(newPass.length < 4) { showToast('پاسۆرد دەبێت لانیکەم ٤ پیت بێت'); return; }
+       adminPassword = newPass;
+       localStorage.setItem('vip_admin_password', adminPassword);
+       document.getElementById('oldPassword').value = '';
+       document.getElementById('newPassword').value = '';
+       document.getElementById('confirmPassword').value = '';
+       showToast('✅ پاسۆرد گۆڕدرا');
+   }
    
    // ==================== Chat ====================
    function toggleChat() { let chat = document.getElementById('chatModal'); chat.style.display = chat.style.display === 'flex' ? 'none' : 'flex'; renderChatMessages(); }
@@ -1233,14 +1164,12 @@
        let input = document.getElementById('chatInput'), text = input.value.trim();
        if(!text) return;
        let time = new Date().toLocaleTimeString('ku', { hour: '2-digit', minute: '2-digit' });
-       let newMsg = { id: Date.now(), sender: 'user', text, time, read: false };
-       chatMessages.push(newMsg);
+       chatMessages.push({ id: Date.now(), sender: 'user', text, time, read: false });
        saveAllData();
        renderChatMessages(); input.value = '';
        setTimeout(() => {
            let replyTime = new Date().toLocaleTimeString('ku', { hour: '2-digit', minute: '2-digit' });
-           let replyMsg = { id: Date.now()+1, sender: 'admin', text: autoReply, time: replyTime, read: true };
-           chatMessages.push(replyMsg);
+           chatMessages.push({ id: Date.now()+1, sender: 'admin', text: autoReply, time: replyTime, read: true });
            saveAllData();
            renderChatMessages();
        }, 1000);
@@ -1405,7 +1334,38 @@
    function adminLogin() { let pass = document.getElementById('adminPassword').value; if(pass === adminPassword) { closeModal('adminLoginModal'); document.getElementById('adminPanel').style.display = 'block'; renderAdminProducts(); renderAdminOrders(); renderSliderAdmin(); renderCouponsAdmin(); document.getElementById('shopNameInput').value = localStorage.getItem('vip_shop_name') || 'VIP Baby Nutrition'; document.getElementById('shopWhatsappInput').value = localStorage.getItem('vip_whatsapp') || '9647700000000'; document.getElementById('currentWhatsapp').innerText = localStorage.getItem('vip_whatsapp') || '9647700000000'; document.getElementById('autoReplyMsg').value = autoReply; renderChatMessages(); showToast('بەخێربێیت بۆ پانێڵی ئادمین'); } else showToast('پاسۆرد هەڵەیە!'); document.getElementById('adminPassword').value = ''; }
    function closeAdminPanel() { document.getElementById('adminPanel').style.display = 'none'; }
    function changeThemeColor(color) { document.documentElement.style.setProperty('--primary', color); localStorage.setItem('vip_theme_color', color); saveAllData(); }
-   function saveShopSettings() { let shopName = document.getElementById('shopNameInput').value, whatsapp = document.getElementById('shopWhatsappInput').value; if(shopName) { localStorage.setItem('vip_shop_name', shopName); document.getElementById('shopNameDisplay').innerText = shopName; } if(whatsapp) { localStorage.setItem('vip_whatsapp', whatsapp); document.getElementById('whatsappBtn').href = `https://wa.me/${whatsapp}`; document.getElementById('currentWhatsapp').innerText = whatsapp; } saveAllData(); showToast('زانیاری هەڵگیرا'); }
+   
+   // ==================== Save Shop Settings (Fixed WhatsApp) ====================
+   function saveShopSettings() { 
+       let shopName = document.getElementById('shopNameInput').value;
+       let whatsapp = document.getElementById('shopWhatsappInput').value;
+       
+       if(shopName && shopName.trim() !== '') { 
+           localStorage.setItem('vip_shop_name', shopName); 
+           document.getElementById('shopNameDisplay').innerText = shopName;
+           if(database && firebaseInitialized) database.ref('settings/shopName').set(shopName);
+       } 
+       
+       if(whatsapp && whatsapp.trim() !== '') { 
+           let cleanWhatsapp = whatsapp.trim().replace(/\s/g, '');
+           if(cleanWhatsapp.startsWith('0')) cleanWhatsapp = '964' + cleanWhatsapp.substring(1);
+           if(!cleanWhatsapp.startsWith('+')) cleanWhatsapp = '+' + cleanWhatsapp;
+           
+           localStorage.setItem('vip_whatsapp', cleanWhatsapp);
+           document.getElementById('whatsappBtn').href = `https://wa.me/${cleanWhatsapp}`;
+           document.getElementById('currentWhatsapp').innerText = cleanWhatsapp;
+           
+           if(database && firebaseInitialized) database.ref('settings/whatsapp').set(cleanWhatsapp);
+           showToast(currentLang === 'ku' ? '✅ ژمارەی واتساپ گۆڕدرا' : '✅ WhatsApp number changed');
+       } else if(whatsapp === '') {
+           showToast(currentLang === 'ku' ? '⚠️ تکایە ژمارەی واتساپ بنووسە' : '⚠️ Please enter WhatsApp number');
+           return;
+       }
+       
+       saveAllData();
+       showToast(currentLang === 'ku' ? '✅ زانیاری هەڵگیرا' : '✅ Settings saved');
+   }
+   
    function addCoupon() { let code = document.getElementById('couponName').value, discount = parseInt(document.getElementById('couponPercent').value), expiry = document.getElementById('couponDate').value; if(code && discount) { coupons.push({code, discount, expiry}); saveAllData(); renderCouponsAdmin(); document.getElementById('couponName').value = ''; document.getElementById('couponPercent').value = ''; showToast('کۆدێن زیادکرا'); } }
    function renderCouponsAdmin() { let container = document.getElementById('couponsList'); if(container) container.innerHTML = coupons.map((c,i) => `<div class="cart-item" style="justify-content:space-between;"><span>🎫 ${c.code} - ${c.discount}% (${c.expiry})</span><button class="remove-item" onclick="deleteCoupon(${i})"><i class="fas fa-trash-alt"></i></button></div>`).join(''); }
    function deleteCoupon(i) { coupons.splice(i,1); saveAllData(); renderCouponsAdmin(); showToast('کۆدێن سڕایەوە'); }
@@ -1425,9 +1385,7 @@
            return;
        }
        
-       if(!category && categories.length > 0) {
-           category = categories[0];
-       }
+       if(!category && categories.length > 0) category = categories[0];
        
        let newProduct = {
            id: nextId++,
@@ -1449,15 +1407,10 @@
        document.getElementById('productStock').value = '';
        document.getElementById('productImage').value = '';
        document.getElementById('productDesc').value = '';
-       
        renderAdminProducts();
        
        let resultDiv = document.getElementById('addProductResult');
-       if(resultDiv) {
-           resultDiv.innerHTML = `✅ ${currentLang === 'ku' ? 'بەرهەم زیادکرا و بۆ کڕیار نمایش دەکرێت' : 'Product added and shown to customer'}`;
-           setTimeout(() => { resultDiv.innerHTML = ''; }, 3000);
-       }
-       
+       if(resultDiv) { resultDiv.innerHTML = `✅ ${currentLang === 'ku' ? 'بەرهەم زیادکرا!' : 'Product added!'}`; setTimeout(() => { resultDiv.innerHTML = ''; }, 3000); }
        showToast(currentLang === 'ku' ? '✅ بەرهەم زیادکرا!' : '✅ Product added!');
    }
    
@@ -1467,14 +1420,8 @@
        if(products.length === 0) { container.innerHTML = '<div class="empty-state">هیچ بەرهەمێک نییە</div>'; return; }
        container.innerHTML = products.map(p => `
            <div class="product-admin-item">
-               <div style="flex:1;">
-                   <div><strong>${p.name}</strong></div>
-                   <div style="font-size:12px;">${p.price.toLocaleString()} IQD | ستۆک: ${p.stock} | پۆل: ${p.category}</div>
-               </div>
-               <div>
-                   <button class="edit-product-btn" onclick="editProductFromAdmin(${p.id})"><i class="fas fa-edit"></i> دەستکاری</button>
-                   <button class="delete-product-btn" onclick="deleteProductFromAdmin(${p.id})"><i class="fas fa-trash"></i> سڕینەوە</button>
-               </div>
+               <div style="flex:1;"><div><strong>${p.name}</strong></div><div style="font-size:12px;">${p.price.toLocaleString()} IQD | ستۆک: ${p.stock} | پۆل: ${p.category}</div></div>
+               <div><button class="edit-product-btn" onclick="editProductFromAdmin(${p.id})"><i class="fas fa-edit"></i> دەستکاری</button><button class="delete-product-btn" onclick="deleteProductFromAdmin(${p.id})"><i class="fas fa-trash"></i> سڕینەوە</button></div>
            </div>
        `).join('');
    }
@@ -1482,27 +1429,12 @@
    function editProductFromAdmin(id) {
        let product = products.find(p => p.id === id);
        if(!product) return;
-       
-       let newName = prompt('ناوی نوێ:', product.name);
-       if(newName && newName.trim()) product.name = newName;
-       
-       let newPrice = prompt('نرخی نوێ (IQD):', product.price);
-       if(newPrice && !isNaN(newPrice)) product.price = parseInt(newPrice);
-       
-       let newStock = prompt('ستۆکی نوێ:', product.stock);
-       if(newStock !== null && !isNaN(newStock)) product.stock = parseInt(newStock);
-       
-       let newCategory = prompt('پۆلی نوێ:', product.category);
-       if(newCategory && categories.includes(newCategory)) product.category = newCategory;
-       else if(newCategory) showToast('پۆلەکە بوونی نییە! یەکەم پۆل زیاد بکە');
-       
-       let newStatus = prompt('دۆخ (instock/outstock):', product.status);
-       if(newStatus === 'instock' || newStatus === 'outstock') product.status = newStatus;
-       
-       saveAllData();
-       refreshAllUI();
-       renderAdminProducts();
-       showToast('✏️ بەرهەم نوێکرایەوە');
+       let newName = prompt('ناوی نوێ:', product.name); if(newName && newName.trim()) product.name = newName;
+       let newPrice = prompt('نرخی نوێ (IQD):', product.price); if(newPrice && !isNaN(newPrice)) product.price = parseInt(newPrice);
+       let newStock = prompt('ستۆکی نوێ:', product.stock); if(newStock !== null && !isNaN(newStock)) product.stock = parseInt(newStock);
+       let newCategory = prompt('پۆلی نوێ:', product.category); if(newCategory && categories.includes(newCategory)) product.category = newCategory;
+       let newStatus = prompt('دۆخ (instock/outstock):', product.status); if(newStatus === 'instock' || newStatus === 'outstock') product.status = newStatus;
+       saveAllData(); refreshAllUI(); renderAdminProducts(); showToast('✏️ بەرهەم نوێکرایەوە');
    }
    
    function deleteProductFromAdmin(id) {
@@ -1510,24 +1442,17 @@
            products = products.filter(p => p.id !== id);
            cart = cart.filter(item => item.id !== id);
            wishlist = wishlist.filter(item => item.id !== id);
-           saveAllData();
-           refreshAllUI();
-           renderAdminProducts();
-           showToast('🗑️ بەرهەم سڕایەوە');
+           saveAllData(); refreshAllUI(); renderAdminProducts(); showToast('🗑️ بەرهەم سڕایەوە');
        }
    }
    
-   // ==================== Admin Orders - FIXED: Shows all items in order ====================
+   // ==================== Admin Orders - FIXED: Shows all items ====================
    function renderAdminOrders() {
        let container = document.getElementById('adminOrders');
        if(!container) return;
-       if(orders.length === 0) { 
-           container.innerHTML = '<div class="empty-state">📭 هیچ داواکارییەک نییە</div>'; 
-           return; 
-       }
+       if(orders.length === 0) { container.innerHTML = '<div class="empty-state">📭 هیچ داواکارییەک نییە</div>'; return; }
        
        container.innerHTML = orders.map(order => {
-           // دروستکردنی لیستی بەرهەمەکان بە وردی
            let itemsList = '';
            if(order.items && order.items.length > 0) {
                itemsList = '<div style="margin-top:10px; padding:10px; background:var(--bg); border-radius:12px;">';
@@ -1538,33 +1463,24 @@
                        <span>${item.cartQty} x ${item.price.toLocaleString()} IQD</span>
                    </div>`;
                });
-               itemsList += `<div style="margin-top:8px; text-align:left; font-weight:bold;">کۆ: ${order.subtotal.toLocaleString()} IQD</div>`;
-               itemsList += `</div>`;
+               itemsList += `<div style="margin-top:8px; text-align:left; font-weight:bold;">کۆ: ${order.subtotal.toLocaleString()} IQD</div></div>`;
            }
            
-           return `
-               <div class="admin-section" style="margin-bottom:15px; padding:15px; border-right: 4px solid var(--primary);">
-                   <div style="display:flex; justify-content:space-between; flex-wrap:wrap;">
-                       <div><strong>📋 #${order.id}</strong></div>
-                       <div>📅 ${order.date}</div>
-                   </div>
-                   <div style="margin-top:8px; background:var(--primary); color:white; padding:8px; border-radius:10px;">
-                       <div>👤 <strong>${order.customer}</strong> | 📞 ${order.phone}</div>
-                       <div>📍 ${order.address} | 🏙️ ${order.city}</div>
-                   </div>
-                   ${itemsList}
-                   <div style="margin-top:10px; padding:10px; background:var(--success); color:white; border-radius:12px; display:flex; justify-content:space-between;">
-                       <span>💰 کۆی گشتی:</span>
-                       <span><strong>${order.total.toLocaleString()} IQD</strong></span>
-                   </div>
-                   <div style="margin-top:10px; display:flex; justify-content:space-between; align-items:center;">
-                       <div>🔍 <span style="font-family:monospace; background:var(--bg); padding:4px 8px; border-radius:8px;">${order.trackingCode}</span></div>
-                       <button class="remove-item" onclick="deleteOrder(${order.id})" style="background:var(--danger); color:white; padding:6px 15px; border-radius:25px; border:none; cursor:pointer;">
-                           <i class="fas fa-trash-alt"></i> سڕینەوە
-                       </button>
-                   </div>
+           return `<div class="admin-section" style="margin-bottom:15px; padding:15px; border-right: 4px solid var(--primary);">
+               <div style="display:flex; justify-content:space-between; flex-wrap:wrap;"><div><strong>📋 #${order.id}</strong></div><div>📅 ${order.date}</div></div>
+               <div style="margin-top:8px; background:var(--primary); color:white; padding:8px; border-radius:10px;">
+                   <div>👤 <strong>${order.customer}</strong> | 📞 ${order.phone}</div>
+                   <div>📍 ${order.address} | 🏙️ ${order.city}</div>
                </div>
-           `;
+               ${itemsList}
+               <div style="margin-top:10px; padding:10px; background:var(--success); color:white; border-radius:12px; display:flex; justify-content:space-between;">
+                   <span>💰 کۆی گشتی:</span><span><strong>${order.total.toLocaleString()} IQD</strong></span>
+               </div>
+               <div style="margin-top:10px; display:flex; justify-content:space-between; align-items:center;">
+                   <div>🔍 <span style="font-family:monospace; background:var(--bg); padding:4px 8px; border-radius:8px;">${order.trackingCode}</span></div>
+                   <button class="remove-item" onclick="deleteOrder(${order.id})" style="background:var(--danger); color:white; padding:6px 15px; border-radius:25px; border:none; cursor:pointer;"><i class="fas fa-trash-alt"></i> سڕینەوە</button>
+               </div>
+           </div>`;
        }).join('');
    }
    
@@ -1592,10 +1508,8 @@
    let savedShopName = localStorage.getItem('vip_shop_name'); if(savedShopName) document.getElementById('shopNameDisplay').innerText = savedShopName;
    let savedWhatsapp = localStorage.getItem('vip_whatsapp'); if(savedWhatsapp) document.getElementById('whatsappBtn').href = `https://wa.me/${savedWhatsapp}`;
    
-   // Start
-   if (database && firebaseInitialized) {
-       setupFirebaseListeners();
-   } else {
+   if(database && firebaseInitialized) setupFirebaseListeners();
+   else {
        products = [
            { id: 1, name: "شیری منداڵان VIP", desc: "شیری تایبەت بۆ منداڵان", price: 25000, stock: 12, status: "instock", category: "تغذیة", image: "https://i.postimg.cc/RWNMnJDG/image.jpg" },
            { id: 2, name: "کۆمپلێتی منداڵان", desc: "کۆمپلێتی جل", price: 35000, stock: 7, status: "instock", category: "ملابس", image: "https://i.postimg.cc/RWNMnJDG/image.jpg" },
