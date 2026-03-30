@@ -999,14 +999,12 @@
    function setupFirebaseListeners() {
        if (!database) return;
        
-       // Listen to products
        database.ref('products').on('value', (snapshot) => {
            const data = snapshot.val();
            if (data) {
                products = Object.values(data);
                nextId = Math.max(...products.map(p => p.id), 0) + 1;
            } else {
-               // Default products if empty
                products = [
                    { id: 1, name: "شیری منداڵان VIP", desc: "شیری تایبەت بۆ منداڵان", price: 25000, stock: 12, status: "instock", category: "تغذیة", image: "https://i.postimg.cc/RWNMnJDG/image.jpg" },
                    { id: 2, name: "کۆمپلێتی منداڵان", desc: "کۆمپلێتی جل", price: 35000, stock: 7, status: "instock", category: "ملابس", image: "https://i.postimg.cc/RWNMnJDG/image.jpg" },
@@ -1019,7 +1017,6 @@
            refreshAllUI();
        });
        
-       // Listen to categories
        database.ref('categories').on('value', (snapshot) => {
            const data = snapshot.val();
            if (data) {
@@ -1031,7 +1028,6 @@
            refreshAllUI();
        });
        
-       // Listen to slider images
        database.ref('sliderImages').on('value', (snapshot) => {
            const data = snapshot.val();
            if (data) {
@@ -1043,7 +1039,6 @@
            renderSliderAdmin();
        });
        
-       // Listen to shipping cities
        database.ref('shippingCities').on('value', (snapshot) => {
            const data = snapshot.val();
            if (data) {
@@ -1055,7 +1050,6 @@
            renderShippingCities();
        });
        
-       // Listen to orders
        database.ref('orders').on('value', (snapshot) => {
            const data = snapshot.val();
            if (data) {
@@ -1066,7 +1060,6 @@
            renderAdminOrders();
        });
        
-       // Listen to coupons
        database.ref('coupons').on('value', (snapshot) => {
            const data = snapshot.val();
            if (data) {
@@ -1077,7 +1070,6 @@
            renderCouponsAdmin();
        });
        
-       // Listen to reviews
        database.ref('reviews').on('value', (snapshot) => {
            const data = snapshot.val();
            if (data) {
@@ -1088,7 +1080,6 @@
            renderProducts();
        });
        
-       // Listen to chat messages
        database.ref('chatMessages').on('value', (snapshot) => {
            const data = snapshot.val();
            if (data) {
@@ -1099,7 +1090,6 @@
            renderChatMessages();
        });
        
-       // Listen to auto reply
        database.ref('settings/autoReply').on('value', (snapshot) => {
            const data = snapshot.val();
            if (data) {
@@ -1108,7 +1098,6 @@
            }
        });
        
-       // Listen to shop settings
        database.ref('settings/shopName').on('value', (snapshot) => {
            const data = snapshot.val();
            if (data) {
@@ -1328,7 +1317,7 @@
        let order = { id: Date.now(), date: new Date().toLocaleString(), customer: name, phone, address, city, items: cart.map(i=>({...i})), subtotal, shippingCost, discount, total, trackingCode: 'TRK'+Date.now() };
        orders.unshift(order); saveAllData();
        let whatsapp = localStorage.getItem('vip_whatsapp') || '9647700000000';
-       let msg = `📦 ئۆردەر نوێ\n👤 ${name}\n📞 ${phone}\n📍 ${address}\n🏙️ ${city}\n💰 ${total.toLocaleString()} IQD\n🔍 ${order.trackingCode}`;
+       let msg = `📦 ئۆردەر نوێ\n👤 ${name}\n📞 ${phone}\n📍 ${address}\n🏙️ ${city}\n💰 ${total.toLocaleString()} IQD\n🔍 ${order.trackingCode}\n\n🛍️ بەرهەمەکان:\n${cart.map(i => `- ${i.name} x${i.cartQty} = ${(i.price*i.cartQty).toLocaleString()} IQD`).join('\n')}`;
        window.open(`https://wa.me/${whatsapp}?text=${encodeURIComponent(msg)}`, '_blank');
        cart = []; quantities = {}; appliedCoupon = null; updateCartUI(); closeModal('checkoutModal');
        document.getElementById('customerName').value = ''; document.getElementById('customerPhone').value = ''; document.getElementById('customerAddress').value = '';
@@ -1528,27 +1517,64 @@
        }
    }
    
+   // ==================== Admin Orders - FIXED: Shows all items in order ====================
    function renderAdminOrders() {
        let container = document.getElementById('adminOrders');
        if(!container) return;
-       if(orders.length === 0) { container.innerHTML = '<p>هیچ داواکارییەک نییە</p>'; return; }
-       container.innerHTML = orders.map(order => `
-           <div class="admin-section" style="margin-bottom:10px; padding:12px;">
-               <div><strong>#${order.id}</strong> - ${order.date}</div>
-               <div>👤 ${order.customer} | 📞 ${order.phone}</div>
-               <div>📍 ${order.address} | 🏙️ ${order.city}</div>
-               <div>💰 ${order.total.toLocaleString()} IQD</div>
-               <div>🔍 ${order.trackingCode}</div>
-               <button class="remove-item" onclick="deleteOrder(${order.id})"><i class="fas fa-trash-alt"></i> سڕینەوە</button>
-           </div>
-       `).join('');
+       if(orders.length === 0) { 
+           container.innerHTML = '<div class="empty-state">📭 هیچ داواکارییەک نییە</div>'; 
+           return; 
+       }
+       
+       container.innerHTML = orders.map(order => {
+           // دروستکردنی لیستی بەرهەمەکان بە وردی
+           let itemsList = '';
+           if(order.items && order.items.length > 0) {
+               itemsList = '<div style="margin-top:10px; padding:10px; background:var(--bg); border-radius:12px;">';
+               itemsList += '<strong>🛍️ بەرهەمەکان:</strong><br>';
+               order.items.forEach((item, idx) => {
+                   itemsList += `<div style="display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px solid var(--border);">
+                       <span>${idx+1}. ${item.name}</span>
+                       <span>${item.cartQty} x ${item.price.toLocaleString()} IQD</span>
+                   </div>`;
+               });
+               itemsList += `<div style="margin-top:8px; text-align:left; font-weight:bold;">کۆ: ${order.subtotal.toLocaleString()} IQD</div>`;
+               itemsList += `</div>`;
+           }
+           
+           return `
+               <div class="admin-section" style="margin-bottom:15px; padding:15px; border-right: 4px solid var(--primary);">
+                   <div style="display:flex; justify-content:space-between; flex-wrap:wrap;">
+                       <div><strong>📋 #${order.id}</strong></div>
+                       <div>📅 ${order.date}</div>
+                   </div>
+                   <div style="margin-top:8px; background:var(--primary); color:white; padding:8px; border-radius:10px;">
+                       <div>👤 <strong>${order.customer}</strong> | 📞 ${order.phone}</div>
+                       <div>📍 ${order.address} | 🏙️ ${order.city}</div>
+                   </div>
+                   ${itemsList}
+                   <div style="margin-top:10px; padding:10px; background:var(--success); color:white; border-radius:12px; display:flex; justify-content:space-between;">
+                       <span>💰 کۆی گشتی:</span>
+                       <span><strong>${order.total.toLocaleString()} IQD</strong></span>
+                   </div>
+                   <div style="margin-top:10px; display:flex; justify-content:space-between; align-items:center;">
+                       <div>🔍 <span style="font-family:monospace; background:var(--bg); padding:4px 8px; border-radius:8px;">${order.trackingCode}</span></div>
+                       <button class="remove-item" onclick="deleteOrder(${order.id})" style="background:var(--danger); color:white; padding:6px 15px; border-radius:25px; border:none; cursor:pointer;">
+                           <i class="fas fa-trash-alt"></i> سڕینەوە
+                       </button>
+                   </div>
+               </div>
+           `;
+       }).join('');
    }
    
    function deleteOrder(orderId) {
-       orders = orders.filter(o => o.id !== orderId);
-       saveAllData();
-       renderAdminOrders();
-       showToast('داواکاری سڕایەوە');
+       if(confirm('دڵنیای لە سڕینەوەی ئەم داواکارییە؟')) {
+           orders = orders.filter(o => o.id !== orderId);
+           saveAllData();
+           renderAdminOrders();
+           showToast('✅ داواکاری سڕایەوە');
+       }
    }
    
    function toggleDarkMode() { document.body.classList.toggle('dark-mode'); localStorage.setItem('vip_dark_mode', document.body.classList.contains('dark-mode')); document.getElementById('darkModeBtn').innerHTML = document.body.classList.contains('dark-mode') ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>'; }
@@ -1570,7 +1596,6 @@
    if (database && firebaseInitialized) {
        setupFirebaseListeners();
    } else {
-       // Load default data if Firebase not initialized
        products = [
            { id: 1, name: "شیری منداڵان VIP", desc: "شیری تایبەت بۆ منداڵان", price: 25000, stock: 12, status: "instock", category: "تغذیة", image: "https://i.postimg.cc/RWNMnJDG/image.jpg" },
            { id: 2, name: "کۆمپلێتی منداڵان", desc: "کۆمپلێتی جل", price: 35000, stock: 7, status: "instock", category: "ملابس", image: "https://i.postimg.cc/RWNMnJDG/image.jpg" },
