@@ -851,7 +851,7 @@
 <div id="adminPanel" class="admin-panel">
    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;"><h2><i class="fas fa-cogs"></i> پانێڵی ئادمین</h2><button class="icon-btn" style="color:var(--danger);font-size:24px;" onclick="closeAdminPanel()"><i class="fas fa-times-circle"></i></button></div>
    
-   <!-- Change Password Section - NEW -->
+   <!-- Change Password Section -->
    <div class="admin-section">
        <h3><i class="fas fa-key"></i> <span id="changePasswordTitle">گۆڕینی پاسۆرد</span></h3>
        <input type="password" id="oldPassword" placeholder="پاسۆردی کۆن">
@@ -873,7 +873,17 @@
    
    <div class="admin-section"><h3><i class="fas fa-tags"></i> کەتەگۆری</h3><div id="categoriesAdmin"></div><div style="display:flex;gap:8px;margin-top:10px;"><input type="text" id="newCategory" placeholder="ناوی نوێ" style="flex:1;"><button class="save-btn" style="width:auto;padding:10px 20px;" onclick="addCategory()"><i class="fas fa-plus"></i> زیادکردن</button></div></div>
    
-   <div class="admin-section"><h3><i class="fas fa-box-open"></i> زیادکردنی بەرهەم</h3><input type="text" id="productName" placeholder="ناو"><textarea id="productDesc" rows="2" placeholder="باسکردن"></textarea><input type="number" id="productPrice" placeholder="نرخ"><input type="number" id="productStock" placeholder="ستۆک"><select id="productCategory"></select><select id="productStatus"><option value="instock">لەبەردەستە</option><option value="outstock">تەواو بووە</option></select><input type="text" id="productImage" placeholder="لینکی وێنە"><button class="save-btn" onclick="addProduct()"><i class="fas fa-plus-circle"></i> زیادکردن</button></div>
+   <div class="admin-section"><h3><i class="fas fa-box-open"></i> زیادکردنی بەرهەم</h3>
+       <input type="text" id="productName" placeholder="ناو">
+       <textarea id="productDesc" rows="2" placeholder="باسکردن"></textarea>
+       <input type="number" id="productPrice" placeholder="نرخ">
+       <input type="number" id="productStock" placeholder="ستۆک">
+       <select id="productCategory"></select>
+       <select id="productStatus"><option value="instock">لەبەردەستە</option><option value="outstock">تەواو بووە</option></select>
+       <input type="text" id="productImage" placeholder="لینکی وێنە">
+       <button class="save-btn" onclick="addProduct()"><i class="fas fa-plus-circle"></i> زیادکردن</button>
+       <div id="addProductResult" style="margin-top:8px;font-size:12px;color:var(--success);"></div>
+   </div>
    
    <div class="admin-section"><h3><i class="fas fa-truck-fast"></i> نرخی گەیاندن</h3><div style="display:flex;gap:8px;"><input type="text" id="shippingCityName" placeholder="ناوی شار" style="flex:1;"><input type="number" id="shippingCostValue" placeholder="نرخ" style="flex:1;"><button class="save-btn" style="width:auto;padding:10px 20px;" onclick="addShippingCity()"><i class="fas fa-plus"></i> زیادکردن</button></div><div id="shippingCitiesAdmin"></div></div>
    
@@ -896,22 +906,22 @@
        let confirmPass = document.getElementById('confirmPassword').value;
        
        if(!oldPass || !newPass || !confirmPass) {
-           showToast(currentLang === 'ku' ? 'تکایە هەموو خانەکان پڕ بکەرەوە' : currentLang === 'ar' ? 'الرجاء ملء جميع الحقول' : 'Please fill all fields');
+           showToast(currentLang === 'ku' ? 'تکایە هەموو خانەکان پڕ بکەرەوە' : 'Please fill all fields');
            return;
        }
        
        if(oldPass !== adminPassword) {
-           showToast(currentLang === 'ku' ? 'پاسۆردی کۆن هەڵەیە!' : currentLang === 'ar' ? 'كلمة المرور القديمة خاطئة!' : 'Old password is wrong!');
+           showToast(currentLang === 'ku' ? 'پاسۆردی کۆن هەڵەیە!' : 'Old password is wrong!');
            return;
        }
        
        if(newPass !== confirmPass) {
-           showToast(currentLang === 'ku' ? 'پاسۆردی نوێ لەگەڵ دووبارەکردنەوە ناگونجێت!' : currentLang === 'ar' ? 'كلمة المرور الجديدة غير متطابقة!' : 'New passwords do not match!');
+           showToast(currentLang === 'ku' ? 'پاسۆردی نوێ لەگەڵ دووبارەکردنەوە ناگونجێت!' : 'New passwords do not match!');
            return;
        }
        
        if(newPass.length < 4) {
-           showToast(currentLang === 'ku' ? 'پاسۆرد دەبێت لانیکەم ٤ پیت بێت' : currentLang === 'ar' ? 'كلمة المرور يجب أن تكون 4 أحرف على الأقل' : 'Password must be at least 4 characters');
+           showToast(currentLang === 'ku' ? 'پاسۆرد دەبێت لانیکەم ٤ پیت بێت' : 'Password must be at least 4 characters');
            return;
        }
        
@@ -922,7 +932,7 @@
        document.getElementById('newPassword').value = '';
        document.getElementById('confirmPassword').value = '';
        
-       showToast(currentLang === 'ku' ? '✅ پاسۆرد بە سەرکەوتوویی گۆڕدرا' : currentLang === 'ar' ? '✅ تم تغيير كلمة المرور بنجاح' : '✅ Password changed successfully');
+       showToast(currentLang === 'ku' ? '✅ پاسۆرد بە سەرکەوتوویی گۆڕدرا' : '✅ Password changed successfully');
    }
    
    // ========== Data ==========
@@ -967,13 +977,19 @@
        localStorage.setItem('vip_auto_reply', autoReply);
    }
    
-   // ========== Refresh UI after changes ==========
+   // ========== Refresh UI after changes - This is the key function! ==========
    function refreshAllUI() {
+       // Refresh products for customer
        renderProducts();
+       // Refresh categories
        renderCategories();
+       // Refresh shipping cities
        renderShippingCities();
+       // Refresh wishlist
        renderWishlist();
+       // Refresh cart
        updateCartUI();
+       // Refresh admin sections
        renderAdminProducts();
        renderAdminOrders();
        renderCouponsAdmin();
@@ -996,7 +1012,6 @@
        document.getElementById('timeLeftText').innerHTML = t.timeLeft;
        document.getElementById('chatInput').placeholder = t.chatPlaceholder;
        
-       // Update admin panel texts
        const changePasswordTitle = document.getElementById('changePasswordTitle');
        if(changePasswordTitle) changePasswordTitle.innerHTML = `<i class="fas fa-key"></i> ${t.changePassword}`;
        const changePasswordBtnText = document.getElementById('changePasswordBtnText');
@@ -1014,7 +1029,7 @@
        if(document.getElementById('chatMessages').children.length === 0) document.getElementById('chatMessages').innerHTML = `<div class="message message-admin">${t.welcomeMsg}<div class="message-time"></div></div>`;
    }
    
-   function changeLanguage(lang) { currentLang = lang; document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active')); document.querySelector(`.lang-btn[data-lang="${lang}"]`).classList.add('active'); updateAllTexts(); showToast(currentLang === 'ku' ? 'زمان گۆڕدرا' : currentLang === 'ar' ? 'تم تغيير اللغة' : 'Language changed'); }
+   function changeLanguage(lang) { currentLang = lang; document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active')); document.querySelector(`.lang-btn[data-lang="${lang}"]`).classList.add('active'); updateAllTexts(); showToast(currentLang === 'ku' ? 'زمان گۆڕدرا' : 'Language changed'); }
    
    function showToast(msg) { let t = document.getElementById('toast'); t.innerText = msg; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 2500); }
    function openModal(id) { document.getElementById(id).style.display = 'flex'; if(id === 'wishlistModal') renderWishlist(); }
@@ -1210,7 +1225,7 @@
    function renderCouponsAdmin() { let container = document.getElementById('couponsList'); if(container) container.innerHTML = coupons.map((c,i) => `<div class="cart-item" style="justify-content:space-between;"><span>🎫 ${c.code} - ${c.discount}% (${c.expiry})</span><button class="remove-item" onclick="deleteCoupon(${i})"><i class="fas fa-trash-alt"></i></button></div>`).join(''); }
    function deleteCoupon(i) { coupons.splice(i,1); saveAllData(); renderCouponsAdmin(); showToast('کۆدێن سڕایەوە'); }
    
-   // ========== Add Product ==========
+   // ========== Add Product - FIXED: Now product appears immediately for customer! ==========
    function addProduct() {
        let name = document.getElementById('productName').value;
        let price = parseInt(document.getElementById('productPrice').value);
@@ -1238,13 +1253,23 @@
        
        products.push(newProduct);
        saveAllData();
+       
+       // IMPORTANT: Refresh all UI immediately so customer sees the new product
        refreshAllUI();
        
+       // Clear form
        document.getElementById('productName').value = '';
        document.getElementById('productPrice').value = '';
        document.getElementById('productStock').value = '';
        document.getElementById('productImage').value = '';
        document.getElementById('productDesc').value = '';
+       
+       // Show success message
+       let resultDiv = document.getElementById('addProductResult');
+       if(resultDiv) {
+           resultDiv.innerHTML = `✅ ${currentLang === 'ku' ? 'بەرهەم زیادکرا و بۆ کڕیار نمایش دەکرێت' : 'Product added and shown to customer'}`;
+           setTimeout(() => { resultDiv.innerHTML = ''; }, 3000);
+       }
        
        showToast(currentLang === 'ku' ? '✅ بەرهەم زیادکرا و بۆ کڕیار نمایش دەکرێت' : '✅ Product added and shown to customer');
    }
