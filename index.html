@@ -1,1027 +1,2330 @@
 <!DOCTYPE html>
 <html lang="ku" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>VIP Baby Nutrition - فرۆشگای تایبەتی منداڵان</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        
-        :root {
-            --primary: #8B5CF6;
-            --primary-dark: #7C3AED;
-            --primary-light: #A78BFA;
-            --accent: #F59E0B;
-            --bg: #F9FAFB;
-            --card: #FFFFFF;
-            --text: #1F2937;
-            --text-light: #6B7280;
-            --success: #10B981;
-            --danger: #EF4444;
-            --warning: #F59E0B;
-            --border: #E5E7EB;
-            --shadow: 0 2px 8px rgba(0,0,0,0.05);
-        }
-        
-        body {
-            font-family: 'Cairo', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: var(--bg);
-            color: var(--text);
-            transition: all 0.3s ease;
-            padding-bottom: 75px;
-        }
-        
-        body.dark-mode {
-            --bg: #0F172A;
-            --card: #1E293B;
-            --text: #F1F5F9;
-            --text-light: #94A3B8;
-            --border: #334155;
-        }
-        
-        .header {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-            padding: 12px 16px;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-        
-        .header-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        
-        .logo-area {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            cursor: pointer;
-        }
-        
-        .logo {
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            border: 2px solid var(--accent);
-            object-fit: cover;
-        }
-        
-        .shop-name {
-            font-size: 18px;
-            font-weight: bold;
-            color: white;
-        }
-        
-        .header-icons {
-            display: flex;
-            gap: 15px;
-            align-items: center;
-        }
-        
-        .icon-btn {
-            background: none;
-            border: none;
-            font-size: 22px;
-            cursor: pointer;
-            color: white;
-            position: relative;
-            transition: transform 0.2s;
-        }
-        
-        .icon-btn:hover { transform: scale(1.1); }
-        
-        .cart-badge, .notification-badge {
-            position: absolute;
-            top: -8px;
-            right: -12px;
-            background: var(--accent);
-            color: black;
-            border-radius: 50%;
-            width: 18px;
-            height: 18px;
-            font-size: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-        }
-        
-        /* Language Switcher */
-        .lang-switch {
-            position: fixed;
-            top: 80px;
-            left: 10px;
-            z-index: 150;
-            background: var(--card);
-            border-radius: 30px;
-            padding: 5px 10px;
-            display: flex;
-            gap: 5px;
-            box-shadow: var(--shadow);
-        }
-        
-        .lang-btn {
-            background: none;
-            border: none;
-            padding: 5px 10px;
-            cursor: pointer;
-            border-radius: 20px;
-            font-size: 12px;
-        }
-        
-        .lang-btn.active {
-            background: var(--primary);
-            color: white;
-        }
-        
-        /* Slider */
-        .slider-container {
-            position: relative;
-            width: 100%;
-            height: 200px;
-            overflow: hidden;
-            margin: 10px 0;
-        }
-        
-        .slider {
-            display: flex;
-            transition: transform 0.5s ease;
-            height: 100%;
-        }
-        
-        .slide {
-            min-width: 100%;
-            height: 100%;
-            position: relative;
-        }
-        
-        .slide img, .slide video {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-        
-        .slider-btn {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            background: rgba(0,0,0,0.5);
-            color: white;
-            border: none;
-            padding: 10px;
-            cursor: pointer;
-            border-radius: 50%;
-        }
-        
-        .slider-btn.prev { left: 10px; }
-        .slider-btn.next { right: 10px; }
-        .slider-dots {
-            position: absolute;
-            bottom: 10px;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            gap: 8px;
-        }
-        
-        .dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: rgba(255,255,255,0.5);
-            cursor: pointer;
-        }
-        
-        .dot.active { background: white; }
-        
-        /* Countdown Timer */
-        .offer-timer {
-            background: linear-gradient(135deg, var(--danger), var(--warning));
-            color: white;
-            padding: 8px;
-            text-align: center;
-            margin: 10px;
-            border-radius: 12px;
-        }
-        
-        .search-section {
-            padding: 12px 16px;
-            background: var(--bg);
-            border-bottom: 1px solid var(--border);
-        }
-        
-        .search-input {
-            width: 100%;
-            padding: 12px 16px;
-            border: 1px solid var(--border);
-            border-radius: 30px;
-            background: var(--card);
-            color: var(--text);
-            font-size: 14px;
-            outline: none;
-        }
-        
-        .categories {
-            display: flex;
-            gap: 10px;
-            overflow-x: auto;
-            padding: 12px 16px;
-            background: var(--bg);
-            border-bottom: 1px solid var(--border);
-            scrollbar-width: none;
-        }
-        
-        .cat-btn {
-            padding: 8px 20px;
-            border-radius: 30px;
-            border: 1px solid var(--border);
-            background: var(--card);
-            color: var(--text);
-            font-size: 14px;
-            font-weight: 500;
-            cursor: pointer;
-            white-space: nowrap;
-            transition: all 0.3s;
-        }
-        
-        .cat-btn.active {
-            background: var(--primary);
-            color: white;
-            border-color: var(--primary);
-        }
-        
-        .products-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
-            padding: 16px;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        
-        @media (min-width: 600px) { .products-grid { grid-template-columns: repeat(3, 1fr); } }
-        @media (min-width: 900px) { .products-grid { grid-template-columns: repeat(4, 1fr); } }
-        
-        .product-card {
-            background: var(--card);
-            border-radius: 16px;
-            padding: 12px;
-            box-shadow: var(--shadow);
-            transition: transform 0.3s;
-            position: relative;
-            border: 1px solid var(--border);
-        }
-        
-        .product-card:hover { transform: translateY(-4px); }
-        
-        .product-media {
-            width: 100%;
-            height: 150px;
-            object-fit: cover;
-            border-radius: 12px;
-            cursor: pointer;
-        }
-        
-        .product-gallery {
-            display: flex;
-            gap: 5px;
-            margin-top: 5px;
-            overflow-x: auto;
-        }
-        
-        .gallery-thumb {
-            width: 40px;
-            height: 40px;
-            object-fit: cover;
-            border-radius: 6px;
-            cursor: pointer;
-        }
-        
-        .product-name {
-            font-size: 14px;
-            font-weight: 600;
-            margin: 10px 0 5px;
-        }
-        
-        .product-price {
-            color: var(--success);
-            font-weight: bold;
-            font-size: 16px;
-        }
-        
-        .old-price {
-            color: var(--text-light);
-            font-size: 12px;
-            text-decoration: line-through;
-            margin-right: 8px;
-        }
-        
-        .product-rating {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            margin: 5px 0;
-        }
-        
-        .stars {
-            color: #FFD700;
-            font-size: 12px;
-        }
-        
-        .status-badge {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            padding: 3px 8px;
-            border-radius: 20px;
-            font-size: 10px;
-            font-weight: bold;
-        }
-        
-        .status-instock { background: var(--success); color: white; }
-        .status-outstock { background: var(--danger); color: white; }
-        .status-preorder { background: var(--warning); color: black; }
-        
-        .quantity-control {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin: 8px 0;
-        }
-        
-        .quantity-btn {
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
-            border: 1px solid var(--border);
-            background: var(--card);
-            cursor: pointer;
-        }
-        
-        .wish-btn {
-            position: absolute;
-            top: 12px;
-            right: 12px;
-            background: rgba(255,255,255,0.9);
-            border: none;
-            border-radius: 50%;
-            width: 32px;
-            height: 32px;
-            cursor: pointer;
-            font-size: 18px;
-            color: #CBD5E1;
-        }
-        
-        .wish-btn.active { color: var(--danger); }
-        
-        .add-to-cart {
-            width: 100%;
-            padding: 10px;
-            margin-top: 10px;
-            background: var(--primary);
-            color: white;
-            border: none;
-            border-radius: 12px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-        
-        .floating-buttons {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            z-index: 200;
-        }
-        
-        .float-btn {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            cursor: pointer;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-            border: none;
-        }
-        
-        .btn-wa { background: #25D366; color: white; }
-        .btn-dark { background: var(--primary); color: white; }
-        
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.7);
-            z-index: 1000;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .modal-content {
-            background: var(--card);
-            border-radius: 24px;
-            padding: 24px;
-            width: 90%;
-            max-width: 500px;
-            max-height: 85vh;
-            overflow-y: auto;
-        }
-        
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid var(--border);
-        }
-        
-        .cart-item {
-            display: flex;
-            gap: 12px;
-            padding: 12px 0;
-            border-bottom: 1px solid var(--border);
-        }
-        .cart-item-img {
-            width: 60px;
-            height: 60px;
-            object-fit: cover;
-            border-radius: 10px;
-        }
-        
-        .review-item {
-            padding: 10px;
-            border-bottom: 1px solid var(--border);
-        }
-        
-        .shipping-select {
-            margin: 15px 0;
-            padding: 10px;
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            background: var(--bg);
-        }
-        
-        .admin-panel {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: var(--bg);
-            z-index: 2000;
-            overflow-y: auto;
-            padding: 20px;
-        }
-        
-        .admin-section {
-            background: var(--card);
-            border-radius: 20px;
-            padding: 20px;
-            margin-bottom: 20px;
-            border: 1px solid var(--border);
-        }
-        
-        .color-picker {
-            width: 100%;
-            height: 50px;
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            cursor: pointer;
-        }
-        
-        .toast {
-            visibility: hidden;
-            position: fixed;
-            bottom: 80px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: var(--text);
-            color: white;
-            padding: 12px 24px;
-            border-radius: 50px;
-            z-index: 1100;
-            white-space: nowrap;
-        }
-        
-        .toast.show {
-            visibility: visible;
-            animation: fadeInOut 2.5s ease;
-        }
-        
-        @keyframes fadeInOut {
-            0% { opacity: 0; bottom: 0; }
-            15% { opacity: 1; bottom: 80px; }
-            85% { opacity: 1; bottom: 80px; }
-            100% { opacity: 0; bottom: 0; }
-        }
-        
-        input, textarea, select {
-            width: 100%;
-            padding: 12px;
-            margin-bottom: 12px;
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            background: var(--bg);
-            color: var(--text);
-        }
-        
-        .coupon-input {
-            display: flex;
-            gap: 10px;
-            margin: 10px 0;
-        }
-        
-        .tracking-input {
-            text-align: center;
-            margin: 20px 0;
-        }
-        
-        @media (max-width: 600px) {
-            .modal-content { width: 95%; padding: 16px; }
-            .toast { white-space: normal; text-align: center; max-width: 90%; }
-        }
-    </style>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+   <title>VIP Baby Nutrition - فرۆشگای تایبەتی منداڵان</title>
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+   <!-- Firebase SDK -->
+   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+   <style>
+       * { margin: 0; padding: 0; box-sizing: border-box; }
+       
+       :root {
+           --primary: #8B5CF6;
+           --primary-dark: #7C3AED;
+           --accent: #F59E0B;
+           --bg: #F9FAFB;
+           --card: #FFFFFF;
+           --text: #1F2937;
+           --text-light: #6B7280;
+           --success: #10B981;
+           --danger: #EF4444;
+           --warning: #F59E0B;
+           --border: #E5E7EB;
+           --chat-bg: #f0f0f0;
+           --chat-user: #8B5CF6;
+           --chat-admin: #E5E7EB;
+       }
+       
+       body {
+           font-family: 'Cairo', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+           background: var(--bg);
+           color: var(--text);
+           transition: all 0.3s ease;
+           padding-bottom: 75px;
+       }
+       
+       body.dark-mode {
+           --bg: #0F172A;
+           --card: #1E293B;
+           --text: #F1F5F9;
+           --text-light: #94A3B8;
+           --border: #334155;
+           --chat-bg: #1E293B;
+           --chat-user: #8B5CF6;
+           --chat-admin: #334155;
+       }
+       
+       /* Firebase Status Indicator */
+       .firebase-status {
+           position: fixed;
+           bottom: 20px;
+           left: 50%;
+           transform: translateX(-50%);
+           background: var(--card);
+           border-radius: 20px;
+           padding: 5px 12px;
+           font-size: 11px;
+           z-index: 250;
+           border: 1px solid var(--border);
+           display: flex;
+           align-items: center;
+           gap: 5px;
+       }
+       
+       .status-dot {
+           width: 8px;
+           height: 8px;
+           border-radius: 50%;
+           background: #ef4444;
+       }
+       
+       .status-dot.connected {
+           background: #10b981;
+       }
+       
+       /* Language Switcher with Icons */
+       .lang-switch {
+           position: fixed;
+           top: 70px;
+           left: 10px;
+           z-index: 150;
+           background: var(--card);
+           border-radius: 50px;
+           padding: 6px 12px;
+           display: flex;
+           gap: 8px;
+           box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+           border: 1px solid var(--border);
+           backdrop-filter: blur(10px);
+       }
+       
+       .lang-btn {
+           background: none;
+           border: none;
+           padding: 8px 14px;
+           cursor: pointer;
+           border-radius: 40px;
+           font-size: 14px;
+           font-weight: 600;
+           transition: all 0.3s ease;
+           color: var(--text);
+           display: flex;
+           align-items: center;
+           gap: 6px;
+       }
+       
+       .lang-btn i {
+           font-size: 16px;
+       }
+       
+       .lang-btn:hover {
+           transform: scale(1.05);
+           background: rgba(139, 92, 246, 0.1);
+       }
+       
+       .lang-btn.active {
+           background: var(--primary);
+           color: white;
+           box-shadow: 0 2px 8px rgba(139, 92, 246, 0.4);
+       }
+       
+       .lang-btn.active i {
+           color: white;
+       }
+       
+       .header {
+           background: var(--primary);
+           padding: 12px 16px;
+           position: sticky;
+           top: 0;
+           z-index: 100;
+       }
+       
+       .header-content {
+           display: flex;
+           justify-content: space-between;
+           align-items: center;
+           max-width: 1200px;
+           margin: 0 auto;
+       }
+       
+       .logo-area {
+           display: flex;
+           align-items: center;
+           gap: 10px;
+           cursor: pointer;
+       }
+       
+       .logo {
+           width: 45px;
+           height: 45px;
+           border-radius: 50%;
+           border: 2px solid var(--accent);
+           object-fit: cover;
+       }
+       
+       .shop-name {
+           font-size: 18px;
+           font-weight: bold;
+           color: white;
+       }
+       
+       .header-icons {
+           display: flex;
+           gap: 15px;
+           align-items: center;
+       }
+       
+       .icon-btn {
+           background: none;
+           border: none;
+           font-size: 22px;
+           cursor: pointer;
+           color: white;
+           position: relative;
+           transition: transform 0.2s;
+       }
+       
+       .icon-btn:hover {
+           transform: scale(1.1);
+       }
+       
+       .cart-badge, .chat-badge {
+           position: absolute;
+           top: -8px;
+           right: -12px;
+           background: var(--accent);
+           color: black;
+           border-radius: 50%;
+           width: 18px;
+           height: 18px;
+           font-size: 10px;
+           display: flex;
+           align-items: center;
+           justify-content: center;
+           font-weight: bold;
+       }
+       
+       /* Chat Button */
+       .chat-float {
+           position: fixed;
+           bottom: 20px;
+           left: 20px;
+           width: 55px;
+           height: 55px;
+           border-radius: 50%;
+           background: var(--primary);
+           color: white;
+           display: flex;
+           align-items: center;
+           justify-content: center;
+           font-size: 24px;
+           cursor: pointer;
+           box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+           z-index: 200;
+           border: none;
+           transition: transform 0.3s;
+       }
+       
+       .chat-float:hover {
+           transform: scale(1.1);
+       }
+       
+       /* Chat Modal */
+       .chat-modal {
+           display: none;
+           position: fixed;
+           bottom: 90px;
+           left: 20px;
+           width: 350px;
+           height: 500px;
+           background: var(--card);
+           border-radius: 20px;
+           box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+           z-index: 300;
+           flex-direction: column;
+           overflow: hidden;
+           border: 1px solid var(--border);
+       }
+       
+       @media (max-width: 500px) {
+           .chat-modal {
+               width: calc(100% - 40px);
+               left: 20px;
+               right: 20px;
+               bottom: 90px;
+           }
+           .lang-switch {
+               top: 65px;
+               left: 5px;
+               padding: 4px 8px;
+               gap: 4px;
+           }
+           .lang-btn {
+               padding: 5px 10px;
+               font-size: 12px;
+           }
+           .lang-btn i {
+               font-size: 12px;
+           }
+       }
+       
+       .chat-header {
+           background: var(--primary);
+           color: white;
+           padding: 12px 16px;
+           display: flex;
+           justify-content: space-between;
+           align-items: center;
+       }
+       
+       .chat-messages {
+           flex: 1;
+           overflow-y: auto;
+           padding: 12px;
+           display: flex;
+           flex-direction: column;
+           gap: 8px;
+       }
+       
+       .message {
+           max-width: 80%;
+           padding: 8px 12px;
+           border-radius: 15px;
+           font-size: 13px;
+       }
+       
+       .message-user {
+           background: var(--chat-user);
+           color: white;
+           align-self: flex-end;
+           border-bottom-right-radius: 5px;
+       }
+       
+       .message-admin {
+           background: var(--chat-admin);
+           color: var(--text);
+           align-self: flex-start;
+           border-bottom-left-radius: 5px;
+       }
+       
+       .message-time {
+           font-size: 10px;
+           opacity: 0.7;
+           margin-top: 4px;
+       }
+       
+       .chat-input-area {
+           display: flex;
+           padding: 12px;
+           border-top: 1px solid var(--border);
+           gap: 8px;
+       }
+       
+       .chat-input {
+           flex: 1;
+           padding: 10px;
+           border: 1px solid var(--border);
+           border-radius: 25px;
+           background: var(--bg);
+           color: var(--text);
+           outline: none;
+       }
+       
+       .chat-send {
+           background: var(--primary);
+           color: white;
+           border: none;
+           width: 40px;
+           height: 40px;
+           border-radius: 50%;
+           cursor: pointer;
+           transition: transform 0.2s;
+       }
+       
+       .chat-send:hover {
+           transform: scale(1.05);
+       }
+       
+       /* Slider */
+       .slider-container {
+           position: relative;
+           width: 100%;
+           height: 180px;
+           overflow: hidden;
+           margin: 10px 0;
+       }
+       
+       .slider {
+           display: flex;
+           transition: transform 0.5s ease;
+           height: 100%;
+       }
+       
+       .slide {
+           min-width: 100%;
+           height: 100%;
+       }
+       
+       .slide img {
+           width: 100%;
+           height: 100%;
+           object-fit: cover;
+       }
+       
+       .slider-btn {
+           position: absolute;
+           top: 50%;
+           transform: translateY(-50%);
+           background: rgba(0,0,0,0.5);
+           color: white;
+           border: none;
+           padding: 8px 12px;
+           cursor: pointer;
+           border-radius: 50%;
+           transition: background 0.3s;
+       }
+       
+       .slider-btn:hover {
+           background: rgba(0,0,0,0.8);
+       }
+       
+       .slider-btn.prev { left: 10px; }
+       .slider-btn.next { right: 10px; }
+       
+       .slider-dots {
+           position: absolute;
+           bottom: 10px;
+           left: 50%;
+           transform: translateX(-50%);
+           display: flex;
+           gap: 6px;
+       }
+       
+       .dot {
+           width: 6px;
+           height: 6px;
+           border-radius: 50%;
+           background: rgba(255,255,255,0.5);
+           cursor: pointer;
+           transition: all 0.3s;
+       }
+       
+       .dot.active {
+           background: white;
+           width: 20px;
+           border-radius: 10px;
+       }
+       
+       .offer-timer {
+           background: linear-gradient(135deg, var(--danger), var(--warning));
+           color: white;
+           padding: 8px;
+           text-align: center;
+           margin: 10px;
+           border-radius: 12px;
+           font-size: 14px;
+           font-weight: 500;
+       }
+       
+       .search-section {
+           padding: 12px 16px;
+       }
+       
+       .search-input {
+           width: 100%;
+           padding: 12px 16px;
+           border: 1px solid var(--border);
+           border-radius: 30px;
+           background: var(--card);
+           color: var(--text);
+           font-size: 14px;
+           outline: none;
+           transition: all 0.3s;
+       }
+       
+       .search-input:focus {
+           border-color: var(--primary);
+           box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.2);
+       }
+       
+       .categories {
+           display: flex;
+           gap: 10px;
+           overflow-x: auto;
+           padding: 12px 16px;
+           scrollbar-width: none;
+       }
+       
+       .categories::-webkit-scrollbar {
+           display: none;
+       }
+       
+       .cat-btn {
+           padding: 8px 20px;
+           border-radius: 30px;
+           border: 1px solid var(--border);
+           background: var(--card);
+           color: var(--text);
+           font-size: 14px;
+           font-weight: 500;
+           cursor: pointer;
+           white-space: nowrap;
+           transition: all 0.3s;
+       }
+       
+       .cat-btn:hover {
+           transform: translateY(-2px);
+       }
+       
+       .cat-btn.active {
+           background: var(--primary);
+           color: white;
+           border-color: var(--primary);
+       }
+       
+       .products-grid {
+           display: grid;
+           grid-template-columns: repeat(2, 1fr);
+           gap: 12px;
+           padding: 16px;
+           max-width: 1200px;
+           margin: 0 auto;
+       }
+       
+       @media (min-width: 600px) {
+           .products-grid { grid-template-columns: repeat(3, 1fr); }
+       }
+       @media (min-width: 900px) {
+           .products-grid { grid-template-columns: repeat(4, 1fr); }
+       }
+       
+       .product-card {
+           background: var(--card);
+           border-radius: 16px;
+           padding: 12px;
+           box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+           position: relative;
+           border: 1px solid var(--border);
+           transition: all 0.3s;
+       }
+       
+       .product-card:hover {
+           transform: translateY(-4px);
+           box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+       }
+       
+       .product-img {
+           width: 100%;
+           height: 140px;
+           object-fit: cover;
+           border-radius: 12px;
+           cursor: pointer;
+       }
+       
+       .product-name {
+           font-size: 14px;
+           font-weight: 600;
+           margin: 8px 0 4px;
+       }
+       
+       .product-price {
+           color: var(--success);
+           font-weight: bold;
+           font-size: 15px;
+       }
+       
+       .status-badge {
+           position: absolute;
+           top: 8px;
+           left: 8px;
+           padding: 2px 8px;
+           border-radius: 20px;
+           font-size: 10px;
+           font-weight: bold;
+       }
+       
+       .status-instock { background: var(--success); color: white; }
+       .status-outstock { background: var(--danger); color: white; }
+       
+       .quantity-control {
+           display: flex;
+           align-items: center;
+           gap: 8px;
+           margin: 8px 0;
+       }
+       
+       .quantity-btn {
+           width: 26px;
+           height: 26px;
+           border-radius: 50%;
+           border: 1px solid var(--border);
+           background: var(--card);
+           cursor: pointer;
+           font-weight: bold;
+           transition: all 0.2s;
+       }
+       
+       .quantity-btn:hover {
+           background: var(--primary);
+           color: white;
+           border-color: var(--primary);
+       }
+       
+       .wish-btn {
+           position: absolute;
+           top: 8px;
+           right: 8px;
+           background: rgba(255,255,255,0.9);
+           border: none;
+           border-radius: 50%;
+           width: 30px;
+           height: 30px;
+           cursor: pointer;
+           font-size: 16px;
+           color: #CBD5E1;
+           transition: all 0.3s;
+       }
+       
+       .wish-btn:hover {
+           transform: scale(1.1);
+       }
+       
+       .wish-btn.active { color: var(--danger); }
+       
+       .add-to-cart {
+           width: 100%;
+           padding: 8px;
+           margin-top: 8px;
+           background: var(--primary);
+           color: white;
+           border: none;
+           border-radius: 12px;
+           font-weight: bold;
+           cursor: pointer;
+           transition: all 0.3s;
+       }
+       
+       .add-to-cart:hover {
+           opacity: 0.9;
+           transform: scale(0.98);
+       }
+       
+       .floating-buttons {
+           position: fixed;
+           bottom: 20px;
+           right: 20px;
+           display: flex;
+           flex-direction: column;
+           gap: 10px;
+           z-index: 200;
+       }
+       
+       .float-btn {
+           width: 48px;
+           height: 48px;
+           border-radius: 50%;
+           display: flex;
+           align-items: center;
+           justify-content: center;
+           font-size: 22px;
+           cursor: pointer;
+           box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+           border: none;
+           transition: transform 0.3s;
+       }
+       
+       .float-btn:hover {
+           transform: scale(1.1);
+       }
+       
+       .btn-wa { background: #25D366; color: white; }
+       .btn-dark { background: var(--primary); color: white; }
+       
+       .modal {
+           display: none;
+           position: fixed;
+           top: 0;
+           left: 0;
+           width: 100%;
+           height: 100%;
+           background: rgba(0,0,0,0.7);
+           z-index: 1000;
+           align-items: center;
+           justify-content: center;
+       }
+       
+       .modal-content {
+           background: var(--card);
+           border-radius: 24px;
+           padding: 20px;
+           width: 90%;
+           max-width: 450px;
+           max-height: 80vh;
+           overflow-y: auto;
+       }
+       
+       .modal-header {
+           display: flex;
+           justify-content: space-between;
+           align-items: center;
+           margin-bottom: 15px;
+           padding-bottom: 10px;
+           border-bottom: 1px solid var(--border);
+       }
+       
+       .cart-item {
+           display: flex;
+           gap: 12px;
+           padding: 10px 0;
+           border-bottom: 1px solid var(--border);
+       }
+       
+       .cart-item-img {
+           width: 55px;
+           height: 55px;
+           object-fit: cover;
+           border-radius: 10px;
+       }
+       
+       .coupon-input {
+           display: flex;
+           gap: 8px;
+           margin: 12px 0;
+       }
+       
+       .shipping-select {
+           width: 100%;
+           padding: 10px;
+           margin: 10px 0;
+           border: 1px solid var(--border);
+           border-radius: 12px;
+           background: var(--bg);
+       }
+       
+       .admin-panel {
+           display: none;
+           position: fixed;
+           top: 0;
+           left: 0;
+           width: 100%;
+           height: 100%;
+           background: var(--bg);
+           z-index: 2000;
+           overflow-y: auto;
+           padding: 20px;
+       }
+       
+       .admin-section {
+           background: var(--card);
+           border-radius: 20px;
+           padding: 16px;
+           margin-bottom: 16px;
+           border: 1px solid var(--border);
+       }
+       
+       .color-picker {
+           width: 100%;
+           height: 45px;
+           border-radius: 12px;
+           cursor: pointer;
+       }
+       
+       .toast {
+           visibility: hidden;
+           position: fixed;
+           bottom: 80px;
+           left: 50%;
+           transform: translateX(-50%);
+           background: var(--text);
+           color: white;
+           padding: 10px 20px;
+           border-radius: 50px;
+           z-index: 1100;
+           white-space: nowrap;
+           font-size: 14px;
+       }
+       
+       .toast.show {
+           visibility: visible;
+           animation: fadeInOut 2.5s ease;
+       }
+       
+       @keyframes fadeInOut {
+           0% { opacity: 0; bottom: 0; }
+           15% { opacity: 1; bottom: 80px; }
+           85% { opacity: 1; bottom: 80px; }
+           100% { opacity: 0; bottom: 0; }
+       }
+       
+       input, textarea, select {
+           width: 100%;
+           padding: 10px;
+           margin-bottom: 10px;
+           border: 1px solid var(--border);
+           border-radius: 12px;
+           background: var(--bg);
+           color: var(--text);
+           transition: all 0.3s;
+       }
+       
+       input:focus, textarea:focus, select:focus {
+           outline: none;
+           border-color: var(--primary);
+           box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.2);
+       }
+       
+       .remove-item {
+           color: var(--danger);
+           background: none;
+           border: none;
+           font-size: 18px;
+           cursor: pointer;
+           transition: transform 0.2s;
+       }
+       
+       .remove-item:hover {
+           transform: scale(1.1);
+       }
+       
+       .edit-cat-btn {
+           background: var(--accent);
+           color: black;
+           border: none;
+           padding: 2px 8px;
+           border-radius: 12px;
+           font-size: 11px;
+           cursor: pointer;
+           transition: all 0.2s;
+       }
+       
+       .edit-cat-btn:hover {
+           opacity: 0.8;
+       }
+       
+       @media (max-width: 600px) {
+           .modal-content { width: 95%; padding: 16px; }
+           .toast { white-space: normal; text-align: center; max-width: 85%; }
+       }
+   </style>
 </head>
 <body>
-
-<div class="lang-switch" id="langSwitch">
-    <button class="lang-btn active" onclick="changeLanguage('ku')">کوردی</button>
-    <button class="lang-btn" onclick="changeLanguage('ar')">العربية</button>
-    <button class="lang-btn" onclick="changeLanguage('en')">EN</button>
+ 
+<!-- Firebase Status Indicator -->
+<div class="firebase-status" id="firebaseStatus">
+   <span class="status-dot" id="statusDot"></span>
+   <span id="statusText">Firebase: پەیوەندیکردن...</span>
 </div>
-
-<div class="header" id="mainHeader">
-    <div class="header-content">
-        <div class="logo-area" id="adminLoginTrigger">
-            <img src="https://i.postimg.cc/RWNMnJDG/image.jpg" class="logo" alt="VIP Baby">
-            <span class="shop-name" id="shopNameDisplay">VIP Baby Nutrition</span>
-        </div>
-        <div class="header-icons">
-            <button class="icon-btn" onclick="openNotifications()">🔔<span class="notification-badge" id="notificationBadge">0</span></button>
-            <button class="icon-btn" onclick="openModal('wishlistModal')">❤️</button>
-            <button class="icon-btn" onclick="openModal('cartModal')">
-                🛒
-                <span class="cart-badge" id="cartCount">0</span>
-            </button>
-        </div>
-    </div>
+ 
+<!-- Language Switcher with Icons -->
+<div class="lang-switch">
+   <button class="lang-btn active" data-lang="ku" onclick="changeLanguage('ku')">
+       <i class="fas fa-flag"></i> کوردی
+   </button>
+   <button class="lang-btn" data-lang="ar" onclick="changeLanguage('ar')">
+       <i class="fas fa-flag-checkered"></i> العربية
+   </button>
+   <button class="lang-btn" data-lang="en" onclick="changeLanguage('en')">
+       <i class="fas fa-globe"></i> English
+   </button>
 </div>
-
+ 
+<div class="header">
+   <div class="header-content">
+       <div class="logo-area" id="adminTrigger">
+           <img src="https://i.postimg.cc/RWNMnJDG/image.jpg" class="logo" alt="VIP Baby">
+           <span class="shop-name" id="shopNameDisplay">VIP Baby Nutrition</span>
+       </div>
+       <div class="header-icons">
+           <button class="icon-btn" onclick="openModal('wishlistModal')" id="wishlistBtn">
+               <i class="fas fa-heart"></i>
+           </button>
+           <button class="icon-btn" onclick="openModal('cartModal')" id="cartBtn">
+               <i class="fas fa-shopping-cart"></i>
+               <span class="cart-badge" id="cartCount">0</span>
+           </button>
+       </div>
+   </div>
+</div>
+ 
 <!-- Offer Timer -->
 <div class="offer-timer" id="offerTimer">
-    🎉 پێشکەشکاری تایبەت: کاتی ماوە: <span id="countdown">00:00:00</span>
+   <i class="fas fa-gift"></i> <span id="offerText">🎉 پێشکەشکاری تایبەت:</span> <span id="timeLeftText">کاتی ماوە:</span> <span id="countdown">--:--:--</span>
 </div>
+ 
 <!-- Slider -->
 <div class="slider-container" id="sliderContainer">
-    <div class="slider" id="slider"></div>
-    <button class="slider-btn prev" onclick="changeSlide(-1)">❮</button>
-    <button class="slider-btn next" onclick="changeSlide(1)">❯</button>
-    <div class="slider-dots" id="sliderDots"></div>
+   <div class="slider" id="slider"></div>
+   <button class="slider-btn prev" onclick="changeSlide(-1)"><i class="fas fa-chevron-right"></i></button>
+   <button class="slider-btn next" onclick="changeSlide(1)"><i class="fas fa-chevron-left"></i></button>
+   <div class="slider-dots" id="sliderDots"></div>
 </div>
-
+ 
 <div class="search-section">
-    <input type="text" class="search-input" id="searchInput" placeholder="🔍 گەڕان بەدوای بەرهەمەکان..." onkeyup="filterProducts()">
+   <input type="text" class="search-input" id="searchInput" placeholder="🔍 گەڕان بەدوای بەرهەمەکان..." onkeyup="filterProducts()">
 </div>
-
+ 
 <div class="categories" id="categoriesList"></div>
-
+ 
 <div class="products-grid" id="productsGrid"></div>
-
-<div class="floating-buttons">
-    <button class="float-btn btn-dark" onclick="toggleDarkMode()">🌙</button>
-    <a href="#" class="float-btn btn-wa" id="whatsappBtn" target="_blank">💬</a>
+ 
+<!-- Chat Button & Modal -->
+<button class="chat-float" onclick="toggleChat()">
+   <i class="fas fa-comment-dots"></i>
+   <span class="chat-badge" id="chatBadge">0</span>
+</button>
+ 
+<div class="chat-modal" id="chatModal">
+   <div class="chat-header">
+       <span id="chatHeaderText"><i class="fas fa-headset"></i> پشتیوانی فرۆشگا</span>
+       <button onclick="toggleChat()" style="background: none; border: none; color: white; font-size: 20px; cursor: pointer;"><i class="fas fa-times"></i></button>
+   </div>
+   <div class="chat-messages" id="chatMessages">
+       <div class="message message-admin" id="welcomeMsg">
+           سڵاو! چۆن دەتوانین یارمەتیت بدەین؟
+           <div class="message-time"></div>
+       </div>
+   </div>
+   <div class="chat-input-area">
+       <input type="text" class="chat-input" id="chatInput" placeholder="پەیامەکەت بنووسە..." onkeypress="if(event.key==='Enter') sendMessage()">
+       <button class="chat-send" onclick="sendMessage()"><i class="fas fa-paper-plane"></i></button>
+   </div>
 </div>
-
+ 
+<div class="floating-buttons">
+   <button class="float-btn btn-dark" onclick="toggleDarkMode()" id="darkModeBtn"><i class="fas fa-moon"></i></button>
+   <a href="#" class="float-btn btn-wa" id="whatsappBtn" target="_blank"><i class="fab fa-whatsapp"></i></a>
+</div>
+ 
 <!-- Cart Modal -->
 <div id="cartModal" class="modal">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h3 id="cartTitle">🛒 سەبەتەی کڕین</h3>
-            <button class="close-modal" onclick="closeModal('cartModal')">&times;</button>
-        </div>
-        <div id="cartItemsList"></div>
-        <div class="coupon-input">
-            <input type="text" id="couponCode" placeholder="کۆدی باڵا">
-            <button class="add-to-cart" style="width: auto; padding: 12px;" onclick="applyCoupon()">💳 جێبەجێکردن</button>
-        </div>
-        <select id="shippingCity" class="shipping-select" onchange="updateCartTotal()">
-            <option value="">هەڵبژاردنی شار</option>
-        </select>
-        <div style="margin-top: 20px; padding-top: 15px; border-top: 2px solid var(--border);">
-            <div style="display: flex; justify-content: space-between;">
-                <span>نرخی گەیاندن:</span>
-                <span id="shippingCost">0 IQD</span>
-            </div>
-            <div style="display: flex; justify-content: space-between;">
-                <span>کۆدێن (کەمکردنەوە):</span>
-                <span id="discountAmount">0 IQD</span>
-            </div>
-            <div style="display: flex; justify-content: space-between; font-weight: bold; font-size: 18px; margin-top: 10px;">
-                <span>کۆی گشتی:</span>
-                <span id="cartTotal" style="color: var(--success);">0 IQD</span>
-            </div>
-            <button class="add-to-cart" style="background: var(--accent); margin-top: 15px;" onclick="goToCheckout()">📝 بەردەوامبوون بۆ کڕین</button>
-        </div>
-    </div>
+   <div class="modal-content">
+       <div class="modal-header">
+           <h3 id="cartModalTitle"><i class="fas fa-shopping-cart"></i> سەبەتەی کڕین</h3>
+           <button class="close-modal" onclick="closeModal('cartModal')"><i class="fas fa-times"></i></button>
+       </div>
+       <div id="cartItemsList"></div>
+       <div class="coupon-input">
+           <input type="text" id="couponCode" placeholder="کۆدی باڵا">
+           <button class="add-to-cart" style="width: auto; padding: 10px 15px;" onclick="applyCoupon()" id="applyCouponBtn"><i class="fas fa-ticket-alt"></i> جێبەجێکردن</button>
+       </div>
+       <select id="shippingCity" class="shipping-select" onchange="updateCartTotal()">
+           <option value="">هەڵبژاردنی شار</option>
+       </select>
+       <div style="margin-top: 15px; padding-top: 10px; border-top: 1px solid var(--border);">
+           <div style="display: flex; justify-content: space-between;">
+               <span id="shippingLabel"><i class="fas fa-truck"></i> نرخی گەیاندن:</span>
+               <span id="shippingCost">0 IQD</span>
+           </div>
+           <div style="display: flex; justify-content: space-between;">
+               <span id="couponLabel"><i class="fas fa-percent"></i> کۆدێن:</span>
+               <span id="discountAmount">0 IQD</span>
+           </div>
+           <div style="display: flex; justify-content: space-between; font-weight: bold; font-size: 17px; margin-top: 10px;">
+               <span id="totalLabel"><i class="fas fa-money-bill-wave"></i> کۆی گشتی:</span>
+               <span id="cartTotal" style="color: var(--success);">0 IQD</span>
+           </div>
+           <button class="add-to-cart" style="background: var(--accent); margin-top: 12px;" onclick="goToCheckout()" id="checkoutBtn"><i class="fas fa-arrow-left"></i> بەردەوامبوون</button>
+       </div>
+   </div>
 </div>
-
+ 
 <!-- Wishlist Modal -->
 <div id="wishlistModal" class="modal">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h3>❤️ دڵخوازەکان</h3>
-            <button class="close-modal" onclick="closeModal('wishlistModal')">&times;</button>
-        </div>
-        <div id="wishlistItems"></div>
-    </div>
+   <div class="modal-content">
+       <div class="modal-header">
+           <h3 id="wishlistTitle"><i class="fas fa-heart"></i> دڵخوازەکان</h3>
+           <button class="close-modal" onclick="closeModal('wishlistModal')"><i class="fas fa-times"></i></button>
+       </div>
+       <div id="wishlistItems"></div>
+   </div>
 </div>
-
+ 
 <!-- Checkout Modal -->
 <div id="checkoutModal" class="modal">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h3>📋 زانیاری کڕیار</h3>
-            <button class="close-modal" onclick="closeModal('checkoutModal')">&times;</button>
-        </div>
-        <input type="text" id="customerName" placeholder="ناوی تەواو">
-        <input type="tel" id="customerPhone" placeholder="ژمارەی مۆبایل">
-        <textarea id="customerAddress" rows="3" placeholder="ناونیشانی ورد"></textarea>
-        <div id="checkoutSummary"></div>
-        <button class="add-to-cart" style="background: var(--success);" onclick="submitOrder()">✅ تەواوکردنی داواکاری</button>
-    </div>
+   <div class="modal-content">
+       <div class="modal-header">
+           <h3 id="checkoutTitle"><i class="fas fa-address-card"></i> زانیاری کڕیار</h3>
+           <button class="close-modal" onclick="closeModal('checkoutModal')"><i class="fas fa-times"></i></button>
+       </div>
+       <input type="text" id="customerName" placeholder="ناوی تەواو">
+       <input type="tel" id="customerPhone" placeholder="ژمارەی مۆبایل">
+       <textarea id="customerAddress" rows="2" placeholder="ناونیشان"></textarea>
+       <div id="checkoutSummary"></div>
+       <button class="add-to-cart" style="background: var(--success);" onclick="submitOrder()" id="submitOrderBtn"><i class="fas fa-check-circle"></i> تەواوکردن</button>
+   </div>
 </div>
-
-<!-- Order Tracking Modal -->
+ 
+<!-- Tracking Modal -->
 <div id="trackingModal" class="modal">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h3>🔍 گەڕانی داواکاری</h3>
-            <button class="close-modal" onclick="closeModal('trackingModal')">&times;</button>
-        </div>
-        <div class="tracking-input">
-            <input type="text" id="trackingCode" placeholder="کۆدی داواکاری">
-            <button class="add-to-cart" onclick="trackOrder()">گەڕان</button>
-        </div>
-        <div id="trackingResult"></div>
-    </div>
+   <div class="modal-content">
+       <div class="modal-header">
+           <h3 id="trackingTitle"><i class="fas fa-search"></i> گەڕانی داواکاری</h3>
+           <button class="close-modal" onclick="closeModal('trackingModal')"><i class="fas fa-times"></i></button>
+       </div>
+       <input type="text" id="trackingCode" placeholder="کۆدی داواکاری">
+       <button class="add-to-cart" onclick="trackOrder()" id="trackBtn"><i class="fas fa-search"></i> گەڕان</button>
+       <div id="trackingResult" style="margin-top: 15px;"></div>
+   </div>
 </div>
-<!-- Notifications Modal -->
-<div id="notificationsModal" class="modal">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h3>🔔 ئاگانامەکان</h3>
-            <button class="close-modal" onclick="closeModal('notificationsModal')">&times;</button>
-        </div>
-        <div id="notificationsList"></div>
-    </div>
+ 
+<!-- Review Modal -->
+<div id="reviewModal" class="modal">
+   <div class="modal-content">
+       <div class="modal-header">
+           <h3 id="reviewTitle"><i class="fas fa-star"></i> پێداچوونەوە</h3>
+           <button class="close-modal" onclick="closeModal('reviewModal')"><i class="fas fa-times"></i></button>
+       </div>
+       <select id="reviewRating">
+           <option value="5">★★★★★ (5)</option>
+           <option value="4">★★★★☆ (4)</option>
+           <option value="3">★★★☆☆ (3)</option>
+           <option value="2">★★☆☆☆ (2)</option>
+           <option value="1">★☆☆☆☆ (1)</option>
+       </select>
+       <textarea id="reviewComment" rows="3" placeholder="پێداچوونەوەکەت بنووسە..."></textarea>
+       <button class="add-to-cart" onclick="submitReview()" id="submitReviewBtn"><i class="fas fa-paper-plane"></i> ناردن</button>
+   </div>
 </div>
-
+ 
 <!-- Admin Login Modal -->
 <div id="adminLoginModal" class="modal">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h3>🔐 چوونە ژوورەوەی بەڕێوەبەر</h3>
-            <button class="close-modal" onclick="closeModal('adminLoginModal')">&times;</button>
-        </div>
-        <input type="password" id="adminPassword" placeholder="پاسۆرد">
-        <input type="text" id="admin2FA" placeholder="کۆدی 2FA (ئەگەر هەیە)">
-        <button class="add-to-cart" onclick="adminLogin()">چوونە ژوورەوە</button>
-    </div>
+   <div class="modal-content">
+       <div class="modal-header">
+           <h3 id="adminLoginTitle"><i class="fas fa-lock"></i> چوونە ژوورەوەی ئادمین</h3>
+           <button class="close-modal" onclick="closeModal('adminLoginModal')"><i class="fas fa-times"></i></button>
+       </div>
+       <input type="password" id="adminPassword" placeholder="پاسۆرد">
+       <button class="add-to-cart" onclick="adminLogin()" id="loginBtn"><i class="fas fa-sign-in-alt"></i> چوونە ژوورەوە</button>
+   </div>
 </div>
-
+ 
 <!-- Admin Panel -->
 <div id="adminPanel" class="admin-panel">
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-        <h2>🛠 پانێڵی بەڕێوەبردن</h2>
-        <button class="icon-btn" style="color: var(--danger);" onclick="closeAdminPanel()">✖️</button>
-    </div>
-    
-    <div class="admin-section">
-        <h3>📊 ئامارەکان</h3>
-        <div id="analyticsStats"></div>
-    </div>
-    
-    <div class="admin-section">
-        <h3>🎨 ڕەنگی ئەپەکە</h3>
-        <input type="color" id="primaryColor" class="color-picker" onchange="changeThemeColor(this.value)">
-    </div>
-    
-    <div class="admin-section">
-        <h3>🏪 زانیاری فرۆشگا</h3>
-        <input type="text" id="shopNameInput" placeholder="ناوی فرۆشگا">
-        <input type="text" id="shopWhatsApp" placeholder="ژمارەی واتساپ">
-        <input type="email" id="shopEmail" placeholder="ئیمەیڵی فرۆشگا">
-        <button class="add-to-cart" onclick="saveShopSettings()">💾 هەڵگرتن</button>
-    </div>
-    
-    <div class="admin-section">
-        <h3>🎁 کۆدێنەکان (Coupons)</h3>
-        <input type="text" id="couponCodeNew" placeholder="کۆد">
-        <input type="number" id="couponDiscount" placeholder="ڕێژەی کەمکردنەوە (١-١٠٠)">
-        <input type="date" id="couponExpiry" placeholder="ڕێکەوتی کۆتایی">
-        <button class="add-to-cart" onclick="addCoupon()">➕ زیادکردنی کۆدێن</button>
-        <div id="couponsList"></div>
-    </div>
-    
-    <div class="admin-section">
-        <h3>🎯 پێشکەشکاری وەرزی</h3>
-        <input type="text" id="offerName" placeholder="ناوی پێشکەشکاری">
-        <input type="date" id="offerEndDate" placeholder="ڕێکەوتی کۆتایی">
-        <button class="add-to-cart" onclick="setSeasonalOffer()">⏰ دابنێ</button>
-    </div>
-    
-    <div class="admin-section">
-        <h3>📸 سلایدەر (وێنە و ڤیدیۆ)</h3>
-        <input type="text" id="sliderMediaUrl" placeholder="لینکی وێنە یان ڤیدیۆ">
-        <select id="sliderMediaType"><option value="image">وێنە</option><option value="video">ڤیدیۆ</option></select>
-        <button class="add-to-cart" onclick="addSliderMedia()">➕ زیادکردن</button>
-        <div id="sliderMediaList" class="media-preview"></div>
-    </div>
-    
-    <div class="admin-section">
-        <h3>📂 کەتەگۆرییەکان</h3>
-        <input type="text" id="newCategoryName" placeholder="ناوی کەتەگۆری">
-        <button class="add-to-cart" onclick="addCategory()">➕ زیادکردن</button>
-        <div id="categoriesListAdmin"></div>
-    </div>
-    
-    <div class="admin-section">
-        <h3>➕ زیادکردنی بەرهەم</h3>
-        <input type="text" id="newProductName" placeholder="ناوی بەرهەم">
-        <textarea id="newProductDesc" placeholder="باسی بەرهەم" rows="2"></textarea>
-        <input type="number" id="newProductPrice" placeholder="نرخ (IQD)">
-        <input type="number" id="newProductOldPrice" placeholder="نرخی کۆن (ئەگەر هەیە)">
-        <div class="quantity-control"><span>ژمارە:</span><input type="number" id="newProductStock" value="0"></div>
-        <select id="newProductStatus"><option value="instock">لەبەردەستە</option><option value="outstock">تەواو بووە</option><option value="preorder">پێشوەختە</option></select>
-       <select id="newProductCategory"></select>
-        <input type="text" id="newProductMedia" placeholder="لینکی وێنە/ڤیدیۆ (بە کۆما جیا بکەرەوە)">
-        <button class="add-to-cart" onclick="addProduct()">✨ زیادکردن</button>
-    </div>
-    
-    <div class="admin-section">
-        <h3>👥 بەکارهێنەران (User Roles)</h3>
-        <input type="text" id="newUserName" placeholder="ناوی بەکارهێنەر">
-        <input type="password" id="newUserPass" placeholder="پاسۆرد">
-        <select id="newUserRole"><option value="admin">ئادمین</option><option value="moderator">مۆدێراتۆر</option><option value="support">پشتیوانی</option></select>
-        <button class="add-to-cart" onclick="addUser()">➕ زیادکردن</button>
-        <div id="usersList"></div>
-    </div>
-    
-    <div class="admin-section">
-        <h3>🚚 نرخی گەیاندن بۆ هەر شارێک</h3>
-        <input type="text" id="shippingCityName" placeholder="ناوی شار">
-        <input type="number" id="shippingCityCost" placeholder="نرخ (IQD)">
-        <button class="add-to-cart" onclick="addShippingCity()">➕ زیادکردن</button>
-        <div id="shippingCitiesList"></div>
-    </div>
-    
-    <div class="admin-section">
-        <h3>📦 بەڕێوەبردنی بەرهەمەکان</h3>
-        <div id="adminProductsList"></div>
-    </div>
-    
-    <div class="admin-section">
-        <h3>📋 داواکارییەکان</h3>
-        <div id="adminOrdersList"></div>
-    </div>
-    
-    <div class="admin-section">
-        <h3>📊 ڕاپۆرتی سەردانەکان</h3>
-        <div id="visitStats"></div>
-        <button class="add-to-cart" onclick="exportAnalytics()">📥 دابەزاندنی ڕاپۆرت</button>
-    </div>
+   <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+       <h2 id="adminPanelTitle"><i class="fas fa-cogs"></i> پانێڵی ئادمین</h2>
+       <button class="icon-btn" style="color: var(--danger); font-size: 24px;" onclick="closeAdminPanel()"><i class="fas fa-times-circle"></i></button>
+   </div>
+   
+   <div class="admin-section">
+       <h3 id="firebaseConfigTitle"><i class="fas fa-fire"></i> ڕێکخستنەکانی Firebase</h3>
+       <input type="text" id="firebaseApiKey" placeholder="API Key" value="AIzaSyDummyExampleKey">
+       <input type="text" id="firebaseProjectId" placeholder="Project ID" value="vip-baby-shop">
+       <input type="text" id="firebaseDatabaseUrl" placeholder="Database URL" value="https://vip-baby-shop-default-rtdb.firebaseio.com">
+       <button class="add-to-cart" onclick="initFirebaseWithConfig()"><i class="fas fa-plug"></i> پەیوەندیکردن بە Firebase</button>
+       <button class="add-to-cart" style="background: var(--warning); margin-top: 5px;" onclick="syncAllToFirebase()"><i class="fas fa-cloud-upload-alt"></i> هەموو داتاکان بنێرە بۆ Firebase</button>
+       <button class="add-to-cart" style="background: var(--success); margin-top: 5px;" onclick="loadAllFromFirebase()"><i class="fas fa-cloud-download-alt"></i> هەموو داتاکان باربکە لە Firebase</button>
+       <div id="firebaseSyncStatus" style="margin-top: 10px; font-size: 12px; color: var(--text-light);"></div>
+   </div>
+   
+   <div class="admin-section">
+       <h3 id="themeColorTitle"><i class="fas fa-palette"></i> ڕەنگی ئەپ</h3>
+       <input type="color" id="themeColor" class="color-picker" onchange="changeThemeColor(this.value)">
+   </div>
+   
+   <div class="admin-section">
+       <h3 id="shopInfoTitle"><i class="fas fa-store"></i> زانیاری فرۆشگا</h3>
+       <input type="text" id="shopNameInput" placeholder="ناوی فرۆشگا">
+       <input type="text" id="shopWhatsappInput" placeholder="ژمارەی واتساپ (تەنها ژمارە)">
+       <button class="add-to-cart" onclick="saveShopSettings()" id="saveSettingsBtn"><i class="fas fa-save"></i> هەڵگرتن</button>
+       <div style="margin-top: 10px; font-size: 12px; color: var(--text-light);">
+           📌 <span id="currentWhatsappLabel">ژمارەی ئێستا:</span> <span id="currentWhatsapp">9647700000000</span>
+       </div>
+   </div>
+   
+   <div class="admin-section">
+       <h3 id="autoReplyTitle"><i class="fas fa-robot"></i> وەڵامی چات (ئۆتۆماتیک)</h3>
+       <textarea id="autoReplyMsg" rows="2" placeholder="پەیامی وەڵامی ئۆتۆماتیک..."></textarea>
+       <button class="add-to-cart" onclick="saveAutoReply()" id="saveAutoReplyBtn"><i class="fas fa-save"></i> هەڵگرتنی وەڵام</button>
+   </div>
+   
+   <div class="admin-section">
+       <h3 id="couponsTitle"><i class="fas fa-ticket-alt"></i> کۆدێن (Coupon)</h3>
+       <input type="text" id="couponName" placeholder="ناوی کۆدێن">
+       <input type="number" id="couponPercent" placeholder="ڕێژە (١-١٠٠)">
+       <input type="date" id="couponDate">
+       <button class="add-to-cart" onclick="addCoupon()" id="addCouponBtn"><i class="fas fa-plus"></i> زیادکردن</button>
+       <div id="couponsList"></div>
+   </div>
+   
+   <div class="admin-section">
+       <h3 id="sliderTitle"><i class="fas fa-images"></i> سلایدەر</h3>
+       <input type="text" id="sliderImage" placeholder="لینکی وێنە">
+       <button class="add-to-cart" onclick="addSliderImage()" id="addSliderBtn"><i class="fas fa-plus"></i> زیادکردن</button>
+       <div id="sliderList"></div>
+   </div>
+   
+   <div class="admin-section">
+       <h3 id="categoriesTitle"><i class="fas fa-tags"></i> کەتەگۆری (دەستکاری)</h3>
+       <div id="categoriesAdmin"></div>
+       <div style="margin-top: 10px; display: flex; gap: 8px;">
+           <input type="text" id="newCategory" placeholder="ناوی کەتەگۆری نوێ" style="flex:1;">
+           <button class="add-to-cart" style="width: auto; padding: 10px 20px;" onclick="addCategory()" id="addCategoryBtn"><i class="fas fa-plus"></i> زیادکردن</button>
+       </div>
+   </div>
+   
+   <div class="admin-section">
+       <h3 id="addProductTitle"><i class="fas fa-box-open"></i> زیادکردنی بەرهەم</h3>
+       <input type="text" id="productName" placeholder="ناو">
+       <textarea id="productDesc" rows="2" placeholder="باسکردن"></textarea>
+       <input type="number" id="productPrice" placeholder="نرخ">
+       <input type="number" id="productStock" placeholder="ژمارە">
+       <select id="productCategory"></select>
+       <select id="productStatus">
+           <option value="instock" id="instockOption">لەبەردەستە</option>
+           <option value="outstock" id="outstockOption">تەواو بووە</option>
+       </select>
+       <input type="text" id="productImage" placeholder="لینکی وێنە">
+       <button class="add-to-cart" onclick="addProduct()" id="addProductBtn"><i class="fas fa-plus-circle"></i> زیادکردن</button>
+   </div>
+   
+   <div class="admin-section">
+       <h3 id="shippingTitle"><i class="fas fa-truck-fast"></i> نرخی گەیاندن</h3>
+       <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+           <input type="text" id="shippingCityName" placeholder="ناوی شار" style="flex:1;">
+           <input type="number" id="shippingCostValue" placeholder="نرخ" style="flex:1;">
+           <button class="add-to-cart" style="width: auto; padding: 10px 20px;" onclick="addShippingCity()" id="addShippingBtn"><i class="fas fa-plus"></i> زیادکردن</button>
+       </div>
+       <div id="shippingCitiesAdmin"></div>
+   </div>
+   
+   <div class="admin-section">
+       <h3 id="productsListTitle"><i class="fas fa-boxes"></i> بەرهەمەکان</h3>
+       <div id="adminProducts"></div>
+   </div>
+   
+   <div class="admin-section">
+       <h3 id="ordersListTitle"><i class="fas fa-clipboard-list"></i> داواکارییەکان</h3>
+       <div id="adminOrders"></div>
+   </div>
+   
+   <div class="admin-section">
+       <h3 id="chatMessagesTitle"><i class="fas fa-comments"></i> پەیامەکانی چات</h3>
+       <div id="adminChatMessages" style="max-height: 300px; overflow-y: auto;"></div>
+   </div>
 </div>
-
+ 
 <div id="toast" class="toast"></div>
-
+ 
 <script>
-    // ========== داتابەیس ==========
-    let products = JSON.parse(localStorage.getItem('vip_products'))  [];
-    let categories = JSON.parse(localStorage.getItem('vip_categories'))  ['تغذیة', 'ملابس', 'العاب', 'عربات'];
-    let sliderMedia = JSON.parse(localStorage.getItem('vip_slider'))  [];
-    let shippingCities = JSON.parse(localStorage.getItem('vip_shipping'))  [{city: 'بغداد', cost: 3000}, {city: 'البصرة', cost: 5000}];
-    let orders = JSON.parse(localStorage.getItem('vip_orders'))  [];
-    let wishlist = JSON.parse(localStorage.getItem('vip_wishlist'))  [];
-    let coupons = JSON.parse(localStorage.getItem('vip_coupons'))  [];
-    let reviews = JSON.parse(localStorage.getItem('vip_reviews'))  [];
-    let users = JSON.parse(localStorage.getItem('vip_users'))  [{username: 'admin', password: 'admin2026', role: 'admin', name: 'ئادمین'}];
-    let notifications = JSON.parse(localStorage.getItem('vip_notifications'))  [];
-    let analytics = JSON.parse(localStorage.getItem('vip_analytics'))  { views: {}, productClicks: {} };
-    let seasonalOffer = JSON.parse(localStorage.getItem('vip_seasonal_offer'))  null;
-    let currentUser = JSON.parse(localStorage.getItem('vip_current_user'))  null;
-    let cart = [], quantities = {}, appliedCoupon = null, currentSlide = 0, clickCount = 0, currentLang = 'ku';
-    
-    // Language translations
-    const translations = {
-        ku: { search: "🔍 گەڕان بەدوای بەرهەمەکان...", cart: "🛒 سەبەتەی کڕین", all: "✨ هەموو" },
-        ar: { search: "🔍 بحث عن المنتجات...", cart: "🛒 سلة التسوق", all: "✨ الكل" },
-        en: { search: "🔍 Search products...", cart: "🛒 Shopping Cart", all: "✨ All" }
-    };
-    
-    // Initialize default products
-    if(products.length === 0) {
-        products = [
-            { id: 1, name: "شیری منداڵان VIP", description: "شیری تایبەت بە منداڵان", price: 25000, oldPrice: 30000, stock: 10, status: "instock", category: "تغذیة", media: ["https://i.postimg.cc/RWNMnJDG/image.jpg"], views: 0 },
-            { id: 2, name: "جلی منداڵان", description: "کۆمپلێتی جلوبەرگ", price: 35000, oldPrice: 45000, stock: 5, status: "instock", category: "ملابس", media: ["https://i.postimg.cc/RWNMnJDG/image.jpg"], views: 0 }
-        ];
-        localStorage.setItem('vip_products', JSON.stringify(products));
-    }
-    
-    function recordView(productId) {
-        const product = products.find(p => p.id === productId);
-        if(product) { product.views = (product.views  0) + 1; localStorage.setItem('vip_products', JSON.stringify(products)); }
-        analytics.views[Date.now()] = (analytics.views[Date.now()]  0) + 1;
-        localStorage.setItem('vip_analytics', JSON.stringify(analytics));
-    }
-    
-    function renderSlider() {
-        const slider = document.getElementById('slider');
-        if(sliderMedia.length === 0) { slider.innerHTML = '<div class="slide"><img src="https://i.postimg.cc/RWNMnJDG/image.jpg"></div>'; return; }
-        slider.innerHTML = sliderMedia.map(media => `<div class="slide">${media.type === 'video' ? `<video controls><source src="${media.url}"></video>` : `<img src="${media.url}">`}</div>`).join('');
-        document.getElementById('sliderDots').innerHTML = sliderMedia.map((_, i) => `<span class="dot ${i === currentSlide ? 'active' : ''}" onclick="goToSlide(${i})"></span>`).join('');
-    }
-    
-    function changeSlide(d) { if(sliderMedia.length) { currentSlide = (currentSlide + d + sliderMedia.length) % sliderMedia.length; document.getElementById('slider').style.transform = `translateX(-${currentSlide * 100}%)`; renderSlider(); } }
-    function goToSlide(i) { currentSlide = i; document.getElementById('slider').style.transform = `translateX(-${currentSlide * 100}%)`; renderSlider(); }
-    
-    function renderCategories() {
-        const container = document.getElementById('categoriesList');
-        container.innerHTML = `<button class="cat-btn ${currentCategory === 'all' ? 'active' : ''}" onclick="filterByCategory('all', this)">✨ ${translations[currentLang].all}</button>` + categories.map(cat => `<button class="cat-btn ${currentCategory === cat ? 'active' : ''}" onclick="filterByCategory('${cat}', this)">${cat}</button>`).join('');
-        const adminCatSelect = document.getElementById('newProductCategory');
-        if(adminCatSelect) adminCatSelect.innerHTML = categories.map(cat => `<option value="${cat}">${cat}</option>`).join('');
-    }
-    
-    let currentCategory = 'all';
-    function filterByCategory(category, btn) { currentCategory = category; document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active')); btn.classList.add('active'); renderProducts(); }
-    function filterProducts() { renderProducts(); }
-    
-    function renderProducts() {
-        let filtered = currentCategory === 'all' ? products : products.filter(p => p.category === currentCategory);
-        let searchTerm = document.getElementById('searchInput').value.toLowerCase();
-        filtered = filtered.filter(p => p.name.toLowerCase().includes(searchTerm));
-        const grid = document.getElementById('productsGrid');
-        grid.innerHTML = filtered.map(product => {
-            const productReviews = reviews.filter(r => r.productId === product.id);
-            const avgRating = p
-            roductReviews.length ? (productReviews.reduce((s, r) => s + r.rating, 0) / productReviews.length).toFixed(1) : 0;
-            const statusText = { instock: "لەبەردەستە", outstock: "تەواو بووە", preorder: "پێشوەختە" };
-            const statusClass = { instock: "status-instock", outstock: "status-outstock", preorder: "status-preorder" };
-            return `
-                <div class="product-card">
-                    <div class="status-badge ${statusClass[product.status]  'status-instock'}">${statusText[product.status]  'لەبەردەستە'}</div>
-                    <button class="wish-btn ${wishlist.some(w => w.id === product.id) ? 'active' : ''}" onclick="toggleWishlist(${product.id})">❤️</button>
-                    ${product.media && product.media[0] ? `<img src="${product.media[0]}" class="product-media" onclick="zoomImage('${product.media[0]}')">` : ''}
-                    <div class="product-gallery">${product.media?.slice(1, 4).map(m => `<img src="${m}" class="gallery-thumb" onclick="zoomImage('${m}')">`).join('')  ''}</div>
-                    <div class="product-name">${product.name}</div>
-                    <div class="product-description">${product.description  ''}</div>
-                    <div class="product-rating"><div class="stars">${'★'.repeat(Math.floor(avgRating))}${'☆'.repeat(5 - Math.floor(avgRating))}</div><span>(${productReviews.length})</span></div>
-                    <div><span class="product-price">${product.price.toLocaleString()} IQD</span>${product.oldPrice ? `<span class="old-price">${product.oldPrice.toLocaleString()} IQD</span>` : ''}</div>
-                    <div class="quantity-control"><button class="quantity-btn" onclick="changeQuantity(${product.id}, -1)">-</button><span id="qty-${product.id}">1</span><button class="quantity-btn" onclick="changeQuantity(${product.id}, 1)">+</button><span style="font-size:12px;">(پاشماوە: ${product.stock})</span></div>
-                    <button class="add-to-cart" onclick="addToCart(${product.id})" ${product.status === 'outstock' ? 'disabled style="opacity:0.5;"' : ''}>🛒 زیادکردن بۆ سەبەتە</button>
-                    <button class="add-to-cart" style="background: var(--accent); margin-top: 5px;" onclick="openReviewModal(${product.id})">⭐️ پێداچوونەوە</button>
-                </div>
-            `;
-        }).join('');
-        if(filtered.length === 0) grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:50px;">هیچ بەرهەمێک نەدۆزرایەوە 😢</div>';
-    }
-    
-    function changeQuantity(id, d) { quantities[id] = (quantities[id]  1) + d; if(quantities[id] < 1) quantities[id] = 1; document.getElementById(qty-${id}).innerText = quantities[id]; }
-    
-    function addToCart(id) {
-        const product = products.find(p => p.id === id);
-        const qty = quantities[id]  1;
-        if(product.stock < qty) { showToast('بەرهەم بەم ژمارەیە نییە!'); return; }
-        cart.push({...product, cartQty: qty});
-        updateCartUI();
-        showToast(`${product.name} (${qty}) زیادکرا ✅`);
-        // Affiliate tracking
-        if(new URLSearchParams(window.location.search).get('ref')) { localStorage.setItem('vip_affiliate', new URLSearchParams(window.location.search).get('ref')); }
-    }
-    
-    function updateCartUI() {
-        document.getElementById('cartCount').innerText = cart.length;
-        let subtotal = cart.reduce((s, i) => s + (i.price * i.cartQty), 0);
-        const cartList = document.getElementById('cartItemsList');
-        if(cart.length === 0) { cartList.innerHTML = '<p style="text-align:center;">سەبەتەکەت خاڵییە 🛒</p>'; document.getElementById('cartTotal').innerText = '0 IQD'; return; }
-        cartList.innerHTML = cart.map((item, i) => `<div class="cart-item"><img src="${item.media?.[0]  ''}" class="cart-item-img"><div class="cart-item-info"><div>${item.name}</div><div>ژمارە: ${item.cartQty}</div><div>${(item.price * item.cartQty).toLocaleString()} IQD</div></div><button class="remove-item" onclick="removeFromCart(${i})">🗑</button></div>`).join('');
-        updateCartTotal();
-    }
-    
-    function updateCartTotal() {
-        let subtotal = cart.reduce((s, i) => s + (i.price * i.cartQty), 0);
-        const city = document.getElementById('shippingCity')?.value;
-        const shipping = shippingCities.find(c => c.city === city);
-        const shippingCost = shipping ? shipping.cost : 0;
-        let discount = 0;
-        if(appliedCoupon) { const coupon = coupons.find(c => c.code === appliedCoupon); if(coupon && new Date(coupon.expiry) > new Date()) discount = subtotal * (coupon.discount / 100); }
-        const total = subtotal + shippingCost - discount;
-        document.getElementById('shippingCost').innerText = shippingCost.toLocaleString() + ' IQD';
-        document.getElementById('discountAmount').innerText = discount.toLocaleString() + ' IQD';
-        document.getElementById('cartTotal').innerText = total.toLocaleString() + ' IQD';
-        return { subtotal, shippingCost, discount, total };
-    }
-    
-    function applyCoupon() {
-        const code = document.getElementById('couponCode').value;
-        const coupon = coupons.find(c => c.code === code);
-        if(coupon && new Date(coupon.expiry) > new Date()) { appliedCoupon = code; updateCartTotal(); showToast(کۆدێن ${code} جێبەجێکرا ✅); }
-        else showToast('کۆدێن نادروستە یان بەسەرچووە');
-    }
-    
-    function goToCheckout() { if(cart.length && document.getElementById('shippingCity').value) { closeModal('cartModal'); openModal('checkoutModal'); updateCartTotal(); document.getElementById('checkoutSummary').innerHTML = <div style="background:var(--border);padding:10px;border-radius:12px;">کۆی گشتی: ${document.getElementById('cartTotal').innerText}</div>; } else showToast('تکایە بەرهەم و شار هەڵبژێرە'); }
-    
-    function submitOrder() {
-        const name = document.getElementById('customerName').value, phone = document.getElementById('customerPhone').value, address = document.getElementById('customerAddress').value, city = document.getElementById('shippingCity').value;
-        if(!name  !phone  !address) { showToast('تکایە هەموو زانیارییەکان پڕ بکەرەوە'); return; }
-        const { subtotal, shippingCost, discount, total } = updateCartTotal();
-        const order = { id: Date.now(), date: new Date().toLocaleString(), customer: name, phone, address, city, items: cart.map(i => ({...i})), subtotal, shippingCost, discount, total, status: 'pending', trackingCode: 'TRK' + Date.now() };
-        orders.unshift(order);
-        localStorage.setItem('vip_orders', JSON.stringify(orders));
-        // Send notification
-        notifications.unshift({ id: Date.now(), title: 'داواکاری نوێ', message: ${name} داواکارییەکی نوێی هەیە, date: new Date().toLocaleString(), read: false });
-        localStorage.setItem('vip_notifications', JSON.stringify(notifications));
-        updateNotificationBadge();
-        // WhatsApp
-                             const whatsapp = localStorage.getItem('vip_whatsapp')  '9647700000000';
-        const message = `📦 داواکاری نوێ\n👤 ناو: ${name}\n📞 تەلەفۆن: ${phone}\n📍 ناونیشان: ${address}\n🏙 شار: ${city}\n📋 بەرهەمەکان:\n${cart.map(i => `- ${i.name} x${i.cartQty} = ${(i.price * i.cartQty).toLocaleString()} IQD`).join('\n')}\n💰 کۆی گشتی: ${total.toLocaleString()} IQD\n🔍 کۆدی گەڕان: TRK${order.id}`;
-        window.open(`https://wa.me/${whatsapp}?text=${encodeURIComponent(message)}`, '_blank');
-        cart = []; quantities = {}; appliedCoupon = null; updateCartUI(); closeModal('checkoutModal'); showToast('داواکاری ڕەوانە کرا ✅');
-        document.getElementById('customerName').value = ''; document.getElementById('customerPhone').value = ''; document.getElementById('customerAddress').value = '';
-    }
-    
-    function trackOrder() { const code = document.getElementById('trackingCode').value; const order = orders.find(o => o.id == code.replace('TRK', '')); document.getElementById('trackingResult').innerHTML = order ? `<div style="background:var(--success);padding:15px;border-radius:12px;">✅ داواکاری دۆزرایەوە<br>ناو: ${order.customer}<br>دۆخ: ${order.status}<br>کۆی گشتی: ${order.total.toLocaleString()} IQD</div>` : '<div style="background:var(--danger);padding:15px;border-radius:12px;">❌ داواکاری نەدۆزرایەوە</div>'; }
-    
-    function openReviewModal(productId) { const rating = prompt('ئەستێرە (1-5):'); const comment = prompt('پێداچوونەوە:'); if(rating && comment) { reviews.push({ id: Date.now(), productId, rating: parseInt(rating), comment, date: new Date().toLocaleString(), user: 'کڕیار' }); localStorage.setItem('vip_reviews', JSON.stringify(reviews)); showToast('پێداچوونەوە زیادکرا ✅'); renderProducts(); } }
-    
-    function toggleWishlist(id) { const product = products.find(p => p.id === id); if(wishlist.some(w => w.id === id)) { wishlist = wishlist.filter(w => w.id !== id); showToast('لە دڵخوازەکان سڕایەوە'); } else { wishlist.push(product); showToast('زیادکرا بۆ دڵخوازەکان'); } localStorage.setItem('vip_wishlist', JSON.stringify(wishlist)); renderProducts(); renderWishlist(); }
-    function renderWishlist() { const container = document.getElementById('wishlistItems'); if(!container) return; container.innerHTML = wishlist.length ? wishlist.map(item => `<div class="cart-item"><img src="${item.media?.[0]}" class="cart-item-img"><div>${item.name}<br>${item.price.toLocaleString()} IQD</div><button class="remove-item" onclick="addToCart(${item.id})">🛒</button></div>`).join('') : '<p>هیچ بەرهەمێک نییە</p>'; }
-    
-    function openNotifications() { renderNotifications(); openModal('notificationsModal'); }
-    function renderNotifications() { const container = document.getElementById('notificationsList'); if(container) container.innerHTML = notifications.map(n => `<div class="cart-item"><div><strong>${n.title}</strong><br>${n.message}<br><small>${n.date}</small></div></div>`).join(''); }
-    function updateNotificationBadge() { document.getElementById('notificationBadge').innerText = notifications.filter(n => !n.read).length; }
-    
-    // Admin Functions
-    document.getElementById('adminLoginTrigger').onclick = () => { clickCount++; if(clickCount >= 3) openModal('adminLoginModal'); setTimeout(() => clickCount = 0, 2000); };
-    function adminLogin() { if(document.getElementById('adminPassword').value === 'admin2026') { closeModal('adminLoginModal'); document.getElementById('adminPanel').style.display = 'block'; renderAdminProducts(); renderAdminOrders(); renderCategoriesListAdmin(); renderSliderMediaList(); renderShippingCities(); renderCouponsList(); renderUsersList(); renderAnalytics(); showToast('بەخێربێیت'); } else showToast('پاسۆرد هەڵەیە!'); }
-    function closeAdminPanel() { document.getElementById('adminPanel').style.display = 'none'; }
-    function changeThemeColor(c) { document.documentElement.style.setProperty('--primary', c); localStorage.setItem('vip_theme_color', c); }
-                            function saveShopSettings() { localStorage.setItem('vip_shop_name', document.getElementById('shopNameInput').value); localStorage.setItem('vip_whatsapp', document.getElementById('shopWhatsApp').value); localStorage.setItem('vip_shop_email', document.getElementById('shopEmail').value); document.getElementById('shopNameDisplay').innerText = document.getElementById('shopNameInput').value; showToast('هەڵگیرا'); }
-    function addCategory() { const name = document.getElementById('newCategoryName').value; if(name && !categories.includes(name)) { categories.push(name); localStorage.setItem('vip_categories', JSON.stringify(categories)); renderCategories(); renderCategoriesListAdmin(); showToast('زیادکرا'); } }
-    function deleteCategory(cat) { categories = categories.filter(c => c !== cat); localStorage.setItem('vip_categories', JSON.stringify(categories)); renderCategories(); renderCategoriesListAdmin(); showToast('سڕایەوە'); }
-    function renderCategoriesListAdmin() { const c = document.getElementById('categoriesListAdmin'); if(c) c.innerHTML = categories.map(cat => `<div class="cart-item" style="justify-content:space-between;"><span>${cat}</span><button class="remove-item" onclick="deleteCategory('${cat}')">🗑</button></div>`).join(''); }
-    function addSliderMedia() { const url = document.getElementById('sliderMediaUrl').value; const type = document.getElementById('sliderMediaType').value; if(url) { sliderMedia.push({url, type}); localStorage.setItem('vip_slider', JSON.stringify(sliderMedia)); renderSlider(); renderSliderMediaList(); showToast('زیادکرا'); } }
-    function deleteSliderMedia(i) { sliderMedia.splice(i,1); localStorage.setItem('vip_slider', JSON.stringify(sliderMedia)); renderSlider(); renderSliderMediaList(); }
-    function renderSliderMediaList() { const c = document.getElementById('sliderMediaList'); if(c) c.innerHTML = sliderMedia.map((m,i) => `<div style="position:relative;">${m.type === 'video' ? `<video width="80" height="80"><source src="${m.url}"></video>` : `<img src="${m.url}" width="80" height="80">`}<button class="delete-media" onclick="deleteSliderMedia(${i})">✖️</button></div>`).join(''); }
-    function addProduct() { const name = document.getElementById('newProductName').value; if(!name) { showToast('ناو بنووسە'); return; } products.push({ id: Date.now(), name, description: document.getElementById('newProductDesc').value, price: parseInt(document.getElementById('newProductPrice').value), oldPrice: parseInt(document.getElementById('newProductOldPrice').value)  null, stock: parseInt(document.getElementById('newProductStock').value), status: document.getElementById('newProductStatus').value, category: document.getElementById('newProductCategory').value, media: document.getElementById('newProductMedia').value.split(',').filter(u=>u.trim()), views: 0 }); localStorage.setItem('vip_products', JSON.stringify(products)); renderProducts(); renderAdminProducts(); showToast('بەرهەم زیادکرا'); }
-    function deleteProduct(i) { if(confirm('دڵنیای؟')) { products.splice(i,1); localStorage.setItem('vip_products', JSON.stringify(products)); renderProducts(); renderAdminProducts(); } }
-    function renderAdminProducts() { const c = document.getElementById('adminProductsList'); if(c) c.innerHTML = products.map((p,i) => <div class="cart-item" style="justify-content:space-between;"><span>${p.name} - ${p.price.toLocaleString()} IQD (${p.stock})</span><button class="remove-item" onclick="deleteProduct(${i})">🗑</button></div>).join(''); }
-    function addCoupon() { const code = document.getElementById('couponCodeNew').value; const discount = parseInt(document.getElementById('couponDiscount').value); const expiry = document.getElementById('couponExpiry').value; if(code && discount) { coupons.push({code, discount, expiry}); localStorage.setItem('vip_coupons', JSON.stringify(coupons)); renderCouponsList(); showToast('کۆدێن زیادکرا'); } }
-    function renderCouponsList() { const c = document.getElementById('couponsList'); if(c) c.innerHTML = coupons.map((cp,i) => <div class="cart-item" style="justify-content:space-between;
-        "><span>${cp.code} - ${cp.discount}% (${cp.expiry})</span><button class="remove-item" onclick="deleteCoupon(${i})">🗑</button></div>).join(''); }
-    function deleteCoupon(i) { coupons.splice(i,1); localStorage.setItem('vip_coupons', JSON.stringify(coupons)); renderCouponsList(); }
-    function setSeasonalOffer() { const name = document.getElementById('offerName').value; const endDate = document.getElementById('offerEndDate').value; if(name && endDate) { seasonalOffer = { name, endDate }; localStorage.setItem('vip_seasonal_offer', JSON.stringify(seasonalOffer)); startCountdown(); showToast('پێشکەشکاری دانرا'); } }
-    function startCountdown() { if(seasonalOffer) { const end = new Date(seasonalOffer.endDate).getTime(); setInterval(() => { const now = new Date().getTime(); const diff = end - now; if(diff>0) { const h = Math.floor(diff/(1000*60*60)); const m = Math.floor((diff%(1000*60*60))/(1000*60)); const s = Math.floor((diff%(1000*60))/1000); document.getElementById('countdown').innerText = ${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}; } else document.getElementById('countdown').innerText = 'پێشکەشکاری تەواو بوو'; }, 1000); } }
-    function addUser() { const username = document.getElementById('newUserName').value; const password = document.getElementById('newUserPass').value; const role = document.getElementById('newUserRole').value; if(username && password) { users.push({username, password, role, name: username}); localStorage.setItem('vip_users', JSON.stringify(users)); renderUsersList(); showToast('بەکارهێنەر زیادکرا'); } }
-    function renderUsersList() { const c = document.getElementById('usersList'); if(c) c.innerHTML = users.map((u,i) => <div class="cart-item" style="justify-content:space-between;"><span>👤 ${u.username} (${u.role})</span><button class="remove-item" onclick="deleteUser(${i})">🗑</button></div>).join(''); }
-    function deleteUser(i) { users.splice(i,1); localStorage.setItem('vip_users', JSON.stringify(users)); renderUsersList(); }
-    function addShippingCity() { const city = document.getElementById('shippingCityName').value; const cost = parseInt(document.getElementById('shippingCityCost').value); if(city && cost) { shippingCities.push({city, cost}); localStorage.setItem('vip_shipping', JSON.stringify(shippingCities)); renderShippingCities(); showToast('شار زیادکرا'); } }
-    function deleteShippingCity(i) { shippingCities.splice(i,1); localStorage.setItem('vip_shipping', JSON.stringify(shippingCities)); renderShippingCities(); }
-    function renderShippingCities() { const s = document.getElementById('shippingCity'); if(s) s.innerHTML = '<option value="">هەڵبژاردنی شار</option>' + shippingCities.map(c => <option value="${c.city}">${c.city} - ${c.cost.toLocaleString()} IQD</option>).join(''); const c = document.getElementById('shippingCitiesList'); if(c) c.innerHTML = shippingCities.map((c,i) => <div class="cart-item" style="justify-content:space-between;"><span>${c.city}: ${c.cost.toLocaleString()} IQD</span><button class="remove-item" onclick="deleteShippingCity(${i})">🗑</button></div>).join(''); }
-    function renderAdminOrders() { const c = document.getElementById('adminOrdersList'); if(c) c.innerHTML = orders.length ? orders.map(o => <div class="admin-section"><div><strong>#${o.id}</strong> - ${o.date}</div><div>👤 ${o.customer} | 📞 ${o.phone}</div><div>📍 ${o.address}</div><div>💰 ${o.total.toLocaleString()} IQD</div><button class="remove-item" onclick="deleteOrder(${o.id})">سڕینەوە</button></div>).join('') : '<p>هیچ داواکارییەک نییە</p>'; }
-    function deleteOrder(id) { orders = orders.filter(o => o.id !== id); localStorage.setItem('vip_orders', JSON.stringify(orders)); renderAdminOrders(); }
-                                  function renderAnalytics() { const totalViews = Object.values(analytics.views).reduce((a,b)=>a+b,0); const c = document.getElementById('analyticsStats'); if(c) c.innerHTML = <div>📊 سەردان: ${totalViews}</div><div>📦 فرۆشتن: ${orders.length}</div><div>❤️ دڵخواز: ${wishlist.length}</div><div>⭐️ پێداچوونەوە: ${reviews.length}</div>; document.getElementById('visitStats').innerHTML = <div>ڕاپۆرتی سەردان: ${Object.entries(analytics.views).slice(-10).map(([d,v])=><div>${new Date(parseInt(d)).toLocaleDateString()}: ${v}</div>).join('')}</div>; }
-    function exportAnalytics() { const data = JSON.stringify({products, orders, analytics, reviews}, null, 2); const blob = new Blob([data], {type: 'application/json'}); const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'vip_analytics.json'; a.click(); showToast('ڕاپۆرت دابەزی'); }
-    function changeLanguage(lang) { currentLang = lang; document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active')); event.target.classList.add('active'); document.getElementById('searchInput').placeholder = translations[lang].search; renderProducts(); }
-    
-    function removeFromCart(i) { cart.splice(i,1); updateCartUI(); showToast('سڕایەوە'); }
-    function openModal(id) { document.getElementById(id).style.display = 'flex'; if(id === 'wishlistModal') renderWishlist(); if(id === 'notificationsModal') renderNotifications(); }
-    function closeModal(id) { document.getElementById(id).style.display = 'none'; }
-    function toggleDarkMode() { document.body.classList.toggle('dark-mode'); localStorage.setItem('vip_dark_mode', document.body.classList.contains('dark-mode')); }
-    function zoomImage(src) { const m = document.createElement('div'); m.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.9);z-index:3000;display:flex;align-items:center;justify-content:center;cursor:pointer;'; const i = document.createElement('img'); i.src = src; i.style.cssText = 'max-width:90%;max-height:90%;border-radius:20px;'; m.appendChild(i); m.onclick = () => m.remove(); document.body.appendChild(m); }
-    function showToast(m) { const t = document.getElementById('toast'); t.innerText = m; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 2500); }
-    
-    // Initialize
-    const savedColor = localStorage.getItem('vip_theme_color'); if(savedColor) document.documentElement.style.setProperty('--primary', savedColor);
-    if(localStorage.getItem('vip_dark_mode') === 'true') document.body.classList.add('dark-mode');
-    const savedShopName = localStorage.getItem('vip_shop_name'); if(savedShopName) document.getElementById('shopNameDisplay').innerText = savedShopName;
-    const savedWhatsapp = localStorage.getItem('vip_whatsapp'); if(savedWhatsapp) document.getElementById('whatsappBtn').href = `https://wa.me/${savedWhatsapp}`;
-    renderSlider(); renderCategories(); renderProducts(); renderShippingCities(); updateCartUI(); startCountdown(); renderUsersList(); renderCouponsList(); renderAnalytics(); updateNotificationBadge();
+   // ========== Firebase Configuration ==========
+   let firebaseApp = null;
+   let database = null;
+   let firebaseConnected = false;
+   
+   // Default Firebase config (پێویستە لەگەڵ پرۆژەکەت بگۆڕیت)
+   let firebaseConfig = {
+       apiKey: "AIzaSyDummyExampleKey",
+       authDomain: "vip-baby-shop.firebaseapp.com",
+       databaseURL: "https://vip-baby-shop-default-rtdb.firebaseio.com",
+       projectId: "vip-baby-shop",
+       storageBucket: "vip-baby-shop.appspot.com",
+       messagingSenderId: "123456789",
+       appId: "1:123456789:web:abcdef123456"
+   };
+   
+   function updateFirebaseStatus(connected, message) {
+       const dot = document.getElementById('statusDot');
+       const text = document.getElementById('statusText');
+       if(connected) {
+           dot.className = 'status-dot connected';
+           text.innerHTML = message || '✅ Firebase: پەیوەندی هەیە';
+       } else {
+           dot.className = 'status-dot';
+           text.innerHTML = message || '⚠️ Firebase: پەیوەندی نییە - داتا لە ناوخۆدا هەڵدەگیرێت';
+       }
+       firebaseConnected = connected;
+   }
+   
+   function initFirebaseWithConfig() {
+       const apiKey = document.getElementById('firebaseApiKey').value;
+       const projectId = document.getElementById('firebaseProjectId').value;
+       const databaseURL = document.getElementById('firebaseDatabaseUrl').value;
+       
+       if(!apiKey || apiKey === 'AIzaSyDummyExampleKey') {
+           showToast('تکایە API Key ڕاستەقینە لە Firebase وەربگرە');
+           return;
+       }
+       
+       firebaseConfig = {
+           apiKey: apiKey,
+           authDomain: `${projectId}.firebaseapp.com`,
+           databaseURL: databaseURL,
+           projectId: projectId,
+           storageBucket: `${projectId}.appspot.com`,
+           messagingSenderId: "123456789",
+           appId: "1:123456789:web:abcdef123456"
+       };
+       
+       try {
+           if(firebase.apps.length) {
+               firebase.app().delete();
+           }
+           firebaseApp = firebase.initializeApp(firebaseConfig);
+           database = firebase.database();
+           
+           // Test connection
+           database.ref('.info/connected').on('value', (snap) => {
+               if(snap.val() === true) {
+                   updateFirebaseStatus(true, '✅ Firebase: پەیوەندی سەرکەوتوو');
+                   showToast('پەیوەندی بە Firebase کرا');
+                   localStorage.setItem('firebase_config', JSON.stringify(firebaseConfig));
+               } else {
+                   updateFirebaseStatus(false, '⚠️ Firebase: چاوەڕوانی پەیوەندی...');
+               }
+           });
+       } catch(e) {
+           console.error('Firebase error:', e);
+           updateFirebaseStatus(false, '❌ Firebase: هەڵە لە پەیوەندیکردن');
+           showToast('هەڵە لە پەیوەندیکردن بە Firebase');
+       }
+   }
+   
+   // Sync all data to Firebase
+   async function syncAllToFirebase() {
+       if(!database) {
+           showToast('تکایە یەکەمجار Firebase پەیوەست بکە');
+           return;
+       }
+       
+       showToast('داتاکان دەنێردرێن...');
+       const syncStatus = document.getElementById('firebaseSyncStatus');
+       syncStatus.innerHTML = '⏳ داتاکان دەنێردرێن...';
+       
+       try {
+           await database.ref('products').set(products);
+           await database.ref('categories').set(categories);
+           await database.ref('shippingCities').set(shippingCities);
+           await database.ref('coupons').set(coupons);
+           await database.ref('reviews').set(reviews);
+           await database.ref('shopSettings').set({
+               shopName: localStorage.getItem('vip_shop_name') || 'VIP Baby Nutrition',
+               whatsapp: localStorage.getItem('vip_whatsapp') || '9647700000000',
+               autoReply: autoReply
+           });
+           
+           syncStatus.innerHTML = '✅ هەموو داتاکان بە سەرکەوتوویی نێردران!';
+           showToast('هەموو داتاکان نێردران بۆ Firebase ✅');
+       } catch(e) {
+           syncStatus.innerHTML = '❌ هەڵە لە ناردندا: ' + e.message;
+           showToast('هەڵە لە ناردنی داتاکان');
+       }
+   }
+   
+   // Load all data from Firebase
+   async function loadAllFromFirebase() {
+       if(!database) {
+           showToast('تکایە یەکەمجار Firebase پەیوەست بکە');
+           return;
+       }
+       
+       showToast('داتاکان دەبارێت...');
+       const syncStatus = document.getElementById('firebaseSyncStatus');
+       syncStatus.innerHTML = '⏳ داتاکان دەبارێت...';
+       
+       try {
+           const productsSnap = await database.ref('products').once('value');
+           if(productsSnap.val()) products = productsSnap.val();
+           
+           const categoriesSnap = await database.ref('categories').once('value');
+           if(categoriesSnap.val()) categories = categoriesSnap.val();
+           
+           const shippingSnap = await database.ref('shippingCities').once('value');
+           if(shippingSnap.val()) shippingCities = shippingSnap.val();
+           
+           const couponsSnap = await database.ref('coupons').once('value');
+           if(couponsSnap.val()) coupons = couponsSnap.val();
+           
+           const reviewsSnap = await database.ref('reviews').once('value');
+           if(reviewsSnap.val()) reviews = reviewsSnap.val();
+           
+           const settingsSnap = await database.ref('shopSettings').once('value');
+           if(settingsSnap.val()) {
+               const settings = settingsSnap.val();
+               localStorage.setItem('vip_shop_name', settings.shopName);
+               localStorage.setItem('vip_whatsapp', settings.whatsapp);
+               autoReply = settings.autoReply || autoReply;
+               document.getElementById('shopNameDisplay').innerText = settings.shopName;
+               document.getElementById('whatsappBtn').href = `https://wa.me/${settings.whatsapp}`;
+           }
+           
+           // Save to localStorage
+           localStorage.setItem('vip_products', JSON.stringify(products));
+           localStorage.setItem('vip_categories', JSON.stringify(categories));
+           localStorage.setItem('vip_shipping', JSON.stringify(shippingCities));
+           localStorage.setItem('vip_coupons', JSON.stringify(coupons));
+           localStorage.setItem('vip_reviews', JSON.stringify(reviews));
+           localStorage.setItem('vip_auto_reply', autoReply);
+           
+           syncStatus.innerHTML = '✅ هەموو داتاکان بە سەرکەوتوویی بارکران!';
+           showToast('هەموو داتاکان لە Firebase بارکران ✅');
+           
+           // Refresh UI
+           renderProducts();
+           renderCategories();
+           renderShippingCities();
+           renderWishlist();
+           updateCartUI();
+           renderChatMessages();
+           
+       } catch(e) {
+           syncStatus.innerHTML = '❌ هەڵە لە بارکردن: ' + e.message;
+           showToast('هەڵە لە بارکردنی داتاکان');
+       }
+   }
+   
+   // Load saved Firebase config
+   const savedConfig = localStorage.getItem('firebase_config');
+   if(savedConfig) {
+       try {
+           firebaseConfig = JSON.parse(savedConfig);
+           initFirebaseWithConfig();
+       } catch(e) {}
+   }
+   
+   // ========== Language Translations ==========
+   const translations = {
+       ku: {
+           search: "🔍 گەڕان بەدوای بەرهەمەکان...",
+           cart: "سەبەتەی کڕین",
+           wishlist: "دڵخوازەکان",
+           checkout: "زانیاری کڕیار",
+           tracking: "گەڕانی داواکاری",
+           review: "پێداچوونەوە",
+           admin: "چوونە ژوورەوەی ئادمین",
+           all: "هەموو",
+           instock: "لەبەردەستە",
+           outstock: "تەواو بووە",
+           addToCart: "زیادکردن",
+           reviewBtn: "پێداچوونەوە",
+           shipping: "نرخی گەیاندن:",
+           coupon: "کۆدێن:",
+           total: "کۆی گشتی:",
+           apply: "جێبەجێکردن",
+           checkoutBtn: "بەردەوامبوون",
+           submit: "تەواوکردن",
+           track: "گەڕان",
+           submitReview: "ناردن",
+           login: "چوونە ژوورەوە",
+           offer: "پێشکەشکاری تایبەت:",
+           timeLeft: "کاتی ماوە:",
+           chatHeader: "پشتیوانی فرۆشگا",
+           chatPlaceholder: "پەیامەکەت بنووسە...",
+           welcomeMsg: "سڵاو! چۆن دەتوانین یارمەتیت بدەین?",
+           emptyCart: "سەبەتەکەت خاڵییە 🛒",
+           emptyWishlist: "هیچ بەرهەمێک نییە 💔",
+           noProducts: "هیچ بەرهەمێک نەدۆزرایەوە 😢",
+           orderFound: "✅ داواکاری دۆزرایەوە",
+           orderNotFound: "❌ داواکاری نەدۆزرایەوە",
+           status: "دۆخ: پەسەندکراوە"
+       },
+       ar: {
+           search: "🔍 بحث عن المنتجات...",
+           cart: "سلة التسوق",
+           wishlist: "المفضلة",
+           checkout: "معلومات العميل",
+           tracking: "تتبع الطلب",
+           review: "مراجعة",
+           admin: "دخول المدير",
+           all: "الكل",
+           instock: "متوفر",
+           outstock: "نفد",
+           addToCart: "إضافة",
+           reviewBtn: "مراجعة",
+           shipping: "تكلفة الشحن:",
+           coupon: "كود الخصم:",
+           total: "المجموع:",
+           apply: "تطبيق",
+           checkoutBtn: "متابعة",
+           submit: "إتمام",
+           track: "بحث",
+           submitReview: "إرسال",
+           login: "دخول",
+           offer: "عرض خاص:",
+           timeLeft: "الوقت المتبقي:",
+           chatHeader: "دعم المتجر",
+           chatPlaceholder: "اكتب رسالتك...",
+           welcomeMsg: "مرحباً! كيف يمكننا مساعدتك?",
+           emptyCart: "سلة التسوق فارغة 🛒",
+           emptyWishlist: "لا توجد منتجات 💔",
+           noProducts: "لم يتم العثور على منتجات 😢",
+           orderFound: "✅ تم العثور على الطلب",
+           orderNotFound: "❌ لم يتم العثور على الطلب",
+           status: "الحالة: تمت الموافقة"
+       },
+       en: {
+           search: "🔍 Search products...",
+           cart: "Shopping Cart",
+           wishlist: "Wishlist",
+           checkout: "Customer Info",
+           tracking: "Order Tracking",
+           review: "Review",
+           admin: "Admin Login",
+           all: "All",
+           instock: "In Stock",
+           outstock: "Out of Stock",
+           addToCart: "Add to Cart",
+           reviewBtn: "Review",
+           shipping: "Shipping Cost:",
+           coupon: "Coupon:",
+           total: "Total:",
+           apply: "Apply",
+           checkoutBtn: "Checkout",
+           submit: "Submit",
+           track: "Track",
+           submitReview: "Submit",
+           login: "Login",
+           offer: "Special Offer:",
+           timeLeft: "Time Left:",
+           chatHeader: "Store Support",
+           chatPlaceholder: "Type your message...",
+           welcomeMsg: "Hello! How can we help you?",
+           emptyCart: "Your cart is empty 🛒",
+           emptyWishlist: "No products in wishlist 💔",
+           noProducts: "No products found 😢",
+           orderFound: "✅ Order Found",
+           orderNotFound: "❌ Order Not Found",
+           status: "Status: Approved"
+       }
+   };
+   
+   let currentLang = 'ku';
+   
+   function updateAllTexts() {
+       const t = translations[currentLang];
+       document.getElementById('searchInput').placeholder = t.search;
+       document.getElementById('cartModalTitle').innerHTML = `<i class="fas fa-shopping-cart"></i> ${t.cart}`;
+       document.getElementById('wishlistTitle').innerHTML = `<i class="fas fa-heart"></i> ${t.wishlist}`;
+       document.getElementById('checkoutTitle').innerHTML = `<i class="fas fa-address-card"></i> ${t.checkout}`;
+       document.getElementById('trackingTitle').innerHTML = `<i class="fas fa-search"></i> ${t.tracking}`;
+       document.getElementById('reviewTitle').innerHTML = `<i class="fas fa-star"></i> ${t.review}`;
+       document.getElementById('adminLoginTitle').innerHTML = `<i class="fas fa-lock"></i> ${t.admin}`;
+       document.getElementById('shippingLabel').innerHTML = `<i class="fas fa-truck"></i> ${t.shipping}`;
+       document.getElementById('couponLabel').innerHTML = `<i class="fas fa-percent"></i> ${t.coupon}`;
+       document.getElementById('totalLabel').innerHTML = `<i class="fas fa-money-bill-wave"></i> ${t.total}`;
+       document.getElementById('applyCouponBtn').innerHTML = `<i class="fas fa-ticket-alt"></i> ${t.apply}`;
+       document.getElementById('checkoutBtn').innerHTML = `<i class="fas fa-arrow-left"></i> ${t.checkoutBtn}`;
+       document.getElementById('submitOrderBtn').innerHTML = `<i class="fas fa-check-circle"></i> ${t.submit}`;
+       document.getElementById('trackBtn').innerHTML = `<i class="fas fa-search"></i> ${t.track}`;
+       document.getElementById('submitReviewBtn').innerHTML = `<i class="fas fa-paper-plane"></i> ${t.submitReview}`;
+       document.getElementById('loginBtn').innerHTML = `<i class="fas fa-sign-in-alt"></i> ${t.login}`;
+       document.getElementById('offerText').innerHTML = t.offer;
+       document.getElementById('timeLeftText').innerHTML = t.timeLeft;
+       document.getElementById('chatHeaderText').innerHTML = `<i class="fas fa-headset"></i> ${t.chatHeader}`;
+       document.getElementById('chatInput').placeholder = t.chatPlaceholder;
+       document.getElementById('welcomeMsg').innerHTML = t.welcomeMsg + '<div class="message-time"></div>';
+       
+       document.getElementById('adminPanelTitle').innerHTML = `<i class="fas fa-cogs"></i> ${currentLang === 'ku' ? 'پانێڵی ئادمین' : currentLang === 'ar' ? 'لوحة المدير' : 'Admin Panel'}`;
+       document.getElementById('firebaseConfigTitle').innerHTML = `<i class="fas fa-fire"></i> ${currentLang === 'ku' ? 'ڕێکخستنەکانی Firebase' : currentLang === 'ar' ? 'إعدادات Firebase' : 'Firebase Settings'}`;
+       document.getElementById('themeColorTitle').innerHTML = `<i class="fas fa-palette"></i> ${currentLang === 'ku' ? 'ڕەنگی ئەپ' : currentLang === 'ar' ? 'لون التطبيق' : 'App Color'}`;
+       document.getElementById('shopInfoTitle').innerHTML = `<i class="fas fa-store"></i> ${currentLang === 'ku' ? 'زانیاری فرۆشگا' : currentLang === 'ar' ? 'معلومات المتجر' : 'Shop Info'}`;
+       document.getElementById('autoReplyTitle').innerHTML = `<i class="fas fa-robot"></i> ${currentLang === 'ku' ? 'وەڵامی چات' : currentLang === 'ar' ? 'رد الشات' : 'Chat Reply'}`;
+       document.getElementById('couponsTitle').innerHTML = `<i class="fas fa-ticket-alt"></i> ${currentLang === 'ku' ? 'کۆدێن' : currentLang === 'ar' ? 'كود الخصم' : 'Coupons'}`;
+       document.getElementById('sliderTitle').innerHTML = `<i class="fas fa-images"></i> ${currentLang === 'ku' ? 'سلایدەر' : currentLang === 'ar' ? 'السلايدر' : 'Slider'}`;
+       document.getElementById('categoriesTitle').innerHTML = `<i class="fas fa-tags"></i> ${currentLang === 'ku' ? 'کەتەگۆری' : currentLang === 'ar' ? 'الفئات' : 'Categories'}`;
+       document.getElementById('addProductTitle').innerHTML = `<i class="fas fa-box-open"></i> ${currentLang === 'ku' ? 'زیادکردنی بەرهەم' : currentLang === 'ar' ? 'إضافة منتج' : 'Add Product'}`;
+       document.getElementById('shippingTitle').innerHTML = `<i class="fas fa-truck-fast"></i> ${currentLang === 'ku' ? 'نرخی گەیاندن' : currentLang === 'ar' ? 'تكلفة الشحن' : 'Shipping'}`;
+       document.getElementById('productsListTitle').innerHTML = `<i class="fas fa-boxes"></i> ${currentLang === 'ku' ? 'بەرهەمەکان' : currentLang === 'ar' ? 'المنتجات' : 'Products'}`;
+       document.getElementById('ordersListTitle').innerHTML = `<i class="fas fa-clipboard-list"></i> ${currentLang === 'ku' ? 'داواکارییەکان' : currentLang === 'ar' ? 'الطلبات' : 'Orders'}`;
+       document.getElementById('chatMessagesTitle').innerHTML = `<i class="fas fa-comments"></i> ${currentLang === 'ku' ? 'پەیامەکانی چات' : currentLang === 'ar' ? 'رسائل الشات' : 'Chat Messages'}`;
+       
+       document.getElementById('instockOption').innerHTML = t.instock;
+       document.getElementById('outstockOption').innerHTML = t.outstock;
+       document.getElementById('currentWhatsappLabel').innerHTML = currentLang === 'ku' ? 'ژمارەی ئێستا:' : currentLang === 'ar' ? 'الرقم الحالي:' : 'Current Number:';
+       
+       renderProducts();
+       renderWishlist();
+       updateCartUI();
+       renderCategories();
+       renderShippingCities();
+   }
+   
+   function changeLanguage(lang) {
+       currentLang = lang;
+       document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+       document.querySelector(`.lang-btn[data-lang="${lang}"]`).classList.add('active');
+       updateAllTexts();
+       showToast(currentLang === 'ku' ? 'زمان گۆڕدرا' : currentLang === 'ar' ? 'تم تغيير اللغة' : 'Language changed');
+   }
+   
+   // ========== Data ==========
+   let products = JSON.parse(localStorage.getItem('vip_products')) || [
+       { id: 1, name: "شیری منداڵان VIP", desc: "شیری تایبەت", price: 25000, stock: 10, status: "instock", category: "تغذیة", image: "https://i.postimg.cc/RWNMnJDG/image.jpg" },
+       { id: 2, name: "جلی منداڵان", desc: "کۆمپلێتی جل", price: 35000, stock: 5, status: "instock", category: "ملابس", image: "https://i.postimg.cc/RWNMnJDG/image.jpg" },
+       { id: 3, name: "عەرەبانە", desc: "عەرەبانەی تایبەت", price: 125000, stock: 3, status: "instock", category: "عربات", image: "https://i.postimg.cc/RWNMnJDG/image.jpg" }
+   ];
+   
+   let categories = JSON.parse(localStorage.getItem('vip_categories')) || ['تغذیة', 'ملابس', 'العاب', 'عربات'];
+   let sliderImages = JSON.parse(localStorage.getItem('vip_slider')) || [];
+   let shippingCities = JSON.parse(localStorage.getItem('vip_shipping')) || [
+       { city: "بغداد", cost: 3000 },
+       { city: "البصرة", cost: 5000 },
+       { city: "اربيل", cost: 4000 }
+   ];
+   let orders = JSON.parse(localStorage.getItem('vip_orders')) || [];
+   let wishlist = JSON.parse(localStorage.getItem('vip_wishlist')) || [];
+   let coupons = JSON.parse(localStorage.getItem('vip_coupons')) || [];
+   let reviews = JSON.parse(localStorage.getItem('vip_reviews')) || [];
+   let chatMessages = JSON.parse(localStorage.getItem('vip_chat_messages')) || [];
+   let autoReply = localStorage.getItem('vip_auto_reply') || (currentLang === 'ku' ? "سوپاس بۆ پەیامەکەت! بەم زووانە پەیوەندیت پێدەکەین." : currentLang === 'ar' ? "شكراً لرسالتك! سوف نتواصل معك قريباً." : "Thank you for your message! We will contact you soon.");
+   
+   let cart = [];
+   let quantities = {};
+   let currentCategory = 'all';
+   let appliedCoupon = null;
+   let currentSlide = 0;
+   let clickCount = 0;
+   let currentProductForReview = null;
+   
+   // ========== Helper Functions ==========
+   function showToast(msg) {
+       let toast = document.getElementById('toast');
+       toast.innerText = msg;
+       toast.classList.add('show');
+       setTimeout(() => toast.classList.remove('show'), 2500);
+   }
+   
+   function openModal(id) {
+       document.getElementById(id).style.display = 'flex';
+       if(id === 'wishlistModal') renderWishlist();
+   }
+   
+   function closeModal(id) {
+       document.getElementById(id).style.display = 'none';
+   }
+   
+   // ========== Chat System ==========
+   function toggleChat() {
+       let chat = document.getElementById('chatModal');
+       if(chat.style.display === 'flex') {
+           chat.style.display = 'none';
+       } else {
+           chat.style.display = 'flex';
+           renderChatMessages();
+       }
+   }
+   
+   function renderChatMessages() {
+       let container = document.getElementById('chatMessages');
+       if(chatMessages.length === 0) {
+           container.innerHTML = `<div class="message message-admin">${translations[currentLang].welcomeMsg}<div class="message-time"></div></div>`;
+       } else {
+           container.innerHTML = chatMessages.map(msg => `
+               <div class="message ${msg.sender === 'user' ? 'message-user' : 'message-admin'}">
+                   ${msg.text}
+                   <div class="message-time">${msg.time}</div>
+               </div>
+           `).join('');
+       }
+       container.scrollTop = container.scrollHeight;
+       
+       let adminContainer = document.getElementById('adminChatMessages');
+       if(adminContainer) {
+           adminContainer.innerHTML = chatMessages.slice().reverse().map(msg => `
+               <div class="cart-item" style="flex-direction: column; align-items: flex-start;">
+                   <div><strong>${msg.sender === 'user' ? '👤 کڕیار' : '👑 ئادمین'}</strong> - ${msg.time}</div>
+                   <div>${msg.text}</div>
+               </div>
+           `).join('');
+           if(chatMessages.length === 0) adminContainer.innerHTML = '<p>هیچ پەیامێک نییە</p>';
+       }
+       
+       let unread = chatMessages.filter(m => !m.read && m.sender === 'user').length;
+       document.getElementById('chatBadge').innerText = unread;
+   }
+   
+   function sendMessage() {
+       let input = document.getElementById('chatInput');
+       let text = input.value.trim();
+       if(!text) return;
+       
+       let now = new Date();
+       let time = now.toLocaleTimeString('ku', { hour: '2-digit', minute: '2-digit' });
+       
+       chatMessages.push({
+           id: Date.now(),
+           sender: 'user',
+           text: text,
+           time: time,
+           read: false
+       });
+       
+       localStorage.setItem('vip_chat_messages', JSON.stringify(chatMessages));
+       if(database && firebaseConnected) {
+           database.ref('chatMessages').set(chatMessages);
+       }
+       renderChatMessages();
+       input.value = '';
+       
+       setTimeout(() => {
+           let replyTime = new Date().toLocaleTimeString('ku', { hour: '2-digit', minute: '2-digit' });
+           chatMessages.push({
+               id: Date.now() + 1,
+               sender: 'admin',
+               text: autoReply,
+               time: replyTime,
+               read: true
+           });
+           localStorage.setItem('vip_chat_messages', JSON.stringify(chatMessages));
+           if(database && firebaseConnected) {
+               database.ref('chatMessages').set(chatMessages);
+           }
+           renderChatMessages();
+           showToast(currentLang === 'ku' ? 'وەڵامێکی ئۆتۆماتیک نێردرا' : currentLang === 'ar' ? 'تم إرسال رد آلي' : 'Auto reply sent');
+       }, 1000);
+   }
+   
+   function saveAutoReply() {
+       let msg = document.getElementById('autoReplyMsg').value;
+       if(msg) {
+           autoReply = msg;
+           localStorage.setItem('vip_auto_reply', autoReply);
+           if(database && firebaseConnected) {
+               database.ref('shopSettings/autoReply').set(autoReply);
+           }
+           showToast(currentLang === 'ku' ? 'وەڵامی ئۆتۆماتیک هەڵگیرا' : currentLang === 'ar' ? 'تم حفظ الرد الآلي' : 'Auto reply saved');
+       }
+   }
+   
+   // ========== Products ==========
+   function renderProducts() {
+       const t = translations[currentLang];
+       let filtered = currentCategory === 'all' ? products : products.filter(p => p.category === currentCategory);
+       let searchTerm = document.getElementById('searchInput').value.toLowerCase();
+       filtered = filtered.filter(p => p.name.toLowerCase().includes(searchTerm));
+       
+       let grid = document.getElementById('productsGrid');
+       grid.innerHTML = filtered.map(p => {
+           let productReviews = reviews.filter(r => r.productId === p.id);
+           let avgRating = productReviews.length ? (productReviews.reduce((s,r)=>s+r.rating,0)/productReviews.length).toFixed(1) : 0;
+           let statusText = p.status === 'instock' ? t.instock : t.outstock;
+           let statusClass = p.status === 'instock' ? 'status-instock' : 'status-outstock';
+           
+           return `
+               <div class="product-card">
+                   <div class="status-badge ${statusClass}">${statusText}</div>
+                   <button class="wish-btn ${wishlist.some(w => w.id === p.id) ? 'active' : ''}" onclick="toggleWishlist(${p.id})"><i class="fas fa-heart"></i></button>
+                   <img src="${p.image}" class="product-img" onclick="zoomImage('${p.image}')">
+                   <div class="product-name">${p.name}</div>
+                   <div class="product-price">${p.price.toLocaleString()} IQD</div>
+                   <div style="font-size: 11px; color: var(--text-light);"><i class="fas fa-star" style="color: #FFD700;"></i> ${avgRating} (${productReviews.length})</div>
+                   <div class="quantity-control">
+                       <button class="quantity-btn" onclick="changeQuantity(${p.id}, -1)">-</button>
+                       <span id="qty-${p.id}">1</span>
+                       <button class="quantity-btn" onclick="changeQuantity(${p.id}, 1)">+</button>
+                       <span style="font-size: 11px;"><i class="fas fa-boxes"></i> ${currentLang === 'ku' ? 'پاشماوە:' : currentLang === 'ar' ? 'المتبقي:' : 'Stock:'} ${p.stock}</span>
+                   </div>
+                   <button class="add-to-cart" onclick="addToCart(${p.id})" ${p.status === 'outstock' ? 'disabled style="opacity:0.5;"' : ''}><i class="fas fa-shopping-cart"></i> ${t.addToCart}</button>
+                   <button class="add-to-cart" style="background: var(--accent); margin-top: 5px;" onclick="openReviewModal(${p.id})"><i class="fas fa-star"></i> ${t.reviewBtn}</button>
+               </div>
+           `;
+       }).join('');
+       
+       if(filtered.length === 0) {
+           grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:40px;"><i class="fas fa-box-open"></i> ${t.noProducts}</div>`;
+       }
+   }
+   
+   function changeQuantity(id, delta) {
+       quantities[id] = (quantities[id] || 1) + delta;
+       if(quantities[id] < 1) quantities[id] = 1;
+       let span = document.getElementById(`qty-${id}`);
+       if(span) span.innerText = quantities[id];
+   }
+   
+   function addToCart(id) {
+       const t = translations[currentLang];
+       let product = products.find(p => p.id === id);
+       let qty = quantities[id] || 1;
+       if(product.stock < qty) {
+           showToast(currentLang === 'ku' ? 'بەرهەم بەم ژمارەیە نییە!' : currentLang === 'ar' ? 'المنتج غير متوفر بهذا العدد!' : 'Product not available in this quantity!');
+           return;
+       }
+       cart.push({...product, cartQty: qty});
+       updateCartUI();
+       showToast(`${product.name} ${currentLang === 'ku' ? 'زیادکرا' : currentLang === 'ar' ? 'تمت الإضافة' : 'added'}`);
+   }
+   
+   function removeFromCart(index) {
+       cart.splice(index, 1);
+       updateCartUI();
+       showToast(currentLang === 'ku' ? 'سڕایەوە' : currentLang === 'ar' ? 'تم الحذف' : 'Removed');
+   }
+   
+   function updateCartUI() {
+       const t = translations[currentLang];
+       document.getElementById('cartCount').innerText = cart.length;
+       let cartList = document.getElementById('cartItemsList');
+       if(cart.length === 0) {
+           cartList.innerHTML = `<p style="text-align:center;"><i class="fas fa-shopping-cart"></i> ${t.emptyCart}</p>`;
+           updateCartTotal();
+           return;
+       }
+       
+       cartList.innerHTML = cart.map((item, i) => `
+           <div class="cart-item">
+               <img src="${item.image}" class="cart-item-img">
+               <div style="flex:1;">
+                   <div>${item.name}</div>
+                   <div><i class="fas fa-calculator"></i> ${currentLang === 'ku' ? 'ژمارە:' : currentLang === 'ar' ? 'العدد:' : 'Qty:'} ${item.cartQty}</div>
+                   <div><i class="fas fa-money-bill"></i> ${(item.price * item.cartQty).toLocaleString()} IQD</div>
+               </div>
+               <button class="remove-item" onclick="removeFromCart(${i})"><i class="fas fa-trash-alt"></i></button>
+           </div>
+       `).join('');
+       updateCartTotal();
+   }
+   
+   function updateCartTotal() {
+       let subtotal = cart.reduce((s, i) => s + (i.price * i.cartQty), 0);
+       let city = document.getElementById('shippingCity').value;
+       let shipping = shippingCities.find(c => c.city === city);
+       let shippingCost = shipping ? shipping.cost : 0;
+       let discount = 0;
+       
+       if(appliedCoupon) {
+           let coupon = coupons.find(c => c.code === appliedCoupon);
+           if(coupon && new Date(coupon.expiry) > new Date()) {
+               discount = subtotal * (coupon.discount / 100);
+           }
+       }
+       
+       let total = subtotal + shippingCost - discount;
+       document.getElementById('shippingCost').innerText = shippingCost.toLocaleString() + ' IQD';
+       document.getElementById('discountAmount').innerText = discount.toLocaleString() + ' IQD';
+       document.getElementById('cartTotal').innerText = total.toLocaleString() + ' IQD';
+       return { subtotal, shippingCost, discount, total };
+   }
+   
+   function applyCoupon() {
+       let code = document.getElementById('couponCode').value;
+       let coupon = coupons.find(c => c.code === code);
+       if(coupon && new Date(coupon.expiry) > new Date()) {
+           appliedCoupon = code;
+           updateCartTotal();
+           showToast(`${currentLang === 'ku' ? 'کۆدێن' : currentLang === 'ar' ? 'كود الخصم' : 'Coupon'} ${code} ${currentLang === 'ku' ? 'جێبەجێکرا' : currentLang === 'ar' ? 'تم التطبيق' : 'applied'}`);
+       } else {
+           showToast(currentLang === 'ku' ? 'کۆدێن نادروستە یان بەسەرچووە' : currentLang === 'ar' ? 'كود الخصم غير صالح أو منتهي' : 'Invalid or expired coupon');
+       }
+   }
+   
+   function goToCheckout() {
+       const t = translations[currentLang];
+       if(cart.length === 0) {
+           showToast(t.emptyCart);
+           return;
+       }
+       if(!document.getElementById('shippingCity').value) {
+           showToast(currentLang === 'ku' ? 'تکایە شار هەڵبژێرە' : currentLang === 'ar' ? 'الرجاء اختيار المدينة' : 'Please select a city');
+           return;
+       }
+       closeModal('cartModal');
+       let total = document.getElementById('cartTotal').innerText;
+       document.getElementById('checkoutSummary').innerHTML = `
+           <div style="background: var(--border); padding: 12px; border-radius: 12px; margin: 10px 0;">
+               <div style="font-weight: bold;"><i class="fas fa-money-bill-wave"></i> ${t.total} ${total}</div>
+           </div>
+       `;
+       openModal('checkoutModal');
+   }
+   
+   function submitOrder() {
+       const t = translations[currentLang];
+       let name = document.getElementById('customerName').value;
+       let phone = document.getElementById('customerPhone').value;
+       let address = document.getElementById('customerAddress').value;
+       let city = document.getElementById('shippingCity').value;
+       
+       if(!name || !phone || !address) {
+           showToast(currentLang === 'ku' ? 'تکایە هەموو زانیارییەکان پڕ بکەرەوە' : currentLang === 'ar' ? 'الرجاء ملء جميع البيانات' : 'Please fill all fields');
+           return;
+       }
+       
+       let { subtotal, shippingCost, discount, total } = updateCartTotal();
+       let order = {
+           id: Date.now(),
+           date: new Date().toLocaleString(),
+           customer: name,
+           phone: phone,
+           address: address,
+           city: city,
+           items: cart.map(i => ({...i})),
+           subtotal: subtotal,
+           shippingCost: shippingCost,
+           discount: discount,
+           total: total,
+           trackingCode: 'TRK' + Date.now()
+       };
+       
+       orders.unshift(order);
+       localStorage.setItem('vip_orders', JSON.stringify(orders));
+       if(database && firebaseConnected) {
+           database.ref('orders').set(orders);
+       }
+       
+       let whatsapp = localStorage.getItem('vip_whatsapp') || '9647700000000';
+       let message = `📦 New Order\n👤 Name: ${name}\n📞 Phone: ${phone}\n📍 Address: ${address}\n🏙️ City: ${city}\n📋 Items:\n${cart.map(i => `- ${i.name} x${i.cartQty} = ${(i.price*i.cartQty).toLocaleString()} IQD`).join('\n')}\n💰 Total: ${total.toLocaleString()} IQD\n🔍 Tracking: ${order.trackingCode}`;
+       window.open(`https://wa.me/${whatsapp}?text=${encodeURIComponent(message)}`, '_blank');
+       
+       cart = [];
+       quantities = {};
+       appliedCoupon = null;
+       updateCartUI();
+       closeModal('checkoutModal');
+       showToast(currentLang === 'ku' ? 'داواکاری ڕەوانە کرا ✅' : currentLang === 'ar' ? 'تم إرسال الطلب ✅' : 'Order sent ✅');
+       
+       document.getElementById('customerName').value = '';
+       document.getElementById('customerPhone').value = '';
+       document.getElementById('customerAddress').value = '';
+   }
+   
+   function trackOrder() {
+       const t = translations[currentLang];
+       let code = document.getElementById('trackingCode').value;
+       let order = orders.find(o => o.trackingCode === code);
+       let resultDiv = document.getElementById('trackingResult');
+       if(order) {
+           resultDiv.innerHTML = `<div style="background: var(--success); color: white; padding: 12px; border-radius: 12px;">
+               <i class="fas fa-check-circle"></i> ${t.orderFound}<br>
+               👤 ${order.customer}<br>
+               ${t.status}<br>
+               💰 ${order.total.toLocaleString()} IQD
+           </div>`;
+       } else {
+           resultDiv.innerHTML = `<div style="background: var(--danger); color: white; padding: 12px; border-radius: 12px;">
+               <i class="fas fa-times-circle"></i> ${t.orderNotFound}
+           </div>`;
+       }
+   }
+   
+   function toggleWishlist(id) {
+       let product = products.find(p => p.id === id);
+       let exists = wishlist.some(w => w.id === id);
+       if(exists) {
+           wishlist = wishlist.filter(w => w.id !== id);
+           showToast(currentLang === 'ku' ? 'لە دڵخوازەکان سڕایەوە' : currentLang === 'ar' ? 'تمت الإزالة من المفضلة' : 'Removed from wishlist');
+       } else {
+           wishlist.push(product);
+           showToast(currentLang === 'ku' ? 'زیادکرا بۆ دڵخوازەکان' : currentLang === 'ar' ? 'تمت الإضافة إلى المفضلة' : 'Added to wishlist');
+       }
+       localStorage.setItem('vip_wishlist', JSON.stringify(wishlist));
+       if(database && firebaseConnected) {
+           database.ref('wishlist').set(wishlist);
+       }
+       renderProducts();
+       renderWishlist();
+   }
+   
+   function renderWishlist() {
+       const t = translations[currentLang];
+       let container = document.getElementById('wishlistItems');
+       if(wishlist.length === 0) {
+           container.innerHTML = `<p style="text-align:center;"><i class="fas fa-heart-broken"></i> ${t.emptyWishlist}</p>`;
+           return;
+       }
+       container.innerHTML = wishlist.map(item => `
+           <div class="cart-item">
+               <img src="${item.image}" class="cart-item-img">
+               <div style="flex:1;">
+                   <div>${item.name}</div>
+                   <div>${item.price.toLocaleString()} IQD</div>
+               </div>
+               <button class="remove-item" onclick="addToCart(${item.id})"><i class="fas fa-shopping-cart"></i></button>
+           </div>
+       `).join('');
+   }
+   
+   function openReviewModal(productId) {
+       currentProductForReview = productId;
+       openModal('reviewModal');
+   }
+   
+   function submitReview() {
+       let rating = parseInt(document.getElementById('reviewRating').value);
+       let comment = document.getElementById('reviewComment').value;
+       if(comment) {
+           reviews.push({
+               id: Date.now(),
+               productId: currentProductForReview,
+               rating: rating,
+               comment: comment,
+               date: new Date().toLocaleString()
+           });
+           localStorage.setItem('vip_reviews', JSON.stringify(reviews));
+           if(database && firebaseConnected) {
+               database.ref('reviews').set(reviews);
+           }
+           closeModal('reviewModal');
+           document.getElementById('reviewComment').value = '';
+           renderProducts();
+           showToast(currentLang === 'ku' ? 'پێداچوونەوەکەت زیادکرا ✅' : currentLang === 'ar' ? 'تم إضافة المراجعة ✅' : 'Review added ✅');
+       } else {
+           showToast(currentLang === 'ku' ? 'تکایە پێداچوونەوە بنووسە' : currentLang === 'ar' ? 'الرجاء كتابة المراجعة' : 'Please write a review');
+       }
+   }
+   
+   // ========== Categories ==========
+   function renderCategories() {
+       const t = translations[currentLang];
+       let container = document.getElementById('categoriesList');
+       container.innerHTML = `<button class="cat-btn ${currentCategory === 'all' ? 'active' : ''}" onclick="filterByCategory('all', this)"><i class="fas fa-globe"></i> ${t.all}</button>`;
+       categories.forEach(cat => {
+           container.innerHTML += `<button class="cat-btn ${currentCategory === cat ? 'active' : ''}" onclick="filterByCategory('${cat}', this)"><i class="fas fa-tag"></i> ${cat}</button>`;
+       });
+       
+       let catSelect = document.getElementById('productCategory');
+       if(catSelect) {
+           catSelect.innerHTML = categories.map(cat => `<option value="${cat}">${cat}</option>`).join('');
+       }
+       
+       let adminContainer = document.getElementById('categoriesAdmin');
+       if(adminContainer) {
+           adminContainer.innerHTML = categories.map((cat, i) => `
+               <div class="cart-item" style="justify-content: space-between;">
+                   <span><i class="fas fa-tag"></i> ${cat}</span>
+                   <div>
+                       <button class="edit-cat-btn" onclick="editCategory(${i})"><i class="fas fa-edit"></i></button>
+                       <button class="remove-item" onclick="deleteCategory(${i})"><i class="fas fa-trash-alt"></i></button>
+                   </div>
+               </div>
+           `).join('');
+       }
+   }
+   
+   function filterByCategory(category, btn) {
+       currentCategory = category;
+       document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+       btn.classList.add('active');
+       renderProducts();
+   }
+   
+   function filterProducts() {
+       renderProducts();
+   }
+   
+   function addCategory() {
+       let cat = document.getElementById('newCategory').value;
+       if(cat && !categories.includes(cat)) {
+           categories.push(cat);
+           localStorage.setItem('vip_categories', JSON.stringify(categories));
+           if(database && firebaseConnected) {
+               database.ref('categories').set(categories);
+           }
+           renderCategories();
+           document.getElementById('newCategory').value = '';
+           showToast(currentLang === 'ku' ? 'کەتەگۆری زیادکرا' : currentLang === 'ar' ? 'تم إضافة الفئة' : 'Category added');
+       } else if(categories.includes(cat)) {
+           showToast(currentLang === 'ku' ? 'ئەم کەتەگۆرییە هەیە' : currentLang === 'ar' ? 'هذه الفئة موجودة' : 'Category exists');
+       }
+   }
+   
+   function editCategory(index) {
+       let newName = prompt(currentLang === 'ku' ? 'ناوی نوێی کەتەگۆری:' : currentLang === 'ar' ? 'الاسم الجديد للفئة:' : 'New category name:', categories[index]);
+       if(newName && newName.trim() && !categories.includes(newName)) {
+           categories[index] = newName;
+           localStorage.setItem('vip_categories', JSON.stringify(categories));
+           if(database && firebaseConnected) {
+               database.ref('categories').set(categories);
+           }
+           renderCategories();
+           showToast(currentLang === 'ku' ? 'کەتەگۆری نوێکرایەوە' : currentLang === 'ar' ? 'تم تحديث الفئة' : 'Category updated');
+       }
+   }
+   
+   function deleteCategory(index) {
+       if(confirm(currentLang === 'ku' ? 'دڵنیای لە سڕینەوەی ئەم کەتەگۆرییە؟' : currentLang === 'ar' ? 'هل أنت متأكد من حذف هذه الفئة؟' : 'Are you sure to delete this category?')) {
+           categories.splice(index, 1);
+           localStorage.setItem('vip_categories', JSON.stringify(categories));
+           if(database && firebaseConnected) {
+               database.ref('categories').set(categories);
+           }
+           renderCategories();
+           showToast(currentLang === 'ku' ? 'کەتەگۆری سڕایەوە' : currentLang === 'ar' ? 'تم حذف الفئة' : 'Category deleted');
+       }
+   }
+   
+   // ========== Slider ==========
+   function renderSlider() {
+       let slider = document.getElementById('slider');
+       let dots = document.getElementById('sliderDots');
+       
+       if(sliderImages.length === 0) {
+           slider.innerHTML = `<div class="slide"><img src="https://i.postimg.cc/RWNMnJDG/image.jpg"></div>`;
+           dots.innerHTML = '';
+           return;
+       }
+       
+       slider.innerHTML = sliderImages.map(img => `
+           <div class="slide"><img src="${img}" alt="slide"></div>
+       `).join('');
+       
+       dots.innerHTML = sliderImages.map((_, i) => `
+           <span class="dot ${i === currentSlide ? 'active' : ''}" onclick="goToSlide(${i})"></span>
+       `).join('');
+   }
+   
+   function changeSlide(direction) {
+       if(sliderImages.length === 0) return;
+       currentSlide = (currentSlide + direction + sliderImages.length) % sliderImages.length;
+       document.getElementById('slider').style.transform = `translateX(-${currentSlide * 100}%)`;
+       renderSlider();
+   }
+   
+   function goToSlide(index) {
+       currentSlide = index;
+       document.getElementById('slider').style.transform = `translateX(-${currentSlide * 100}%)`;
+       renderSlider();
+   }
+   
+   // ========== Shipping ==========
+   function renderShippingCities() {
+       let select = document.getElementById('shippingCity');
+       if(select) {
+           select.innerHTML = '<option value="">' + (currentLang === 'ku' ? 'هەڵبژاردنی شار' : currentLang === 'ar' ? 'اختر المدينة' : 'Select city') + '</option>';
+           shippingCities.forEach(c => {
+               select.innerHTML += `<option value="${c.city}">${c.city} - ${c.cost.toLocaleString()} IQD</option>`;
+           });
+       }
+       
+       let adminList = document.getElementById('shippingCitiesAdmin');
+       if(adminList) {
+           adminList.innerHTML = shippingCities.map((c, i) => `
+               <div class="cart-item" style="justify-content: space-between;">
+                   <span><i class="fas fa-city"></i> ${c.city}: ${c.cost.toLocaleString()} IQD</span>
+                   <button class="remove-item" onclick="deleteShippingCity(${i})"><i class="fas fa-trash-alt"></i></button>
+               </div>
+           `).join('');
+       }
+   }
+   
+   function addShippingCity() {
+       let city = document.getElementById('shippingCityName').value;
+       let cost = parseInt(document.getElementById('shippingCostValue').value);
+       if(city && cost) {
+           shippingCities.push({city, cost});
+           localStorage.setItem('vip_shipping', JSON.stringify(shippingCities));
+           if(database && firebaseConnected) {
+               database.ref('shippingCities').set(shippingCities);
+           }
+           renderShippingCities();
+           document.getElementById('shippingCityName').value = '';
+           document.getElementById('shippingCostValue').value = '';
+           showToast(currentLang === 'ku' ? 'شار زیادکرا' : currentLang === 'ar' ? 'تم إضافة المدينة' : 'City added');
+       }
+   }
+   
+   function deleteShippingCity(index) {
+       shippingCities.splice(index, 1);
+       localStorage.setItem('vip_shipping', JSON.stringify(shippingCities));
+       if(database && firebaseConnected) {
+           database.ref('shippingCities').set(shippingCities);
+       }
+       renderShippingCities();
+       showToast(currentLang === 'ku' ? 'شار سڕایەوە' : currentLang === 'ar' ? 'تم حذف المدينة' : 'City deleted');
+   }
+   
+   // ========== Admin Functions ==========
+   document.getElementById('adminTrigger').onclick = () => {
+       clickCount++;
+       if(clickCount >= 3) {
+           openModal('adminLoginModal');
+           clickCount = 0;
+       }
+       setTimeout(() => clickCount = 0, 2000);
+   };
+   
+   function adminLogin() {
+       let pass = document.getElementById('adminPassword').value;
+       if(pass === 'admin2026') {
+           closeModal('adminLoginModal');
+           document.getElementById('adminPanel').style.display = 'block';
+           renderAdminProducts();
+           renderAdminOrders();
+           renderSliderAdmin();
+           renderCouponsAdmin();
+           document.getElementById('shopNameInput').value = localStorage.getItem('vip_shop_name') || 'VIP Baby Nutrition';
+           document.getElementById('shopWhatsappInput').value = localStorage.getItem('vip_whatsapp') || '9647700000000';
+           document.getElementById('currentWhatsapp').innerText = localStorage.getItem('vip_whatsapp') || '9647700000000';
+           document.getElementById('autoReplyMsg').value = autoReply;
+           renderChatMessages();
+           showToast(currentLang === 'ku' ? 'بەخێربێیت بۆ پانێڵی ئادمین' : currentLang === 'ar' ? 'مرحباً بك في لوحة المدير' : 'Welcome to Admin Panel');
+       } else {
+           showToast(currentLang === 'ku' ? 'پاسۆرد هەڵەیە!' : currentLang === 'ar' ? 'كلمة المرور خاطئة!' : 'Wrong password!');
+       }
+       document.getElementById('adminPassword').value = '';
+   }
+   
+   function closeAdminPanel() {
+       document.getElementById('adminPanel').style.display = 'none';
+   }
+   
+   function changeThemeColor(color) {
+       document.documentElement.style.setProperty('--primary', color);
+       localStorage.setItem('vip_theme_color', color);
+   }
+   
+   function saveShopSettings() {
+       let shopName = document.getElementById('shopNameInput').value;
+       let whatsapp = document.getElementById('shopWhatsappInput').value;
+       if(shopName) {
+           localStorage.setItem('vip_shop_name', shopName);
+           document.getElementById('shopNameDisplay').innerText = shopName;
+           if(database && firebaseConnected) {
+               database.ref('shopSettings/shopName').set(shopName);
+           }
+       }
+       if(whatsapp) {
+           localStorage.setItem('vip_whatsapp', whatsapp);
+           document.getElementById('whatsappBtn').href = `https://wa.me/${whatsapp}`;
+           document.getElementById('currentWhatsapp').innerText = whatsapp;
+           if(database && firebaseConnected) {
+               database.ref('shopSettings/whatsapp').set(whatsapp);
+           }
+           showToast(currentLang === 'ku' ? 'ژمارەی واتساپ گۆڕدرا ✅' : currentLang === 'ar' ? 'تم تغيير رقم واتساب ✅' : 'WhatsApp number changed ✅');
+       }
+       showToast(currentLang === 'ku' ? 'زانیاری هەڵگیرا' : currentLang === 'ar' ? 'تم حفظ المعلومات' : 'Settings saved');
+   }
+   
+   function addCoupon() {
+       let code = document.getElementById('couponName').value;
+       let discount = parseInt(document.getElementById('couponPercent').value);
+       let expiry = document.getElementById('couponDate').value;
+       if(code && discount) {
+           coupons.push({code, discount, expiry});
+           localStorage.setItem('vip_coupons', JSON.stringify(coupons));
+           if(database && firebaseConnected) {
+               database.ref('coupons').set(coupons);
+           }
+           renderCouponsAdmin();
+           document.getElementById('couponName').value = '';
+           document.getElementById('couponPercent').value = '';
+           showToast(currentLang === 'ku' ? 'کۆدێن زیادکرا' : currentLang === 'ar' ? 'تم إضافة كود الخصم' : 'Coupon added');
+       }
+   }
+   
+   function renderCouponsAdmin() {
+       let container = document.getElementById('couponsList');
+       if(container) {
+           container.innerHTML = coupons.map((c, i) => `
+               <div class="cart-item" style="justify-content: space-between;">
+                   <span><i class="fas fa-ticket-alt"></i> ${c.code} - ${c.discount}% (${c.expiry})</span>
+                   <button class="remove-item" onclick="deleteCoupon(${i})"><i class="fas fa-trash-alt"></i></button>
+               </div>
+           `).join('');
+       }
+   }
+   
+   function deleteCoupon(index) {
+       coupons.splice(index, 1);
+       localStorage.setItem('vip_coupons', JSON.stringify(coupons));
+       if(database && firebaseConnected) {
+           database.ref('coupons').set(coupons);
+       }
+       renderCouponsAdmin();
+       showToast(currentLang === 'ku' ? 'کۆدێن سڕایەوە' : currentLang === 'ar' ? 'تم حذف كود الخصم' : 'Coupon deleted');
+   }
+   
+   function addSliderImage() {
+       let img = document.getElementById('sliderImage').value;
+       if(img) {
+           sliderImages.push(img);
+           localStorage.setItem('vip_slider', JSON.stringify(sliderImages));
+           if(database && firebaseConnected) {
+               database.ref('slider').set(sliderImages);
+           }
+           renderSlider();
+           renderSliderAdmin();
+           document.getElementById('sliderImage').value = '';
+           showToast(currentLang === 'ku' ? 'وێنە زیادکرا' : currentLang === 'ar' ? 'تم إضافة الصورة' : 'Image added');
+       }
+   }
+   
+   function renderSliderAdmin() {
+       let container = document.getElementById('sliderList');
+       if(container) {
+           container.innerHTML = sliderImages.map((img, i) => `
+               <div class="cart-item" style="justify-content: space-between;">
+                   <img src="${img}" style="width: 50px; height: 50px; object-fit: cover; border-radius: 8px;">
+                   <button class="remove-item" onclick="deleteSliderImage(${i})"><i class="fas fa-trash-alt"></i></button>
+               </div>
+           `).join('');
+       }
+   }
+   
+   function deleteSliderImage(index) {
+       sliderImages.splice(index, 1);
+       localStorage.setItem('vip_slider', JSON.stringify(sliderImages));
+       if(database && firebaseConnected) {
+           database.ref('slider').set(sliderImages);
+       }
+       renderSlider();
+       renderSliderAdmin();
+       showToast(currentLang === 'ku' ? 'وێنە سڕایەوە' : currentLang === 'ar' ? 'تم حذف الصورة' : 'Image deleted');
+   }
+   
+   function addProduct() {
+       let name = document.getElementById('productName').value;
+       let price = parseInt(document.getElementById('productPrice').value);
+       let stock = parseInt(document.getElementById('productStock').value);
+       let category = document.getElementById('productCategory').value;
+       let status = document.getElementById('productStatus').value;
+       let image = document.getElementById('productImage').value;
+       let desc = document.getElementById('productDesc').value;
+       
+       if(!name || !price) {
+           showToast(currentLang === 'ku' ? 'تکایە ناو و نرخ بنووسە' : currentLang === 'ar' ? 'الرجاء كتابة الاسم والسعر' : 'Please enter name and price');
+           return;
+       }
+       
+       let newId = Math.max(...products.map(p => p.id), 0) + 1;
+       products.push({
+           id: newId,
+           name: name,
+           desc: desc,
+           price: price,
+           stock: stock || 0,
+           status: status,
+           category: category,
+           image: image || 'https://i.postimg.cc/RWNMnJDG/image.jpg'
+       });
+       
+       localStorage.setItem('vip_products', JSON.stringify(products));
+       if(database && firebaseConnected) {
+           database.ref('products').set(products);
+       }
+       renderProducts();
+       renderAdminProducts();
+       
+       document.getElementById('productName').value = '';
+       document.getElementById('productPrice').value = '';
+       document.getElementById('productStock').value = '';
+       document.getElementById('productImage').value = '';
+       document.getElementById('productDesc').value = '';
+       
+       showToast(currentLang === 'ku' ? 'بەرهەم زیادکرا ✅' : currentLang === 'ar' ? 'تم إضافة المنتج ✅' : 'Product added ✅');
+   }
+   
+   function renderAdminProducts() {
+       let container = document.getElementById('adminProducts');
+       if(container) {
+           container.innerHTML = products.map((p, i) => `
+               <div class="cart-item" style="justify-content: space-between;">
+                   <span><i class="fas fa-box"></i> ${p.name} - ${p.price.toLocaleString()} IQD (${currentLang === 'ku' ? 'پاشماوە:' : currentLang === 'ar' ? 'المتبقي:' : 'Stock:'} ${p.stock})</span>
+                   <button class="remove-item" onclick="deleteProduct(${i})"><i class="fas fa-trash-alt"></i></button>
+               </div>
+           `).join('');
+       }
+   }
+   
+   function deleteProduct(index) {
+       if(confirm(currentLang === 'ku' ? 'دڵنیای لە سڕینەوەی ئەم بەرهەمە؟' : currentLang === 'ar' ? 'هل أنت متأكد من حذف هذا المنتج؟' : 'Are you sure to delete this product?')) {
+           products.splice(index, 1);
+           localStorage.setItem('vip_products', JSON.stringify(products));
+           if(database && firebaseConnected) {
+               database.ref('products').set(products);
+           }
+           renderProducts();
+           renderAdminProducts();
+           showToast(currentLang === 'ku' ? 'بەرهەم سڕایەوە' : currentLang === 'ar' ? 'تم حذف المنتج' : 'Product deleted');
+       }
+   }
+   
+   function renderAdminOrders() {
+       let container = document.getElementById('adminOrders');
+       if(container) {
+           if(orders.length === 0) {
+               container.innerHTML = '<p><i class="fas fa-inbox"></i> ' + (currentLang === 'ku' ? 'هیچ داواکارییەک نییە' : currentLang === 'ar' ? 'لا توجد طلبات' : 'No orders') + '</p>';
+               return;
+           }
+           container.innerHTML = orders.map(order => `
+               <div class="admin-section" style="margin-bottom: 10px; padding: 12px;">
+                   <div><strong><i class="fas fa-hashtag"></i> ${order.id}</strong> - ${order.date}</div>
+                   <div><i class="fas fa-user"></i> ${order.customer} | <i class="fas fa-phone"></i> ${order.phone}</div>
+                   <div><i class="fas fa-map-marker-alt"></i> ${order.address} | <i class="fas fa-city"></i> ${order.city}</div>
+                   <div><i class="fas fa-money-bill-wave"></i> ${order.total.toLocaleString()} IQD</div>
+                   <div><i class="fas fa-qrcode"></i> ${order.trackingCode}</div>
+                   <button class="remove-item" onclick="deleteOrder(${order.id})"><i class="fas fa-trash-alt"></i> سڕینەوە</button>
+               </div>
+           `).join('');
+       }
+   }
+   
+   function deleteOrder(orderId) {
+       orders = orders.filter(o => o.id !== orderId);
+       localStorage.setItem('vip_orders', JSON.stringify(orders));
+       if(database && firebaseConnected) {
+           database.ref('orders').set(orders);
+       }
+       renderAdminOrders();
+       showToast(currentLang === 'ku' ? 'داواکاری سڕایەوە' : currentLang === 'ar' ? 'تم حذف الطلب' : 'Order deleted');
+   }
+   
+   function toggleDarkMode() {
+       document.body.classList.toggle('dark-mode');
+       localStorage.setItem('vip_dark_mode', document.body.classList.contains('dark-mode'));
+       document.getElementById('darkModeBtn').innerHTML = document.body.classList.contains('dark-mode') ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+   }
+   
+   function zoomImage(src) {
+       let modal = document.createElement('div');
+       modal.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.9);z-index:3000;display:flex;align-items:center;justify-content:center;cursor:pointer;';
+       let img = document.createElement('img');
+       img.src = src;
+       img.style.cssText = 'max-width:90%;max-height:90%;border-radius:20px;';
+       modal.appendChild(img);
+       modal.onclick = () => modal.remove();
+       document.body.appendChild(modal);
+   }
+   
+   // Countdown Timer
+   function startCountdown() {
+       let endDate = localStorage.getItem('vip_offer_end');
+       if(!endDate) {
+           let date = new Date();
+           date.setDate(date.getDate() + 7);
+           endDate = date.toISOString();
+           localStorage.setItem('vip_offer_end', endDate);
+       }
+       let end = new Date(endDate).getTime();
+       setInterval(() => {
+           let now = new Date().getTime();
+           let diff = end - now;
+           if(diff > 0) {
+               let hours = Math.floor(diff / (1000 * 60 * 60));
+               let minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+               let seconds = Math.floor((diff % (1000 * 60)) / 1000);
+               document.getElementById('countdown').innerText = `${hours.toString().padStart(2,'0')}:${minutes.toString().padStart(2,'0')}:${seconds.toString().padStart(2,'0')}`;
+           } else {
+               document.getElementById('countdown').innerText = currentLang === 'ku' ? 'پێشکەشکاری تەواو بوو' : currentLang === 'ar' ? 'انتهى العرض' : 'Offer ended';
+           }
+       }, 1000);
+   }
+   
+   // ========== Initialize ==========
+   let savedColor = localStorage.getItem('vip_theme_color');
+   if(savedColor) document.documentElement.style.setProperty('--primary', savedColor);
+   
+   let savedDarkMode = localStorage.getItem('vip_dark_mode');
+   if(savedDarkMode === 'true') {
+       document.body.classList.add('dark-mode');
+       document.getElementById('darkModeBtn').innerHTML = '<i class="fas fa-sun"></i>';
+   }
+   
+   let savedShopName = localStorage.getItem('vip_shop_name');
+   if(savedShopName) document.getElementById('shopNameDisplay').innerText = savedShopName;
+   
+   let savedWhatsapp = localStorage.getItem('vip_whatsapp');
+   if(savedWhatsapp) document.getElementById('whatsappBtn').href = `https://wa.me/${savedWhatsapp}`;
+   
+   renderSlider();
+   renderCategories();
+   renderProducts();
+   renderShippingCities();
+   startCountdown();
+   renderChatMessages();
+   updateAllTexts();
+   
+   // Try to connect to Firebase with saved config
+   if(savedConfig) {
+       setTimeout(() => {
+           if(!firebaseConnected) {
+               updateFirebaseStatus(false, '⚠️ Firebase: پەیوەندی نییە - پێویستە ڕێکخستنەکان بنووسیت');
+           }
+       }, 2000);
+   }
 </script>
 </body>
 </html>
