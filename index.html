@@ -6,8 +6,8 @@
    <title>VIP Baby Nutrition - فرۆشگای تایبەتی منداڵان</title>
    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
    <!-- Firebase SDK -->
-   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
+   <script src="https://www.gstatic.com/firebasejs/12.11.0/firebase-app-compat.js"></script>
+   <script src="https://www.gstatic.com/firebasejs/12.11.0/firebase-database-compat.js"></script>
    <style>
        * { margin: 0; padding: 0; box-sizing: border-box; }
        
@@ -909,15 +909,14 @@
  
 <script>
    // ==================== Firebase Configuration ====================
-   // 🔴 تکایە لەم شوێنە کۆنفیگەیشنی Firebase خۆت دابنێ 🔴
    const firebaseConfig = {
-       apiKey: "YOUR_API_KEY",
-       authDomain: "YOUR_AUTH_DOMAIN",
-       databaseURL: "YOUR_DATABASE_URL",
-       projectId: "YOUR_PROJECT_ID",
-       storageBucket: "YOUR_STORAGE_BUCKET",
-       messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-       appId: "YOUR_APP_ID"
+       apiKey: "AIzaSyDmhlHwNy-8z4oFMK-1WoKdsKC--RmJBxI",
+       authDomain: "vip-baby-nutrition-2659f.firebaseapp.com",
+       databaseURL: "https://vip-baby-nutrition-2659f-default-rtdb.firebaseio.com",
+       projectId: "vip-baby-nutrition-2659f",
+       storageBucket: "vip-baby-nutrition-2659f.firebasestorage.app",
+       messagingSenderId: "875903696976",
+       appId: "1:875903696976:web:418d6e927b29d6496ad155"
    };
    
    let firebaseInitialized = false;
@@ -925,16 +924,11 @@
    
    // Initialize Firebase
    try {
-       if (firebaseConfig.apiKey !== "YOUR_API_KEY") {
-           firebase.initializeApp(firebaseConfig);
-           database = firebase.database();
-           firebaseInitialized = true;
-           document.getElementById('onlineStatus').className = 'online-status connected';
-           document.getElementById('statusText').innerText = 'Firebase: پەیوەندی هەیە ✅';
-       } else {
-           document.getElementById('onlineStatus').className = 'online-status disconnected';
-           document.getElementById('statusText').innerText = 'Firebase: پێویستی بە کۆنفیگەیشنە ⚠️';
-       }
+       firebase.initializeApp(firebaseConfig);
+       database = firebase.database();
+       firebaseInitialized = true;
+       document.getElementById('onlineStatus').className = 'online-status connected';
+       document.getElementById('statusText').innerText = 'Firebase: پەیوەندی هەیە ✅';
    } catch(e) {
        console.error('Firebase initialization error:', e);
        document.getElementById('onlineStatus').className = 'online-status disconnected';
@@ -979,13 +973,13 @@
        showToast(currentLang === 'ku' ? '✅ پاسۆرد بە سەرکەوتوویی گۆڕدرا' : '✅ Password changed successfully');
    }
    
-   // ==================== Data (with Firebase sync) ====================
+   // ==================== Data ====================
    let products = [];
    let categories = [];
    let sliderImages = [];
    let shippingCities = [];
    let orders = [];
-   let wishlist = [];
+   let wishlist = JSON.parse(localStorage.getItem('vip_wishlist')) || [];
    let coupons = [];
    let reviews = [];
    let chatMessages = [];
@@ -1020,6 +1014,7 @@
                    { id: 4, name: "یاری پەروەردەیی", desc: "یاری فکری", price: 15000, stock: 22, status: "instock", category: "العاب", image: "https://i.postimg.cc/RWNMnJDG/image.jpg" },
                    { id: 5, name: "پەمپێری پزیشکی", desc: "پەمپێری بێ وێنە", price: 45000, stock: 9, status: "instock", category: "تغذیة", image: "https://i.postimg.cc/RWNMnJDG/image.jpg" }
                ];
+               saveProductsToFirebase();
            }
            refreshAllUI();
        });
@@ -1031,6 +1026,7 @@
                categories = data;
            } else {
                categories = ['تغذیة', 'ملابس', 'العاب', 'عربات'];
+               saveCategoriesToFirebase();
            }
            refreshAllUI();
        });
@@ -1054,6 +1050,7 @@
                shippingCities = data;
            } else {
                shippingCities = [{ city: "بغداد", cost: 3000 }, { city: "هەولێر", cost: 4000 }, { city: "بەسرە", cost: 5000 }];
+               saveShippingToFirebase();
            }
            renderShippingCities();
        });
@@ -1139,46 +1136,14 @@
    }
    
    // ==================== Firebase Save Functions ====================
-   function saveProductsToFirebase() {
-       if (!database) return;
-       database.ref('products').set(products);
-   }
-   
-   function saveCategoriesToFirebase() {
-       if (!database) return;
-       database.ref('categories').set(categories);
-   }
-   
-   function saveSliderToFirebase() {
-       if (!database) return;
-       database.ref('sliderImages').set(sliderImages);
-   }
-   
-   function saveShippingToFirebase() {
-       if (!database) return;
-       database.ref('shippingCities').set(shippingCities);
-   }
-   
-   function saveOrdersToFirebase() {
-       if (!database) return;
-       database.ref('orders').set(orders);
-   }
-   
-   function saveCouponsToFirebase() {
-       if (!database) return;
-       database.ref('coupons').set(coupons);
-   }
-   
-   function saveReviewsToFirebase() {
-       if (!database) return;
-       database.ref('reviews').set(reviews);
-   }
-   
-   function saveChatToFirebase() {
-       if (!database) return;
-       database.ref('chatMessages').set(chatMessages);
-   }
-   
+   function saveProductsToFirebase() { if (database) database.ref('products').set(products); }
+   function saveCategoriesToFirebase() { if (database) database.ref('categories').set(categories); }
+   function saveSliderToFirebase() { if (database) database.ref('sliderImages').set(sliderImages); }
+   function saveShippingToFirebase() { if (database) database.ref('shippingCities').set(shippingCities); }
+   function saveOrdersToFirebase() { if (database) database.ref('orders').set(orders); }
+   function saveCouponsToFirebase() { if (database) database.ref('coupons').set(coupons); }
+   function saveReviewsToFirebase() { if (database) database.ref('reviews').set(reviews); }
+   function saveChatToFirebase() { if (database) database.ref('chatMessages').set(chatMessages); }
    function saveSettingsToFirebase() {
        if (!database) return;
        database.ref('settings').update({
@@ -1189,10 +1154,8 @@
        });
    }
    
-   // ==================== Local Save (for backward compatibility) ====================
    function saveAllData() {
        if (database && firebaseInitialized) {
-           // Save to Firebase
            saveProductsToFirebase();
            saveCategoriesToFirebase();
            saveSliderToFirebase();
@@ -1203,7 +1166,6 @@
            saveChatToFirebase();
            saveSettingsToFirebase();
        } else {
-           // Fallback to localStorage
            localStorage.setItem('vip_products', JSON.stringify(products));
            localStorage.setItem('vip_categories', JSON.stringify(categories));
            localStorage.setItem('vip_slider', JSON.stringify(sliderImages));
@@ -1217,7 +1179,6 @@
        }
    }
    
-   // ==================== Refresh ALL UI ====================
    function refreshAllUI() {
        renderProducts();
        renderCategories();
@@ -1599,30 +1560,6 @@
        setInterval(() => { let now = new Date().getTime(), diff = end - now; if(diff > 0) { let h = Math.floor(diff/(1000*60*60)), m = Math.floor((diff%(1000*60*60))/(1000*60)), s = Math.floor((diff%(1000*60))/1000); document.getElementById('countdown').innerText = `${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`; } else document.getElementById('countdown').innerText = 'پێشکەشکاری تەواو بوو'; }, 1000);
    }
    
-   // ==================== Load Data from LocalStorage (Fallback) ====================
-   function loadLocalData() {
-       if (!database || !firebaseInitialized) {
-           products = JSON.parse(localStorage.getItem('vip_products')) || [
-               { id: 1, name: "شیری منداڵان VIP", desc: "شیری تایبەت بۆ منداڵان", price: 25000, stock: 12, status: "instock", category: "تغذیة", image: "https://i.postimg.cc/RWNMnJDG/image.jpg" },
-               { id: 2, name: "کۆمپلێتی منداڵان", desc: "کۆمپلێتی جل", price: 35000, stock: 7, status: "instock", category: "ملابس", image: "https://i.postimg.cc/RWNMnJDG/image.jpg" },
-               { id: 3, name: "عەرەبانەی VIP", desc: "عەرەبانەی تایبەت", price: 125000, stock: 4, status: "instock", category: "عربات", image: "https://i.postimg.cc/RWNMnJDG/image.jpg" },
-               { id: 4, name: "یاری پەروەردەیی", desc: "یاری فکری", price: 15000, stock: 22, status: "instock", category: "العاب", image: "https://i.postimg.cc/RWNMnJDG/image.jpg" },
-               { id: 5, name: "پەمپێری پزیشکی", desc: "پەمپێری بێ وێنە", price: 45000, stock: 9, status: "instock", category: "تغذیة", image: "https://i.postimg.cc/RWNMnJDG/image.jpg" }
-           ];
-           categories = JSON.parse(localStorage.getItem('vip_categories')) || ['تغذیة', 'ملابس', 'العاب', 'عربات'];
-           sliderImages = JSON.parse(localStorage.getItem('vip_slider')) || [];
-           shippingCities = JSON.parse(localStorage.getItem('vip_shipping')) || [{ city: "بغداد", cost: 3000 }, { city: "هەولێر", cost: 4000 }, { city: "بەسرە", cost: 5000 }];
-           orders = JSON.parse(localStorage.getItem('vip_orders')) || [];
-           wishlist = JSON.parse(localStorage.getItem('vip_wishlist')) || [];
-           coupons = JSON.parse(localStorage.getItem('vip_coupons')) || [];
-           reviews = JSON.parse(localStorage.getItem('vip_reviews')) || [];
-           chatMessages = JSON.parse(localStorage.getItem('vip_chat_messages')) || [];
-           autoReply = localStorage.getItem('vip_auto_reply') || "سوپاس بۆ پەیامەکەت! بەم زووانە پەیوەندیت پێدەکەین.";
-       }
-       nextId = Math.max(...products.map(p => p.id), 0) + 1;
-       refreshAllUI();
-   }
-   
    // Initialize
    let savedColor = localStorage.getItem('vip_theme_color'); if(savedColor) document.documentElement.style.setProperty('--primary', savedColor);
    let savedDarkMode = localStorage.getItem('vip_dark_mode'); if(savedDarkMode === 'true') { document.body.classList.add('dark-mode'); document.getElementById('darkModeBtn').innerHTML = '<i class="fas fa-sun"></i>'; }
@@ -1633,7 +1570,17 @@
    if (database && firebaseInitialized) {
        setupFirebaseListeners();
    } else {
-       loadLocalData();
+       // Load default data if Firebase not initialized
+       products = [
+           { id: 1, name: "شیری منداڵان VIP", desc: "شیری تایبەت بۆ منداڵان", price: 25000, stock: 12, status: "instock", category: "تغذیة", image: "https://i.postimg.cc/RWNMnJDG/image.jpg" },
+           { id: 2, name: "کۆمپلێتی منداڵان", desc: "کۆمپلێتی جل", price: 35000, stock: 7, status: "instock", category: "ملابس", image: "https://i.postimg.cc/RWNMnJDG/image.jpg" },
+           { id: 3, name: "عەرەبانەی VIP", desc: "عەرەبانەی تایبەت", price: 125000, stock: 4, status: "instock", category: "عربات", image: "https://i.postimg.cc/RWNMnJDG/image.jpg" },
+           { id: 4, name: "یاری پەروەردەیی", desc: "یاری فکری", price: 15000, stock: 22, status: "instock", category: "العاب", image: "https://i.postimg.cc/RWNMnJDG/image.jpg" },
+           { id: 5, name: "پەمپێری پزیشکی", desc: "پەمپێری بێ وێنە", price: 45000, stock: 9, status: "instock", category: "تغذیة", image: "https://i.postimg.cc/RWNMnJDG/image.jpg" }
+       ];
+       categories = ['تغذیة', 'ملابس', 'العاب', 'عربات'];
+       shippingCities = [{ city: "بغداد", cost: 3000 }, { city: "هەولێر", cost: 4000 }, { city: "بەسرە", cost: 5000 }];
+       refreshAllUI();
    }
    renderSlider(); renderCategories(); renderProducts(); renderShippingCities(); startCountdown(); renderChatMessages(); updateAllTexts();
 </script>
