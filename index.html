@@ -47,39 +47,32 @@
            --chat-admin: #334155;
        }
        
-       /* Language Switcher - Smaller */
+       /* Language Switcher - inside header, left side */
        .lang-switch {
-           position: fixed;
-           top: 10px;
-           left: 50%;
-           transform: translateX(-50%);
-           z-index: 150;
-           background: var(--card);
-           border-radius: 25px;
-           padding: 4px 10px;
+           background: rgba(255,255,255,0.15);
+           border-radius: 50%;
+           width: 40px;
+           height: 40px;
            display: flex;
-           gap: 6px;
-           box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-           border: 1px solid var(--border);
+           align-items: center;
+           justify-content: center;
            cursor: pointer;
+           transition: 0.2s;
+       }
+       
+       .lang-switch:hover {
+           background: rgba(255,255,255,0.3);
        }
        
        .lang-icon {
-           font-size: 12px;
-           color: var(--primary);
-       }
-       
-       .lang-text {
-           font-size: 11px;
-           font-weight: 500;
-           color: var(--text);
+           font-size: 20px;
+           color: white;
        }
        
        .lang-dropdown {
-           position: fixed;
-           top: 45px;
-           left: 50%;
-           transform: translateX(-50%);
+           position: absolute;
+           top: 60px;
+           left: 16px;
            background: var(--card);
            border-radius: 14px;
            padding: 8px;
@@ -100,7 +93,7 @@
            padding: 6px 10px;
            cursor: pointer;
            border-radius: 10px;
-           font-size: 11px;
+           font-size: 13px;
            transition: 0.2s;
            text-align: center;
        }
@@ -127,6 +120,12 @@
            display: flex;
            justify-content: space-between;
            align-items: center;
+       }
+       
+       .left-section {
+           display: flex;
+           align-items: center;
+           gap: 12px;
        }
        
        .logo-area {
@@ -833,7 +832,7 @@
            text-align: center;
        }
        
-       /* Firebase Status removed - hidden */
+       /* Firebase Status hidden */
        .firebase-status {
            display: none;
        }
@@ -841,23 +840,17 @@
 </head>
 <body>
  
-<!-- Language Switcher - Smaller -->
-<div class="lang-switch" id="langSwitcher">
-   <i class="fas fa-globe lang-icon"></i>
-   <span class="lang-text" id="currentLangText">کوردی</span>
-   <i class="fas fa-chevron-down" style="font-size: 8px;"></i>
-</div>
-<div class="lang-dropdown" id="langDropdown">
-   <div class="lang-option active" data-lang="ku">🏁 کوردی</div>
-   <div class="lang-option" data-lang="ar">🏁 العربية</div>
-   <div class="lang-option" data-lang="en">🌍 English</div>
-</div>
- 
 <div class="header">
    <div class="header-content">
-       <div class="logo-area" id="adminTrigger">
-           <img src="https://i.postimg.cc/RWNMnJDG/image.jpg" class="logo" alt="VIP Baby">
-           <span class="shop-name" id="shopNameDisplay">VIP Baby Nutrition</span>
+       <div class="left-section">
+           <!-- Language Switcher - now inside header, next to logo -->
+           <div class="lang-switch" id="langSwitcher">
+               <i class="fas fa-globe lang-icon"></i>
+           </div>
+           <div class="logo-area" id="adminTrigger">
+               <img src="https://i.postimg.cc/RWNMnJDG/image.jpg" class="logo" alt="VIP Baby">
+               <span class="shop-name" id="shopNameDisplay">VIP Baby Nutrition</span>
+           </div>
        </div>
        <div class="header-icons">
            <button class="icon-btn" onclick="openModal('wishlistModal')"><i class="fas fa-heart"></i></button>
@@ -865,47 +858,53 @@
        </div>
    </div>
 </div>
- 
+
+<div class="lang-dropdown" id="langDropdown">
+   <div class="lang-option active" data-lang="ku">🏁 کوردی</div>
+   <div class="lang-option" data-lang="ar">🏁 العربية</div>
+   <div class="lang-option" data-lang="en">🌍 English</div>
+</div>
+
 <div class="slider-container">
    <div class="slider" id="slider"></div>
    <button class="slider-btn prev" onclick="changeSlide(-1)"><i class="fas fa-chevron-right"></i></button>
    <button class="slider-btn next" onclick="changeSlide(1)"><i class="fas fa-chevron-left"></i></button>
    <div class="slider-dots" id="sliderDots"></div>
 </div>
- 
+
 <div class="search-section">
    <input type="text" class="search-input" id="searchInput" placeholder="🔍 گەڕان..." onkeyup="filterProducts()">
 </div>
- 
+
 <div class="categories" id="categoriesList"></div>
- 
+
 <div class="products-grid" id="productsGrid"></div>
- 
+
 <button class="chat-float" onclick="toggleChat()"><i class="fas fa-comment-dots"></i><span class="chat-badge" id="chatBadge">0</span></button>
- 
+
 <div class="chat-modal" id="chatModal">
    <div class="chat-header"><span id="chatHeaderText"><i class="fas fa-headset"></i> پشتیوانی (تایبەت)</span><button onclick="toggleChat()" style="background:none;border:none;color:white;font-size:20px;"><i class="fas fa-times"></i></button></div>
    <div class="chat-messages" id="chatMessages"></div>
    <div class="chat-input-area"><input type="text" class="chat-input" id="chatInput" placeholder="پەیام..." onkeypress="if(event.key==='Enter') sendMessage()"><button class="chat-send" onclick="sendMessage()"><i class="fas fa-paper-plane"></i></button></div>
 </div>
- 
+
 <div class="floating-buttons">
    <button class="float-btn btn-dark" onclick="toggleDarkMode()" id="darkModeBtn"><i class="fas fa-moon"></i></button>
    <a href="#" class="float-btn btn-wa" id="whatsappBtn" target="_blank"><i class="fab fa-whatsapp"></i></a>
 </div>
- 
+
 <div id="cartModal" class="modal"><div class="modal-content"><div class="modal-header"><h3><i class="fas fa-shopping-cart"></i> سەبەتە</h3><button class="close-modal" onclick="closeModal('cartModal')"><i class="fas fa-times"></i></button></div><div id="cartItemsList"></div><div class="coupon-input" style="display:flex;gap:8px;margin:10px 0;"><input type="text" id="couponCode" placeholder="کۆدێن"><button class="add-to-cart" style="width:auto;padding:10px 15px;" onclick="applyCoupon()"><i class="fas fa-ticket-alt"></i> جێبەجێ</button></div><select id="shippingCity" class="shipping-select" onchange="updateCartTotal()"><option value="">هەڵبژاردنی شار</option></select><div class="cart-summary"><div class="summary-row"><span><i class="fas fa-truck"></i> گەیاندن:</span><span id="shippingCost">0 IQD</span></div><div class="summary-row"><span><i class="fas fa-percent"></i> کۆدێن:</span><span id="discountAmount">0 IQD</span></div><div class="summary-row summary-total"><span><i class="fas fa-money-bill"></i> کۆی گشتی:</span><span id="cartTotal">0 IQD</span></div></div><button class="add-to-cart" style="background:var(--accent);" onclick="goToCheckout()"><i class="fas fa-arrow-left"></i> بەردەوامبوون</button></div></div>
- 
+
 <div id="wishlistModal" class="modal"><div class="modal-content"><div class="modal-header"><h3><i class="fas fa-heart"></i> دڵخوازەکان</h3><button class="close-modal" onclick="closeModal('wishlistModal')"><i class="fas fa-times"></i></button></div><div id="wishlistItems"></div></div></div>
- 
+
 <div id="checkoutModal" class="modal"><div class="modal-content"><div class="modal-header"><h3><i class="fas fa-address-card"></i> زانیاری کڕیار</h3><button class="close-modal" onclick="closeModal('checkoutModal')"><i class="fas fa-times"></i></button></div><input type="text" id="customerName" placeholder="ناوی تەواو"><input type="tel" id="customerPhone" placeholder="ژمارەی مۆبایل"><textarea id="customerAddress" rows="2" placeholder="ناونیشان"></textarea><div id="checkoutSummary"></div><button class="add-to-cart" style="background:var(--success);" onclick="submitOrder()"><i class="fas fa-check-circle"></i> تەواوکردن</button></div></div>
- 
+
 <div id="trackingModal" class="modal"><div class="modal-content"><div class="modal-header"><h3><i class="fas fa-search"></i> گەڕانی داواکاری</h3><button class="close-modal" onclick="closeModal('trackingModal')"><i class="fas fa-times"></i></button></div><input type="text" id="trackingCode" placeholder="کۆدی داواکاری"><button class="add-to-cart" onclick="trackOrder()"><i class="fas fa-search"></i> گەڕان</button><div id="trackingResult" style="margin-top:15px;"></div></div></div>
- 
+
 <div id="reviewModal" class="modal"><div class="modal-content"><div class="modal-header"><h3><i class="fas fa-star"></i> پێداچوونەوە</h3><button class="close-modal" onclick="closeModal('reviewModal')"><i class="fas fa-times"></i></button></div><select id="reviewRating"><option value="5">★★★★★ (5)</option><option value="4">★★★★☆ (4)</option><option value="3">★★★☆☆ (3)</option><option value="2">★★☆☆☆ (2)</option><option value="1">★☆☆☆☆ (1)</option></select><textarea id="reviewComment" rows="3" placeholder="پێداچوونەوەکەت بنووسە..."></textarea><button class="add-to-cart" onclick="submitReview()"><i class="fas fa-paper-plane"></i> ناردن</button></div></div>
- 
+
 <div id="adminLoginModal" class="modal"><div class="modal-content"><div class="modal-header"><h3><i class="fas fa-lock"></i> چوونە ژوورەوەی ئادمین</h3><button class="close-modal" onclick="closeModal('adminLoginModal')"><i class="fas fa-times"></i></button></div><input type="password" id="adminPassword" placeholder="پاسۆرد"><button class="add-to-cart" onclick="adminLogin()"><i class="fas fa-sign-in-alt"></i> چوونە ژوورەوە</button></div></div>
- 
+
 <div id="adminPanel" class="admin-panel">
    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;"><h2><i class="fas fa-cogs"></i> پانێڵی ئادمین</h2><button class="icon-btn" style="color:var(--danger);font-size:24px;" onclick="closeAdminPanel()"><i class="fas fa-times-circle"></i></button></div>
    
@@ -962,10 +961,9 @@
    
    <div class="admin-section"><h3><i class="fas fa-comments"></i> پەیامەکانی چات (تایبەت)</h3><div id="adminChatMessages"></div></div>
 </div>
- 
+
 <div id="toast" class="toast"></div>
-<!-- Firebase Status removed -->
- 
+
 <script>
    // ==================== Firebase Configuration ====================
    const firebaseConfig = {
@@ -1019,7 +1017,8 @@
    ];
    
    // Language dropdown
-   document.getElementById('langSwitcher').onclick = () => {
+   document.getElementById('langSwitcher').onclick = (e) => {
+       e.stopPropagation();
        document.getElementById('langDropdown').classList.toggle('show');
    };
    
@@ -1205,7 +1204,6 @@
        const t = translations[currentLang];
        document.getElementById('searchInput').placeholder = t.search;
        document.getElementById('chatInput').placeholder = t.chatPlaceholder;
-       document.getElementById('currentLangText').innerText = currentLang === 'ku' ? 'کوردی' : (currentLang === 'ar' ? 'العربية' : 'English');
        if(document.getElementById('changePasswordTitle')) document.getElementById('changePasswordTitle').innerHTML = `<i class="fas fa-key"></i> ${t.changePassword}`;
        if(document.getElementById('changePasswordBtnText')) document.getElementById('changePasswordBtnText').innerText = t.changePasswordBtn;
        if(document.getElementById('oldPassword')) document.getElementById('oldPassword').placeholder = t.oldPassword;
