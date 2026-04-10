@@ -5,8 +5,9 @@
    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
    <title>VIP Baby Nutrition - فرۆشگای تایبەتی منداڵان</title>
    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-   <!-- Google Fonts - Cairo Font for Kurdish/Arabic support -->
-   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+   <!-- Classic Arabic/Kurdish Fonts -->
+   <link href="https://fonts.googleapis.com/css2?family=Scheherazade+New:wght@400;500;600;700&display=swap" rel="stylesheet">
+   <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&display=swap" rel="stylesheet">
    <!-- Firebase SDK -->
    <script src="https://www.gstatic.com/firebasejs/12.11.0/firebase-app-compat.js"></script>
    <script src="https://www.gstatic.com/firebasejs/12.11.0/firebase-database-compat.js"></script>
@@ -39,13 +40,13 @@
        }
 
        body {
-           font-family: 'Cairo', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+           font-family: 'Scheherazade New', 'Amiri', 'Times New Roman', serif;
            background: var(--bg);
            color: var(--text);
            transition: all 0.3s ease;
            padding-bottom: 75px;
-           font-size: 16px;
-           line-height: 1.5;
+           font-size: 17px;
+           line-height: 1.6;
            font-weight: 400;
        }
 
@@ -60,13 +61,13 @@
            --chat-admin: #334155;
        }
 
-       /* Improved Typography */
        h1, h2, h3, h4, h5, h6 {
-           font-weight: 800;
+           font-weight: 700;
            letter-spacing: -0.3px;
+           font-family: 'Scheherazade New', 'Amiri', serif;
        }
 
-       /* Header Styles */
+       /* Header */
        .header {
            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
            padding: 12px 18px;
@@ -111,7 +112,7 @@
            padding: 5px 10px;
            border-radius: 30px;
            transition: 0.2s;
-           letter-spacing: -0.5px;
+           font-family: 'Scheherazade New', 'Amiri', serif;
        }
 
        .shop-name:active {
@@ -140,8 +141,7 @@
            background: rgba(255, 255, 255, 0.3);
        }
 
-       .cart-badge,
-       .chat-badge {
+       .cart-badge, .chat-badge {
            position: absolute;
            top: -5px;
            right: -6px;
@@ -157,7 +157,7 @@
            justify-content: center;
        }
 
-       /* Language Switcher */
+       /* Language Switcher - FIXED */
        .lang-switch {
            background: rgba(255, 255, 255, 0.15);
            border-radius: 50%;
@@ -168,6 +168,7 @@
            justify-content: center;
            cursor: pointer;
            transition: 0.2s;
+           position: relative;
        }
 
        .lang-switch:hover {
@@ -177,6 +178,7 @@
        .lang-icon {
            font-size: 20px;
            color: white;
+           pointer-events: none;
        }
 
        .lang-dropdown {
@@ -188,7 +190,7 @@
            padding: 8px;
            box-shadow: var(--shadow-lg);
            border: 1px solid var(--border);
-           z-index: 160;
+           z-index: 9999;
            display: none;
            flex-direction: column;
            gap: 4px;
@@ -207,10 +209,14 @@
            transition: 0.2s;
            text-align: center;
            font-weight: 600;
-           font-family: 'Cairo', sans-serif;
+           font-family: 'Scheherazade New', 'Amiri', serif;
        }
 
-       .lang-option:hover,
+       .lang-option:hover {
+           background: var(--primary);
+           color: white;
+       }
+
        .lang-option.active {
            background: var(--primary);
            color: white;
@@ -236,8 +242,7 @@
            height: 100%;
        }
 
-       .slide img,
-       .slide video {
+       .slide img, .slide video {
            width: 100%;
            height: 100%;
            object-fit: cover;
@@ -261,13 +266,8 @@
            background: rgba(0, 0, 0, 0.8);
        }
 
-       .slider-btn.prev {
-           left: 10px;
-       }
-
-       .slider-btn.next {
-           right: 10px;
-       }
+       .slider-btn.prev { left: 10px; }
+       .slider-btn.next { right: 10px; }
 
        .slider-dots {
            position: absolute;
@@ -307,7 +307,7 @@
            background: var(--card);
            color: var(--text);
            font-size: 15px;
-           font-family: 'Cairo', sans-serif;
+           font-family: 'Scheherazade New', 'Amiri', serif;
            outline: none;
            text-align: right;
            transition: 0.2s;
@@ -339,7 +339,7 @@
            color: var(--text);
            font-size: 14px;
            font-weight: 600;
-           font-family: 'Cairo', sans-serif;
+           font-family: 'Scheherazade New', 'Amiri', serif;
            cursor: pointer;
            white-space: nowrap;
            transition: 0.2s;
@@ -360,15 +360,10 @@
        }
 
        @media (min-width: 640px) {
-           .products-grid {
-               grid-template-columns: repeat(3, 1fr);
-           }
+           .products-grid { grid-template-columns: repeat(3, 1fr); }
        }
-
        @media (min-width: 1024px) {
-           .products-grid {
-               grid-template-columns: repeat(4, 1fr);
-           }
+           .products-grid { grid-template-columns: repeat(4, 1fr); }
        }
 
        /* Product Card */
@@ -397,8 +392,7 @@
            border-radius: 16px;
        }
 
-       .product-gallery-img,
-       .product-gallery-video {
+       .product-gallery-img, .product-gallery-video {
            min-width: 100%;
            width: 100%;
            height: 130px;
@@ -408,9 +402,7 @@
            scroll-snap-align: start;
        }
 
-       .product-gallery-video {
-           background: #000;
-       }
+       .product-gallery-video { background: #000; }
 
        .gallery-nav {
            display: flex;
@@ -445,15 +437,8 @@
            z-index: 5;
        }
 
-       .status-instock {
-           background: var(--success);
-           color: white;
-       }
-
-       .status-outstock {
-           background: var(--danger);
-           color: white;
-       }
+       .status-instock { background: var(--success); color: white; }
+       .status-outstock { background: var(--danger); color: white; }
 
        .wish-btn {
            position: absolute;
@@ -471,18 +456,16 @@
            transition: 0.2s;
        }
 
-       .wish-btn.active {
-           color: var(--danger);
-       }
+       .wish-btn.active { color: var(--danger); }
 
        .product-name {
-           font-size: 15px;
+           font-size: 16px;
            font-weight: 800;
            margin: 10px 0 4px;
            line-height: 1.4;
+           font-family: 'Scheherazade New', 'Amiri', serif;
        }
 
-       /* Product Description with Click to Expand */
        .product-desc {
            font-size: 13px;
            color: var(--text-light);
@@ -494,8 +477,8 @@
            cursor: pointer;
            transition: all 0.2s;
            border: 1px dashed var(--border);
-           position: relative;
            font-weight: 500;
+           font-family: 'Scheherazade New', 'Amiri', serif;
        }
        
        .product-desc:hover {
@@ -504,22 +487,9 @@
            border-color: var(--primary);
        }
        
-       .product-desc:active {
-           transform: scale(0.99);
-       }
+       .product-desc i { margin-left: 6px; font-size: 12px; }
+       .product-desc span { font-size: 10px; display: inline-block; margin-right: 8px; }
        
-       .product-desc i {
-           margin-left: 6px;
-           font-size: 12px;
-       }
-       
-       .product-desc span {
-           font-size: 10px;
-           display: inline-block;
-           margin-right: 8px;
-       }
-       
-       /* Expanded Description Modal */
        .desc-modal {
            position: fixed;
            top: 0;
@@ -550,18 +520,20 @@
        .desc-modal-content h4 {
            color: var(--primary);
            margin-bottom: 15px;
-           font-size: 20px;
+           font-size: 22px;
            font-weight: 800;
            border-bottom: 2px solid var(--border);
            padding-bottom: 10px;
+           font-family: 'Scheherazade New', 'Amiri', serif;
        }
        
        .desc-modal-content p {
-           font-size: 16px;
+           font-size: 17px;
            line-height: 1.8;
            color: var(--text);
            white-space: pre-wrap;
            font-weight: 500;
+           font-family: 'Scheherazade New', 'Amiri', serif;
        }
        
        .desc-modal-content .close-desc {
@@ -572,15 +544,16 @@
            border-radius: 40px;
            margin-top: 20px;
            cursor: pointer;
-           font-size: 14px;
+           font-size: 15px;
            font-weight: 600;
-           font-family: 'Cairo', sans-serif;
+           font-family: 'Scheherazade New', 'Amiri', serif;
        }
 
        .product-price {
            color: var(--success);
            font-weight: 800;
-           font-size: 16px;
+           font-size: 17px;
+           font-family: 'Scheherazade New', 'Amiri', serif;
        }
 
        .quantity-control {
@@ -622,7 +595,7 @@
            border-radius: 40px;
            font-weight: 700;
            font-size: 14px;
-           font-family: 'Cairo', sans-serif;
+           font-family: 'Scheherazade New', 'Amiri', serif;
            cursor: pointer;
            transition: 0.2s;
        }
@@ -637,7 +610,6 @@
            cursor: not-allowed;
        }
 
-       /* Video Modal */
        .video-modal {
            position: fixed;
            top: 0;
@@ -679,9 +651,7 @@
            transition: 0.2s;
        }
 
-       .chat-float:hover {
-           transform: scale(1.05);
-       }
+       .chat-float:hover { transform: scale(1.05); }
 
        .chat-modal {
            display: none;
@@ -700,10 +670,7 @@
        }
 
        @media (max-width: 500px) {
-           .chat-modal {
-               width: calc(100% - 40px);
-               left: 20px;
-           }
+           .chat-modal { width: calc(100% - 40px); left: 20px; }
        }
 
        .chat-header {
@@ -714,6 +681,7 @@
            justify-content: space-between;
            align-items: center;
            font-weight: 600;
+           font-family: 'Scheherazade New', 'Amiri', serif;
        }
 
        .chat-messages {
@@ -731,6 +699,7 @@
            border-radius: 18px;
            font-size: 14px;
            line-height: 1.4;
+           font-family: 'Scheherazade New', 'Amiri', serif;
        }
 
        .message-user {
@@ -768,7 +737,7 @@
            background: var(--bg);
            color: var(--text);
            outline: none;
-           font-family: 'Cairo', sans-serif;
+           font-family: 'Scheherazade New', 'Amiri', serif;
            font-size: 14px;
        }
 
@@ -783,9 +752,7 @@
            transition: 0.2s;
        }
 
-       .chat-send:hover {
-           background: var(--primary-dark);
-       }
+       .chat-send:hover { background: var(--primary-dark); }
 
        /* Floating Buttons */
        .floating-buttons {
@@ -812,20 +779,9 @@
            transition: 0.2s;
        }
 
-       .float-btn:hover {
-           transform: scale(1.05);
-       }
-
-       .btn-dark {
-           background: var(--primary);
-           color: white;
-       }
-
-       .btn-wa {
-           background: #25D366;
-           color: white;
-           text-decoration: none;
-       }
+       .float-btn:hover { transform: scale(1.05); }
+       .btn-dark { background: var(--primary); color: white; }
+       .btn-wa { background: #25D366; color: white; text-decoration: none; }
 
        /* Modals */
        .modal {
@@ -850,7 +806,7 @@
            max-height: 85vh;
            overflow-y: auto;
            text-align: right;
-           font-family: 'Cairo', sans-serif;
+           font-family: 'Scheherazade New', 'Amiri', serif;
        }
 
        .modal-header {
@@ -865,6 +821,7 @@
        .modal-header h3 {
            font-size: 18px;
            font-weight: 800;
+           font-family: 'Scheherazade New', 'Amiri', serif;
        }
 
        .close-modal {
@@ -875,7 +832,7 @@
            color: var(--text-light);
        }
 
-       /* Cart Items */
+       /* Cart */
        .cart-item {
            display: flex;
            gap: 14px;
@@ -890,35 +847,16 @@
            border-radius: 14px;
        }
 
-       .cart-item-info {
-           flex: 1;
-       }
-
        .cart-item-name {
            font-weight: 700;
            font-size: 14px;
+           font-family: 'Scheherazade New', 'Amiri', serif;
        }
 
        .cart-item-price {
            color: var(--success);
            font-weight: bold;
            font-size: 13px;
-       }
-
-       .cart-item-quantity {
-           display: flex;
-           align-items: center;
-           gap: 12px;
-           margin-top: 8px;
-       }
-
-       .cart-qty-btn {
-           width: 28px;
-           height: 28px;
-           border-radius: 50%;
-           border: 1px solid var(--border);
-           background: var(--card);
-           cursor: pointer;
        }
 
        .remove-item {
@@ -929,7 +867,6 @@
            cursor: pointer;
        }
 
-       /* Shipping & Summary */
        .shipping-select {
            width: 100%;
            padding: 12px;
@@ -937,7 +874,7 @@
            border: 1px solid var(--border);
            border-radius: 20px;
            background: var(--bg);
-           font-family: 'Cairo', sans-serif;
+           font-family: 'Scheherazade New', 'Amiri', serif;
            font-size: 14px;
        }
 
@@ -961,6 +898,12 @@
            color: var(--success);
            border-top: 1px solid var(--border);
            padding-top: 12px;
+       }
+
+       .coupon-input {
+           display: flex;
+           gap: 8px;
+           margin: 10px 0;
        }
 
        /* Admin Panel */
@@ -989,30 +932,10 @@
            font-size: 17px;
            font-weight: 800;
            margin-bottom: 12px;
+           font-family: 'Scheherazade New', 'Amiri', serif;
        }
 
-       .admin-section-title {
-           font-size: 18px;
-           font-weight: bold;
-           margin: 20px 0 10px;
-           padding-bottom: 8px;
-           border-bottom: 2px solid var(--border);
-       }
-
-       .form-group {
-           margin-bottom: 15px;
-       }
-
-       .form-group label {
-           display: block;
-           margin-bottom: 6px;
-           font-weight: 600;
-           font-size: 13px;
-       }
-
-       input,
-       textarea,
-       select {
+       input, textarea, select {
            width: 100%;
            padding: 10px 12px;
            margin-bottom: 10px;
@@ -1020,13 +943,11 @@
            border-radius: 12px;
            background: var(--bg);
            color: var(--text);
-           font-family: 'Cairo', sans-serif;
+           font-family: 'Scheherazade New', 'Amiri', serif;
            font-size: 14px;
        }
 
-       textarea {
-           resize: vertical;
-       }
+       textarea { resize: vertical; }
 
        .save-btn {
            width: 100%;
@@ -1037,27 +958,15 @@
            border-radius: 30px;
            font-weight: 700;
            font-size: 14px;
-           font-family: 'Cairo', sans-serif;
+           font-family: 'Scheherazade New', 'Amiri', serif;
            cursor: pointer;
            margin-top: 10px;
            transition: 0.2s;
        }
 
-       .save-btn:hover {
-           opacity: 0.9;
-       }
-
-       .change-password-btn {
-           background: var(--accent);
-           color: #1F2937;
-       }
-
-       .color-picker {
-           width: 100%;
-           height: 45px;
-           border-radius: 12px;
-           cursor: pointer;
-       }
+       .save-btn:hover { opacity: 0.9; }
+       .change-password-btn { background: var(--accent); color: #1F2937; }
+       .color-picker { width: 100%; height: 45px; border-radius: 12px; cursor: pointer; }
 
        /* Toast */
        .toast {
@@ -1074,7 +983,7 @@
            font-size: 14px;
            font-weight: 500;
            white-space: nowrap;
-           font-family: 'Cairo', sans-serif;
+           font-family: 'Scheherazade New', 'Amiri', serif;
        }
 
        .toast.show {
@@ -1083,26 +992,10 @@
        }
 
        @keyframes fadeInUp {
-           0% {
-               opacity: 0;
-               bottom: 60px;
-           }
-
-           15% {
-               opacity: 1;
-               bottom: 100px;
-           }
-
-           85% {
-               opacity: 1;
-               bottom: 100px;
-           }
-
-           100% {
-               opacity: 0;
-               bottom: 60px;
-               visibility: hidden;
-           }
+           0% { opacity: 0; bottom: 60px; }
+           15% { opacity: 1; bottom: 100px; }
+           85% { opacity: 1; bottom: 100px; }
+           100% { opacity: 0; bottom: 60px; visibility: hidden; }
        }
 
        .empty-state {
@@ -1110,6 +1003,7 @@
            padding: 40px 20px;
            color: var(--text-light);
            font-size: 15px;
+           font-family: 'Scheherazade New', 'Amiri', serif;
        }
 
        .edit-cat-btn {
@@ -1132,8 +1026,7 @@
            border-bottom: 1px solid var(--border);
        }
 
-       .edit-product-btn,
-       .delete-product-btn {
+       .edit-product-btn, .delete-product-btn {
            padding: 4px 12px;
            border-radius: 20px;
            font-size: 12px;
@@ -1142,16 +1035,8 @@
            font-weight: 600;
        }
 
-       .edit-product-btn {
-           background: var(--accent);
-           color: black;
-           margin-left: 5px;
-       }
-
-       .delete-product-btn {
-           background: var(--danger);
-           color: white;
-       }
+       .edit-product-btn { background: var(--accent); color: black; margin-left: 5px; }
+       .delete-product-btn { background: var(--danger); color: white; }
 
        .security-note {
            font-size: 12px;
@@ -1167,30 +1052,8 @@
            margin-bottom: 10px;
        }
 
-       .media-field {
-           flex: 1;
-           min-width: 120px;
-       }
-
-       .media-field label {
-           font-size: 11px;
-           margin-bottom: 4px;
-           display: block;
-           font-weight: 600;
-       }
-
-       /* Coupon & Tracking */
-       .coupon-input {
-           display: flex;
-           gap: 8px;
-           margin: 10px 0;
-       }
-       
-       /* Rating Stars */
-       .rating-stars {
-           color: #FFD700;
-           font-size: 12px;
-       }
+       .media-field { flex: 1; min-width: 120px; }
+       .media-field label { font-size: 11px; margin-bottom: 4px; display: block; font-weight: 600; }
    </style>
 </head>
 <body>
@@ -1237,10 +1100,9 @@
     <!-- Chat Button -->
     <button class="chat-float" onclick="toggleChat()"><i class="fas fa-comment-dots"></i><span class="chat-badge" id="chatBadge">0</span></button>
 
-    <!-- Chat Modal -->
     <div class="chat-modal" id="chatModal">
         <div class="chat-header">
-            <span id="chatHeaderText"><i class="fas fa-headset"></i> پشتیوانی (تایبەت)</span>
+            <span><i class="fas fa-headset"></i> پشتیوانی (تایبەت)</span>
             <button onclick="toggleChat()" style="background:none;border:none;color:white;font-size:20px;"><i class="fas fa-times"></i></button>
         </div>
         <div class="chat-messages" id="chatMessages"></div>
@@ -1259,18 +1121,10 @@
     <!-- Modals -->
     <div id="cartModal" class="modal">
         <div class="modal-content">
-            <div class="modal-header">
-                <h3><i class="fas fa-shopping-cart"></i> سەبەتە</h3>
-                <button class="close-modal" onclick="closeModal('cartModal')"><i class="fas fa-times"></i></button>
-            </div>
+            <div class="modal-header"><h3><i class="fas fa-shopping-cart"></i> سەبەتە</h3><button class="close-modal" onclick="closeModal('cartModal')"><i class="fas fa-times"></i></button></div>
             <div id="cartItemsList"></div>
-            <div class="coupon-input">
-                <input type="text" id="couponCode" placeholder="کۆدێن">
-                <button class="add-to-cart" style="width:auto;padding:10px 15px;" onclick="applyCoupon()"><i class="fas fa-ticket-alt"></i> جێبەجێ</button>
-            </div>
-            <select id="shippingCity" class="shipping-select" onchange="updateCartTotal()">
-                <option value="">هەڵبژاردنی شار</option>
-            </select>
+            <div class="coupon-input"><input type="text" id="couponCode" placeholder="کۆدێن"><button class="add-to-cart" style="width:auto;padding:10px 15px;" onclick="applyCoupon()"><i class="fas fa-ticket-alt"></i> جێبەجێ</button></div>
+            <select id="shippingCity" class="shipping-select" onchange="updateCartTotal()"><option value="">هەڵبژاردنی شار</option></select>
             <div class="cart-summary">
                 <div class="summary-row"><span><i class="fas fa-truck"></i> گەیاندن:</span><span id="shippingCost">0 IQD</span></div>
                 <div class="summary-row"><span><i class="fas fa-percent"></i> کۆدێن:</span><span id="discountAmount">0 IQD</span></div>
@@ -1282,20 +1136,14 @@
 
     <div id="wishlistModal" class="modal">
         <div class="modal-content">
-            <div class="modal-header">
-                <h3><i class="fas fa-heart"></i> دڵخوازەکان</h3>
-                <button class="close-modal" onclick="closeModal('wishlistModal')"><i class="fas fa-times"></i></button>
-            </div>
+            <div class="modal-header"><h3><i class="fas fa-heart"></i> دڵخوازەکان</h3><button class="close-modal" onclick="closeModal('wishlistModal')"><i class="fas fa-times"></i></button></div>
             <div id="wishlistItems"></div>
         </div>
     </div>
 
     <div id="checkoutModal" class="modal">
         <div class="modal-content">
-            <div class="modal-header">
-                <h3><i class="fas fa-address-card"></i> زانیاری کڕیار</h3>
-                <button class="close-modal" onclick="closeModal('checkoutModal')"><i class="fas fa-times"></i></button>
-            </div>
+            <div class="modal-header"><h3><i class="fas fa-address-card"></i> زانیاری کڕیار</h3><button class="close-modal" onclick="closeModal('checkoutModal')"><i class="fas fa-times"></i></button></div>
             <input type="text" id="customerName" placeholder="ناوی تەواو">
             <input type="tel" id="customerPhone" placeholder="ژمارەی مۆبایل">
             <textarea id="customerAddress" rows="2" placeholder="ناونیشان"></textarea>
@@ -1306,10 +1154,7 @@
 
     <div id="trackingModal" class="modal">
         <div class="modal-content">
-            <div class="modal-header">
-                <h3><i class="fas fa-search"></i> گەڕانی داواکاری</h3>
-                <button class="close-modal" onclick="closeModal('trackingModal')"><i class="fas fa-times"></i></button>
-            </div>
+            <div class="modal-header"><h3><i class="fas fa-search"></i> گەڕانی داواکاری</h3><button class="close-modal" onclick="closeModal('trackingModal')"><i class="fas fa-times"></i></button></div>
             <input type="text" id="trackingCode" placeholder="کۆدی داواکاری">
             <button class="add-to-cart" onclick="trackOrder()"><i class="fas fa-search"></i> گەڕان</button>
             <div id="trackingResult" style="margin-top:15px;"></div>
@@ -1318,15 +1163,10 @@
 
     <div id="reviewModal" class="modal">
         <div class="modal-content">
-            <div class="modal-header">
-                <h3><i class="fas fa-star"></i> پێداچوونەوە</h3>
-                <button class="close-modal" onclick="closeModal('reviewModal')"><i class="fas fa-times"></i></button>
-            </div>
+            <div class="modal-header"><h3><i class="fas fa-star"></i> پێداچوونەوە</h3><button class="close-modal" onclick="closeModal('reviewModal')"><i class="fas fa-times"></i></button></div>
             <select id="reviewRating">
-                <option value="5">★★★★★ (5)</option>
-                <option value="4">★★★★☆ (4)</option>
-                <option value="3">★★★☆☆ (3)</option>
-                <option value="2">★★☆☆☆ (2)</option>
+                <option value="5">★★★★★ (5)</option><option value="4">★★★★☆ (4)</option>
+                <option value="3">★★★☆☆ (3)</option><option value="2">★★☆☆☆ (2)</option>
                 <option value="1">★☆☆☆☆ (1)</option>
             </select>
             <textarea id="reviewComment" rows="3" placeholder="پێداچوونەوەکەت بنووسە..."></textarea>
@@ -1336,10 +1176,7 @@
 
     <div id="adminLoginModal" class="modal">
         <div class="modal-content">
-            <div class="modal-header">
-                <h3><i class="fas fa-lock"></i> چوونە ژوورەوەی ئادمین</h3>
-                <button class="close-modal" onclick="closeModal('adminLoginModal')"><i class="fas fa-times"></i></button>
-            </div>
+            <div class="modal-header"><h3><i class="fas fa-lock"></i> چوونە ژوورەوەی ئادمین</h3><button class="close-modal" onclick="closeModal('adminLoginModal')"><i class="fas fa-times"></i></button></div>
             <input type="password" id="adminPassword" placeholder="پاسۆرد">
             <button class="add-to-cart" onclick="adminLogin()"><i class="fas fa-sign-in-alt"></i> چوونە ژوورەوە</button>
         </div>
@@ -1391,10 +1228,7 @@
         
         <div class="admin-section">
             <h3><i class="fas fa-images"></i> سلایدەر (وێنە و ڤیدیۆ)</h3>
-            <select id="sliderType" style="margin-bottom:5px;">
-                <option value="image">وێنە</option>
-                <option value="video">ڤیدیۆ</option>
-            </select>
+            <select id="sliderType" style="margin-bottom:5px;"><option value="image">وێنە</option><option value="video">ڤیدیۆ</option></select>
             <input type="text" id="sliderImage" placeholder="لینکی وێنە یان ڤیدیۆ">
             <button class="save-btn" onclick="addSliderImage()"><i class="fas fa-plus"></i> زیادکردن</button>
             <div id="sliderList"></div>
@@ -1410,21 +1244,19 @@
         </div>
         
         <div class="admin-section">
-            <h3><i class="fas fa-box-open"></i> زیادکردنی بەرهەم (٣ وێنە + ١ ڤیدیۆ)</h3>
+            <h3><i class="fas fa-box-open"></i> زیادکردنی بەرهەم</h3>
             <input type="text" id="productName" placeholder="ناو">
             <textarea id="productDesc" rows="2" placeholder="باسکردن"></textarea>
             <input type="number" id="productPrice" placeholder="نرخ">
             <input type="number" id="productStock" placeholder="ستۆک">
             <select id="productCategory"></select>
             <select id="productStatus"><option value="instock">لەبەردەستە</option><option value="outstock">تەواو بووە</option></select>
-            
             <div class="media-row">
                 <div class="media-field"><label>وێنەی 1</label><input type="text" id="productImage1" placeholder="لینکی وێنەی 1"></div>
                 <div class="media-field"><label>وێنەی 2</label><input type="text" id="productImage2" placeholder="لینکی وێنەی 2"></div>
                 <div class="media-field"><label>وێنەی 3</label><input type="text" id="productImage3" placeholder="لینکی وێنەی 3"></div>
-                <div class="media-field"><label>ڤیدیۆ</label><input type="text" id="productVideo" placeholder="لینکی ڤیدیۆ (ئارەزوومەندانە)"></div>
+                <div class="media-field"><label>ڤیدیۆ</label><input type="text" id="productVideo" placeholder="لینکی ڤیدیۆ"></div>
             </div>
-            
             <button class="save-btn" onclick="addProduct()"><i class="fas fa-plus-circle"></i> زیادکردنی بەرهەم</button>
             <div id="addProductResult" style="margin-top:8px;font-size:12px;color:var(--success);"></div>
         </div>
@@ -1450,7 +1282,7 @@
         </div>
         
         <div class="admin-section">
-            <h3><i class="fas fa-comments"></i> پەیامەکانی چات (تایبەت)</h3>
+            <h3><i class="fas fa-comments"></i> پەیامەکانی چات</h3>
             <div id="adminChatMessages"></div>
         </div>
     </div>
@@ -1469,23 +1301,18 @@
             appId: "1:875903696976:web:418d6e927b29d6496ad155"
         };
         
-        let firebaseInitialized = false;
         let database = null;
-        
         try {
             firebase.initializeApp(firebaseConfig);
             database = firebase.database();
-            firebaseInitialized = true;
-            console.log('Firebase initialized successfully');
-        } catch(e) {
-            console.error('Firebase error:', e);
-        }
+            console.log('Firebase initialized');
+        } catch(e) { console.error('Firebase error:', e); }
         
         // Data
         let products = [];
-        let categories = [];
-        let sliderImages = [];
-        let shippingCities = [];
+        let categories = ['تغذیة', 'ملابس', 'العاب', 'عربات'];
+        let sliderImages = [{ type: 'image', url: 'https://i.postimg.cc/RWNMnJDG/image.jpg' }];
+        let shippingCities = [{ city: "بغداد", cost: 3000 }, { city: "هەولێر", cost: 4000 }, { city: "بەسرە", cost: 5000 }];
         let orders = [];
         let wishlist = JSON.parse(localStorage.getItem('vip_wishlist')) || [];
         let coupons = [];
@@ -1501,75 +1328,14 @@
         let currentSlide = 0;
         let clickCount = 0;
         let currentProductForReview = null;
-        let nextId = 1;
+        let nextId = 100;
         let adminPassword = localStorage.getItem('vip_admin_password') || 'admin2026';
-        
-        let defaultSlider = [
-            { type: 'image', url: 'https://i.postimg.cc/RWNMnJDG/image.jpg' }
-        ];
         
         // Translations
         const translations = {
-            ku: { 
-                search: "🔍 گەڕان...", 
-                all: "هەموو", 
-                instock: "لەبەردەستە", 
-                outstock: "تەواو بووە", 
-                addToCart: "زیادکردن", 
-                emptyCart: "سەبەتەکەت خاڵییە 🛒", 
-                emptyWishlist: "هیچ بەرهەمێک نییە 💔", 
-                noProducts: "هیچ بەرهەمێک نەدۆزرایەوە 😢", 
-                rem: "ماوە:", 
-                reviewBtn: "پێداچوونەوە", 
-                chatPlaceholder: "پەیام...", 
-                welcomeMsg: "سڵاو! چۆن دەتوانین یارمەتیت بدەین؟", 
-                changePassword: "گۆڕینی پاسۆرد", 
-                changePasswordBtn: "گۆڕینی پاسۆرد", 
-                oldPassword: "پاسۆردی کۆن", 
-                newPassword: "پاسۆردی نوێ", 
-                confirmPassword: "دووبارە پاسۆردی نوێ", 
-                securityNote: "🔒 پاسۆردی بنەڕەتی: admin2026" 
-            },
-            ar: { 
-                search: "🔍 بحث...", 
-                all: "الكل", 
-                instock: "متوفر", 
-                outstock: "نفذ", 
-                addToCart: "إضافة", 
-                emptyCart: "السلة فارغة 🛒", 
-                emptyWishlist: "لا توجد منتجات 💔", 
-                noProducts: "لم يتم العثور على منتجات 😢", 
-                rem: "المتبقي:", 
-                reviewBtn: "مراجعة", 
-                chatPlaceholder: "رسالة...", 
-                welcomeMsg: "مرحباً! كيف يمكننا مساعدتك؟", 
-                changePassword: "تغيير كلمة المرور", 
-                changePasswordBtn: "تغيير كلمة المرور", 
-                oldPassword: "كلمة المرور القديمة", 
-                newPassword: "كلمة المرور الجديدة", 
-                confirmPassword: "تأكيد كلمة المرور", 
-                securityNote: "🔒 كلمة المرور الافتراضية: admin2026" 
-            },
-            en: { 
-                search: "🔍 Search...", 
-                all: "All", 
-                instock: "In Stock", 
-                outstock: "Out", 
-                addToCart: "Add", 
-                emptyCart: "Cart is empty 🛒", 
-                emptyWishlist: "No items 💔", 
-                noProducts: "No products found 😢", 
-                rem: "Stock:", 
-                reviewBtn: "Review", 
-                chatPlaceholder: "Message...", 
-                welcomeMsg: "Hello! How can we help you?", 
-                changePassword: "Change Password", 
-                changePasswordBtn: "Change Password", 
-                oldPassword: "Old Password", 
-                newPassword: "New Password", 
-                confirmPassword: "Confirm Password", 
-                securityNote: "🔒 Default Password: admin2026" 
-            }
+            ku: { search: "🔍 گەڕان...", all: "هەموو", instock: "لەبەردەستە", outstock: "تەواو بووە", addToCart: "زیادکردن", emptyCart: "سەبەتەکەت خاڵییە 🛒", emptyWishlist: "هیچ بەرهەمێک نییە 💔", noProducts: "هیچ بەرهەمێک نەدۆزرایەوە 😢", rem: "ماوە:", reviewBtn: "پێداچوونەوە", chatPlaceholder: "پەیام...", welcomeMsg: "سڵاو! چۆن دەتوانین یارمەتیت بدەین؟", changePassword: "گۆڕینی پاسۆرد", changePasswordBtn: "گۆڕینی پاسۆرد", oldPassword: "پاسۆردی کۆن", newPassword: "پاسۆردی نوێ", confirmPassword: "دووبارە پاسۆردی نوێ", securityNote: "🔒 پاسۆردی بنەڕەتی: admin2026" },
+            ar: { search: "🔍 بحث...", all: "الكل", instock: "متوفر", outstock: "نفذ", addToCart: "إضافة", emptyCart: "السلة فارغة 🛒", emptyWishlist: "لا توجد منتجات 💔", noProducts: "لم يتم العثور على منتجات 😢", rem: "المتبقي:", reviewBtn: "مراجعة", chatPlaceholder: "رسالة...", welcomeMsg: "مرحباً! كيف يمكننا مساعدتك؟", changePassword: "تغيير كلمة المرور", changePasswordBtn: "تغيير كلمة المرور", oldPassword: "كلمة المرور القديمة", newPassword: "كلمة المرور الجديدة", confirmPassword: "تأكيد كلمة المرور", securityNote: "🔒 كلمة المرور الافتراضية: admin2026" },
+            en: { search: "🔍 Search...", all: "All", instock: "In Stock", outstock: "Out", addToCart: "Add", emptyCart: "Cart is empty 🛒", emptyWishlist: "No items 💔", noProducts: "No products found 😢", rem: "Stock:", reviewBtn: "Review", chatPlaceholder: "Message...", welcomeMsg: "Hello! How can we help you?", changePassword: "Change Password", changePasswordBtn: "Change Password", oldPassword: "Old Password", newPassword: "New Password", confirmPassword: "Confirm Password", securityNote: "🔒 Default Password: admin2026" }
         };
         
         // Helper Functions
@@ -1581,55 +1347,47 @@
         }
         
         function openModal(id) { 
-            document.getElementById(id).style.display = 'flex'; 
+            let modal = document.getElementById(id);
+            if(modal) modal.style.display = 'flex'; 
             if(id === 'wishlistModal') renderWishlist(); 
         }
         
         function closeModal(id) { 
-            document.getElementById(id).style.display = 'none'; 
+            let modal = document.getElementById(id);
+            if(modal) modal.style.display = 'none'; 
         }
         
-        // Function to show full description in a modal (click to expand)
         function showFullDescription(desc, productName) {
             const modal = document.createElement('div');
             modal.className = 'desc-modal';
-            modal.innerHTML = `
-                <div class="desc-modal-content" onclick="event.stopPropagation()">
-                    <h4><i class="fas fa-info-circle"></i> ${productName}</h4>
-                    <p>${desc.replace(/\n/g, '<br>')}</p>
-                    <button class="close-desc" onclick="this.closest('.desc-modal').remove()"><i class="fas fa-times"></i> داخستن</button>
-                </div>
-            `;
+            modal.innerHTML = `<div class="desc-modal-content" onclick="event.stopPropagation()"><h4><i class="fas fa-info-circle"></i> ${productName}</h4><p>${desc.replace(/\n/g, '<br>')}</p><button class="close-desc" onclick="this.closest('.desc-modal').remove()"><i class="fas fa-times"></i> داخستن</button></div>`;
             modal.onclick = () => modal.remove();
             document.body.appendChild(modal);
         }
         
         function updateAllTexts() {
             const t = translations[currentLang];
-            const searchInput = document.getElementById('searchInput');
-            const chatInput = document.getElementById('chatInput');
-            const changePasswordTitle = document.getElementById('changePasswordTitle');
-            const changePasswordBtnText = document.getElementById('changePasswordBtnText');
-            const oldPassword = document.getElementById('oldPassword');
-            const newPassword = document.getElementById('newPassword');
-            const confirmPassword = document.getElementById('confirmPassword');
-            const securityNote = document.getElementById('securityNote');
-            
+            let searchInput = document.getElementById('searchInput');
+            let chatInput = document.getElementById('chatInput');
             if(searchInput) searchInput.placeholder = t.search;
             if(chatInput) chatInput.placeholder = t.chatPlaceholder;
+            let changePasswordTitle = document.getElementById('changePasswordTitle');
+            let changePasswordBtnText = document.getElementById('changePasswordBtnText');
+            let oldPassword = document.getElementById('oldPassword');
+            let newPassword = document.getElementById('newPassword');
+            let confirmPassword = document.getElementById('confirmPassword');
+            let securityNote = document.getElementById('securityNote');
             if(changePasswordTitle) changePasswordTitle.innerHTML = `<i class="fas fa-key"></i> ${t.changePassword}`;
             if(changePasswordBtnText) changePasswordBtnText.innerText = t.changePasswordBtn;
             if(oldPassword) oldPassword.placeholder = t.oldPassword;
             if(newPassword) newPassword.placeholder = t.newPassword;
             if(confirmPassword) confirmPassword.placeholder = t.confirmPassword;
             if(securityNote) securityNote.innerText = t.securityNote;
-            
             renderProducts(); 
             renderCategories(); 
             updateCartUI(); 
             renderWishlist();
-            
-            const chatMessagesDiv = document.getElementById('chatMessages');
+            let chatMessagesDiv = document.getElementById('chatMessages');
             if(chatMessagesDiv && chatMessagesDiv.children.length === 0) 
                 chatMessagesDiv.innerHTML = `<div class="message message-admin">${t.welcomeMsg}<div class="message-time"></div></div>`;
         }
@@ -1644,172 +1402,60 @@
             showToast(currentLang === 'ku' ? 'زمان گۆڕدرا' : 'Language changed'); 
         }
         
-        // Language dropdown
+        // Language dropdown - FIXED
         const langSwitcher = document.getElementById('langSwitcher');
+        const langDropdown = document.getElementById('langDropdown');
+        
         if(langSwitcher) {
-            langSwitcher.onclick = (e) => {
+            langSwitcher.onclick = function(e) {
                 e.stopPropagation();
-                const dropdown = document.getElementById('langDropdown');
-                if(dropdown) dropdown.classList.toggle('show');
+                if(langDropdown) {
+                    langDropdown.classList.toggle('show');
+                }
+                return false;
             };
         }
         
+        document.addEventListener('click', function(e) {
+            if(langSwitcher && langDropdown) {
+                if(!langSwitcher.contains(e.target) && !langDropdown.contains(e.target)) {
+                    langDropdown.classList.remove('show');
+                }
+            }
+        });
+        
         document.querySelectorAll('.lang-option').forEach(opt => {
-            opt.onclick = (e) => {
+            opt.onclick = function(e) {
                 e.stopPropagation();
-                let lang = opt.getAttribute('data-lang');
+                let lang = this.getAttribute('data-lang');
                 changeLanguage(lang);
-                const dropdown = document.getElementById('langDropdown');
-                if(dropdown) dropdown.classList.remove('show');
+                if(langDropdown) langDropdown.classList.remove('show');
+                return false;
             };
         });
         
-        document.onclick = (e) => {
-            const langSwitcherEl = document.getElementById('langSwitcher');
-            const langDropdown = document.getElementById('langDropdown');
-            if (langSwitcherEl && langDropdown && !langSwitcherEl.contains(e.target)) {
-                langDropdown.classList.remove('show');
-            }
-        };
-        
-        // Save functions
-        function saveProductsToFirebase() { if(database) database.ref('products').set(products); }
-        function saveCategoriesToFirebase() { if(database) database.ref('categories').set(categories); }
-        function saveSliderToFirebase() { if(database) database.ref('sliderImages').set(sliderImages); }
-        function saveShippingToFirebase() { if(database) database.ref('shippingCities').set(shippingCities); }
-        function saveOrdersToFirebase() { if(database) database.ref('orders').set(orders); }
-        function saveCouponsToFirebase() { if(database) database.ref('coupons').set(coupons); }
-        function saveReviewsToFirebase() { if(database) database.ref('reviews').set(reviews); }
-        function saveChatToFirebase() { if(database) database.ref('chatMessages').set(chatMessages); }
-        
         function saveAllData() {
-            if(database && firebaseInitialized) {
-                saveProductsToFirebase();
-                saveCategoriesToFirebase();
-                saveSliderToFirebase();
-                saveShippingToFirebase();
-                saveOrdersToFirebase();
-                saveCouponsToFirebase();
-                saveReviewsToFirebase();
-                saveChatToFirebase();
-                database.ref('settings').update({
-                    autoReply: autoReply,
-                    shopName: document.getElementById('shopNameDisplay')?.innerText || 'VIP Baby Nutrition',
-                    whatsapp: localStorage.getItem('vip_whatsapp') || '9647700000000',
-                    themeColor: document.documentElement.style.getPropertyValue('--primary')
-                });
-            } else {
-                localStorage.setItem('vip_products', JSON.stringify(products));
-                localStorage.setItem('vip_categories', JSON.stringify(categories));
-                localStorage.setItem('vip_slider', JSON.stringify(sliderImages));
-                localStorage.setItem('vip_shipping', JSON.stringify(shippingCities));
-                localStorage.setItem('vip_orders', JSON.stringify(orders));
-                localStorage.setItem('vip_wishlist', JSON.stringify(wishlist));
-                localStorage.setItem('vip_coupons', JSON.stringify(coupons));
-                localStorage.setItem('vip_reviews', JSON.stringify(reviews));
-                localStorage.setItem('vip_chat_messages', JSON.stringify(chatMessages));
-                localStorage.setItem('vip_auto_reply', autoReply);
+            localStorage.setItem('vip_products', JSON.stringify(products));
+            localStorage.setItem('vip_categories', JSON.stringify(categories));
+            localStorage.setItem('vip_slider', JSON.stringify(sliderImages));
+            localStorage.setItem('vip_shipping', JSON.stringify(shippingCities));
+            localStorage.setItem('vip_orders', JSON.stringify(orders));
+            localStorage.setItem('vip_wishlist', JSON.stringify(wishlist));
+            localStorage.setItem('vip_coupons', JSON.stringify(coupons));
+            localStorage.setItem('vip_reviews', JSON.stringify(reviews));
+            localStorage.setItem('vip_chat_messages', JSON.stringify(chatMessages));
+            localStorage.setItem('vip_auto_reply', autoReply);
+            if(database) {
+                database.ref('products').set(products);
+                database.ref('categories').set(categories);
+                database.ref('sliderImages').set(sliderImages);
+                database.ref('shippingCities').set(shippingCities);
+                database.ref('orders').set(orders);
+                database.ref('coupons').set(coupons);
+                database.ref('reviews').set(reviews);
+                database.ref('chatMessages').set(chatMessages);
+                database.ref('settings').update({ autoReply: autoReply, shopName: document.getElementById('shopNameDisplay')?.innerText || 'VIP Baby Nutrition', whatsapp: localStorage.getItem('vip_whatsapp') || '9647700000000' });
             }
-        }
-        
-        // Firebase Listeners
-        function setupFirebaseListeners() {
-            if (!database) return;
-            
-            database.ref('products').on('value', (snapshot) => {
-                const data = snapshot.val();
-                if (data) {
-                    products = Object.values(data);
-                    nextId = Math.max(...products.map(p => p.id), 0) + 1;
-                } else {
-                    products = [];
-                }
-                refreshAllUI();
-            });
-            
-            database.ref('categories').on('value', (snapshot) => {
-                const data = snapshot.val();
-                if (data && data.length) categories = data;
-                else categories = ['تغذیة', 'ملابس', 'العاب', 'عربات'];
-                refreshAllUI();
-            });
-            
-            database.ref('sliderImages').on('value', (snapshot) => {
-                const data = snapshot.val();
-                if (data && Object.keys(data).length > 0) {
-                    sliderImages = Object.values(data);
-                } else {
-                    sliderImages = defaultSlider;
-                    saveSliderToFirebase();
-                }
-                renderSlider();
-                renderSliderAdmin();
-            });
-            
-            database.ref('shippingCities').on('value', (snapshot) => {
-                shippingCities = snapshot.val() || [{ city: "بغداد", cost: 3000 }, { city: "هەولێر", cost: 4000 }, { city: "بەسرە", cost: 5000 }];
-                renderShippingCities();
-            });
-            
-            database.ref('orders').on('value', (snapshot) => {
-                const data = snapshot.val();
-                orders = data ? Object.values(data).sort((a,b) => b.id - a.id) : [];
-                renderAdminOrders();
-            });
-            
-            database.ref('coupons').on('value', (snapshot) => {
-                coupons = snapshot.val() || [];
-                renderCouponsAdmin();
-            });
-            
-            database.ref('reviews').on('value', (snapshot) => {
-                reviews = snapshot.val() ? Object.values(snapshot.val()) : [];
-                renderProducts();
-            });
-            
-            database.ref('chatMessages').on('value', (snapshot) => {
-                const data = snapshot.val();
-                chatMessages = data ? Object.values(data) : [];
-                renderChatMessages();
-            });
-            
-            database.ref('settings/autoReply').on('value', (snapshot) => {
-                autoReply = snapshot.val() || "سوپاس بۆ پەیامەکەت! بەم زووانە پەیوەندیت پێدەکەین.";
-                const autoReplyMsg = document.getElementById('autoReplyMsg');
-                if(autoReplyMsg) autoReplyMsg.value = autoReply;
-            });
-            
-            database.ref('settings/shopName').on('value', (snapshot) => {
-                const data = snapshot.val();
-                if (data) {
-                    const shopNameDisplay = document.getElementById('shopNameDisplay');
-                    const shopNameInput = document.getElementById('shopNameInput');
-                    if(shopNameDisplay) shopNameDisplay.innerText = data;
-                    if(shopNameInput) shopNameInput.value = data;
-                }
-            });
-            
-            database.ref('settings/whatsapp').on('value', (snapshot) => {
-                const data = snapshot.val();
-                if (data) {
-                    localStorage.setItem('vip_whatsapp', data);
-                    const whatsappBtn = document.getElementById('whatsappBtn');
-                    const currentWhatsapp = document.getElementById('currentWhatsapp');
-                    const shopWhatsappInput = document.getElementById('shopWhatsappInput');
-                    if(whatsappBtn) whatsappBtn.href = `https://wa.me/${data}`;
-                    if(currentWhatsapp) currentWhatsapp.innerText = data;
-                    if(shopWhatsappInput) shopWhatsappInput.value = data;
-                }
-            });
-            
-            database.ref('settings/themeColor').on('value', (snapshot) => {
-                const data = snapshot.val();
-                if (data) {
-                    document.documentElement.style.setProperty('--primary', data);
-                    const themeColor = document.getElementById('themeColor');
-                    if(themeColor) themeColor.value = data;
-                }
-            });
         }
         
         function refreshAllUI() {
@@ -1841,14 +1487,11 @@
             showToast('✅ پاسۆرد گۆڕدرا');
         }
         
-        const adminTrigger = document.getElementById('adminTrigger');
+        let adminTrigger = document.getElementById('adminTrigger');
         if(adminTrigger) {
             adminTrigger.onclick = () => { 
                 clickCount++; 
-                if(clickCount >= 3) { 
-                    openModal('adminLoginModal'); 
-                    clickCount = 0; 
-                } 
+                if(clickCount >= 3) { openModal('adminLoginModal'); clickCount = 0; } 
                 setTimeout(() => clickCount = 0, 2000); 
             };
         }
@@ -1857,16 +1500,16 @@
             let pass = document.getElementById('adminPassword').value; 
             if(pass === adminPassword) { 
                 closeModal('adminLoginModal'); 
-                const adminPanel = document.getElementById('adminPanel');
+                let adminPanel = document.getElementById('adminPanel');
                 if(adminPanel) adminPanel.style.display = 'block'; 
                 renderAdminProducts(); 
                 renderAdminOrders(); 
                 renderSliderAdmin(); 
                 renderCouponsAdmin(); 
-                const shopNameInput = document.getElementById('shopNameInput');
-                const shopWhatsappInput = document.getElementById('shopWhatsappInput');
-                const currentWhatsapp = document.getElementById('currentWhatsapp');
-                const autoReplyMsg = document.getElementById('autoReplyMsg');
+                let shopNameInput = document.getElementById('shopNameInput');
+                let shopWhatsappInput = document.getElementById('shopWhatsappInput');
+                let currentWhatsapp = document.getElementById('currentWhatsapp');
+                let autoReplyMsg = document.getElementById('autoReplyMsg');
                 if(shopNameInput) shopNameInput.value = localStorage.getItem('vip_shop_name') || 'VIP Baby Nutrition'; 
                 if(shopWhatsappInput) shopWhatsappInput.value = localStorage.getItem('vip_whatsapp') || '9647700000000'; 
                 if(currentWhatsapp) currentWhatsapp.innerText = localStorage.getItem('vip_whatsapp') || '9647700000000'; 
@@ -1874,61 +1517,45 @@
                 renderChatMessages(); 
                 showToast('بەخێربێیت بۆ پانێڵی ئادمین'); 
             } else showToast('پاسۆرد هەڵەیە!'); 
-            const adminPasswordInput = document.getElementById('adminPassword');
-            if(adminPasswordInput) adminPasswordInput.value = ''; 
+            document.getElementById('adminPassword').value = ''; 
         }
         
         function closeAdminPanel() { 
-            const adminPanel = document.getElementById('adminPanel');
+            let adminPanel = document.getElementById('adminPanel');
             if(adminPanel) adminPanel.style.display = 'none'; 
         }
         
         function changeThemeColor(color) { 
             document.documentElement.style.setProperty('--primary', color); 
             localStorage.setItem('vip_theme_color', color); 
-            saveAllData(); 
         }
         
         function saveShopSettings() { 
             let shopName = document.getElementById('shopNameInput')?.value;
             let whatsapp = document.getElementById('shopWhatsappInput')?.value;
-            
             if(shopName && shopName.trim() !== '') { 
                 localStorage.setItem('vip_shop_name', shopName); 
-                const shopNameDisplay = document.getElementById('shopNameDisplay');
+                let shopNameDisplay = document.getElementById('shopNameDisplay');
                 if(shopNameDisplay) shopNameDisplay.innerText = shopName;
-                if(database && firebaseInitialized) database.ref('settings/shopName').set(shopName);
             } 
-            
             if(whatsapp && whatsapp.trim() !== '') { 
                 let cleanWhatsapp = whatsapp.trim().replace(/\s/g, '');
                 if(cleanWhatsapp.startsWith('0')) cleanWhatsapp = '964' + cleanWhatsapp.substring(1);
                 if(!cleanWhatsapp.startsWith('+')) cleanWhatsapp = '+' + cleanWhatsapp;
-                
                 localStorage.setItem('vip_whatsapp', cleanWhatsapp);
-                const whatsappBtn = document.getElementById('whatsappBtn');
-                const currentWhatsapp = document.getElementById('currentWhatsapp');
+                let whatsappBtn = document.getElementById('whatsappBtn');
+                let currentWhatsapp = document.getElementById('currentWhatsapp');
                 if(whatsappBtn) whatsappBtn.href = `https://wa.me/${cleanWhatsapp}`;
                 if(currentWhatsapp) currentWhatsapp.innerText = cleanWhatsapp;
-                
-                if(database && firebaseInitialized) database.ref('settings/whatsapp').set(cleanWhatsapp);
                 showToast(currentLang === 'ku' ? '✅ ژمارەی واتساپ گۆڕدرا' : '✅ WhatsApp number changed');
-            } else if(whatsapp === '') {
-                showToast(currentLang === 'ku' ? '⚠️ تکایە ژمارەی واتساپ بنووسە' : '⚠️ Please enter WhatsApp number');
-                return;
             }
-            
             saveAllData();
             showToast(currentLang === 'ku' ? '✅ زانیاری هەڵگیرا' : '✅ Settings saved');
         }
         
         function saveAutoReply() { 
             let msg = document.getElementById('autoReplyMsg')?.value; 
-            if(msg) { 
-                autoReply = msg; 
-                saveAllData(); 
-                showToast('وەڵام هەڵگیرا'); 
-            } 
+            if(msg) { autoReply = msg; saveAllData(); showToast('وەڵام هەڵگیرا'); } 
         }
         
         // Categories
@@ -1937,57 +1564,28 @@
             let container = document.getElementById('categoriesList');
             if(!container) return;
             container.innerHTML = `<button class="cat-btn ${currentCategory==='all'?'active':''}" onclick="filterByCategory('all')">✨ ${t.all}</button>`;
-            categories.forEach(cat => { 
-                container.innerHTML += `<button class="cat-btn ${currentCategory===cat?'active':''}" onclick="filterByCategory('${cat}')">${cat}</button>`; 
-            });
+            categories.forEach(cat => { container.innerHTML += `<button class="cat-btn ${currentCategory===cat?'active':''}" onclick="filterByCategory('${cat}')">${cat}</button>`; });
             let catSelect = document.getElementById('productCategory');
             if(catSelect) catSelect.innerHTML = categories.map(cat => `<option value="${cat}">${cat}</option>`).join('');
             let adminContainer = document.getElementById('categoriesAdmin');
             if(adminContainer) adminContainer.innerHTML = categories.map((cat,i) => `<div class="cart-item" style="justify-content:space-between;"><span>📁 ${cat}</span><div><button class="edit-cat-btn" onclick="editCategory(${i})"><i class="fas fa-edit"></i></button><button class="remove-item" onclick="deleteCategory(${i})"><i class="fas fa-trash-alt"></i></button></div></div>`).join('');
         }
         
-        function filterByCategory(cat) { 
-            currentCategory = cat; 
-            renderProducts(); 
-            renderCategories(); 
-        }
-        
-        function filterProducts() { 
-            renderProducts(); 
-        }
+        function filterByCategory(cat) { currentCategory = cat; renderProducts(); renderCategories(); }
+        function filterProducts() { renderProducts(); }
         
         function addCategory() { 
             let cat = document.getElementById('newCategory')?.value; 
-            if(cat && !categories.includes(cat)) { 
-                categories.push(cat); 
-                saveAllData(); 
-                renderCategories(); 
-                refreshAllUI(); 
-                const newCategoryInput = document.getElementById('newCategory');
-                if(newCategoryInput) newCategoryInput.value = ''; 
-                showToast('کەتەگۆری زیادکرا'); 
-            } 
+            if(cat && !categories.includes(cat)) { categories.push(cat); saveAllData(); renderCategories(); refreshAllUI(); document.getElementById('newCategory').value = ''; showToast('کەتەگۆری زیادکرا'); } 
         }
         
         function editCategory(i) { 
             let newName = prompt('ناوی نوێ:', categories[i]); 
-            if(newName && !categories.includes(newName)) { 
-                categories[i] = newName; 
-                saveAllData(); 
-                renderCategories(); 
-                refreshAllUI(); 
-                showToast('کەتەگۆری نوێکرایەوە'); 
-            } 
+            if(newName && !categories.includes(newName)) { categories[i] = newName; saveAllData(); renderCategories(); refreshAllUI(); showToast('کەتەگۆری نوێکرایەوە'); } 
         }
         
         function deleteCategory(i) { 
-            if(confirm('دڵنیای لە سڕینەوە؟')) { 
-                categories.splice(i,1); 
-                saveAllData(); 
-                renderCategories(); 
-                refreshAllUI(); 
-                showToast('کەتەگۆری سڕایەوە'); 
-            } 
+            if(confirm('دڵنیای لە سڕینەوە؟')) { categories.splice(i,1); saveAllData(); renderCategories(); refreshAllUI(); showToast('کەتەگۆری سڕایەوە'); } 
         }
         
         // Products
@@ -1998,10 +1596,7 @@
             filtered = filtered.filter(p => p.name.toLowerCase().includes(searchTerm));
             let grid = document.getElementById('productsGrid');
             if(!grid) return;
-            if(filtered.length === 0) { 
-                grid.innerHTML = `<div class="empty-state">${t.noProducts}</div>`; 
-                return; 
-            }
+            if(filtered.length === 0) { grid.innerHTML = `<div class="empty-state">${t.noProducts}</div>`; return; }
             grid.innerHTML = filtered.map(p => {
                 let productReviews = reviews.filter(r => r.productId === p.id);
                 let avgRating = productReviews.length ? (productReviews.reduce((s,r)=>s+r.rating,0)/productReviews.length).toFixed(1) : 0;
@@ -2017,7 +1612,7 @@
                 let galleryHtml = '';
                 if(galleryItems.length > 0) {
                     galleryHtml = `<div class="product-gallery" id="gallery-${p.id}">`;
-                    galleryItems.forEach((item, idx) => {
+                    galleryItems.forEach((item) => {
                         if(item.type === 'video') {
                             galleryHtml += `<video src="${item.url}" class="product-gallery-video" onclick="playVideo('${item.url}')" style="cursor:pointer;"></video>`;
                         } else {
@@ -2029,39 +1624,15 @@
                     galleryHtml = `<div class="product-gallery"><img src="https://i.postimg.cc/RWNMnJDG/image.jpg" class="product-gallery-img"></div><div class="gallery-nav"></div>`;
                 }
                 
-                // Description with click to expand - escape special characters
                 let safeDesc = (p.desc || '').replace(/`/g, '\\`').replace(/\n/g, '\\n');
                 let descHtml = '';
                 if(p.desc && p.desc.trim() !== '') {
                     let shortDesc = p.desc.substring(0, 80);
                     let hasMore = p.desc.length > 80;
-                    descHtml = `<div class="product-desc" onclick="showFullDescription(\`${safeDesc}\`, \`${p.name.replace(/`/g, '\\`')}\`)">
-                        <i class="fas fa-info-circle"></i> ${shortDesc}${hasMore ? '...' : ''}
-                        <span><i class="fas fa-expand-alt"></i> کلیک بکە بۆ گەورەکردن</span>
-                    </div>`;
+                    descHtml = `<div class="product-desc" onclick="showFullDescription(\`${safeDesc}\`, \`${p.name.replace(/`/g, '\\`')}\`)"><i class="fas fa-info-circle"></i> ${shortDesc}${hasMore ? '...' : ''}<span><i class="fas fa-expand-alt"></i> کلیک بکە بۆ گەورەکردن</span></div>`;
                 }
                 
-                return `<div class="product-card">
-                            <div class="status-badge ${statusClass}">${statusText}</div>
-                            <button class="wish-btn ${wishlist.some(w=>w.id===p.id)?'active':''}" onclick="toggleWishlist(${p.id})"><i class="fas fa-heart"></i></button>
-                            ${galleryHtml}
-                            <div class="product-name">${p.name}</div>
-                            ${descHtml}
-                            <div class="product-price">${p.price.toLocaleString()} IQD</div>
-                            <div style="font-size:12px; margin:4px 0;"><i class="fas fa-star" style="color:#FFD700;"></i> ${avgRating} (${productReviews.length})</div>
-                            <div class="quantity-control">
-                                <button class="quantity-btn" onclick="changeQuantity(${p.id},-1)">-</button>
-                                <span id="qty-${p.id}">1</span>
-                                <button class="quantity-btn" onclick="changeQuantity(${p.id},1)">+</button>
-                                <span>${t.rem} ${p.stock}</span>
-                            </div>
-                            <button class="add-to-cart" onclick="addToCart(${p.id})" ${p.status==='outstock'?'disabled':''}>
-                                <i class="fas fa-shopping-cart"></i> ${t.addToCart}
-                            </button>
-                            <button class="add-to-cart" style="background:var(--accent);margin-top:5px;" onclick="openReviewModal(${p.id})">
-                                <i class="fas fa-star"></i> ${t.reviewBtn}
-                            </button>
-                        </div>`;
+                return `<div class="product-card"><div class="status-badge ${statusClass}">${statusText}</div><button class="wish-btn ${wishlist.some(w=>w.id===p.id)?'active':''}" onclick="toggleWishlist(${p.id})"><i class="fas fa-heart"></i></button>${galleryHtml}<div class="product-name">${p.name}</div>${descHtml}<div class="product-price">${p.price.toLocaleString()} IQD</div><div style="font-size:12px; margin:4px 0;"><i class="fas fa-star" style="color:#FFD700;"></i> ${avgRating} (${productReviews.length})</div><div class="quantity-control"><button class="quantity-btn" onclick="changeQuantity(${p.id},-1)">-</button><span id="qty-${p.id}">1</span><button class="quantity-btn" onclick="changeQuantity(${p.id},1)">+</button><span>${t.rem} ${p.stock}</span></div><button class="add-to-cart" onclick="addToCart(${p.id})" ${p.status==='outstock'?'disabled':''}><i class="fas fa-shopping-cart"></i> ${t.addToCart}</button><button class="add-to-cart" style="background:var(--accent);margin-top:5px;" onclick="openReviewModal(${p.id})"><i class="fas fa-star"></i> ${t.reviewBtn}</button></div>`;
             }).join('');
             
             products.forEach(p => {
@@ -2099,38 +1670,21 @@
         function addToCart(id) {
             let product = products.find(p => p.id === id);
             let qty = quantities[id] || 1;
-            if(product.stock < qty) { 
-                showToast('ژمارەکە زیاترە لە بەردەست!'); 
-                return; 
-            }
+            if(product.stock < qty) { showToast('ژمارەکە زیاترە لە بەردەست!'); return; }
             cart.push({...product, cartQty: qty});
             updateCartUI(); 
             showToast(`${product.name} زیادکرا`);
         }
         
-        function removeFromCart(index) { 
-            cart.splice(index,1); 
-            updateCartUI(); 
-        }
+        function removeFromCart(index) { cart.splice(index,1); updateCartUI(); }
         
         function updateCartUI() {
-            const cartCount = document.getElementById('cartCount');
+            let cartCount = document.getElementById('cartCount');
             if(cartCount) cartCount.innerText = cart.length;
             let cartList = document.getElementById('cartItemsList');
             if(!cartList) return;
-            if(cart.length === 0) { 
-                cartList.innerHTML = `<div class="empty-state">${translations[currentLang].emptyCart}</div>`; 
-                updateCartTotal(); 
-                return; 
-            }
-            cartList.innerHTML = cart.map((item,i) => `<div class="cart-item">
-                <img src="${item.image1 || item.image2 || item.image3 || 'https://i.postimg.cc/RWNMnJDG/image.jpg'}" class="cart-item-img">
-                <div style="flex:1;">
-                    <div class="cart-item-name">${item.name}</div>
-                    <div class="cart-item-price">${item.cartQty} x ${item.price.toLocaleString()} = ${(item.price*item.cartQty).toLocaleString()} IQD</div>
-                </div>
-                <button class="remove-item" onclick="removeFromCart(${i})"><i class="fas fa-trash-alt"></i></button>
-            </div>`).join('');
+            if(cart.length === 0) { cartList.innerHTML = `<div class="empty-state">${translations[currentLang].emptyCart}</div>`; updateCartTotal(); return; }
+            cartList.innerHTML = cart.map((item,i) => `<div class="cart-item"><img src="${item.image1 || item.image2 || item.image3 || 'https://i.postimg.cc/RWNMnJDG/image.jpg'}" class="cart-item-img"><div style="flex:1;"><div class="cart-item-name">${item.name}</div><div class="cart-item-price">${item.cartQty} x ${item.price.toLocaleString()} = ${(item.price*item.cartQty).toLocaleString()} IQD</div></div><button class="remove-item" onclick="removeFromCart(${i})"><i class="fas fa-trash-alt"></i></button></div>`).join('');
             updateCartTotal();
         }
         
@@ -2140,14 +1694,11 @@
             let shipping = shippingCities.find(c => c.city === city);
             let shippingCost = shipping ? shipping.cost : 0;
             let discount = 0;
-            if(appliedCoupon) { 
-                let coupon = coupons.find(c => c.code === appliedCoupon); 
-                if(coupon && new Date(coupon.expiry) > new Date()) discount = subtotal * (coupon.discount / 100); 
-            }
+            if(appliedCoupon) { let coupon = coupons.find(c => c.code === appliedCoupon); if(coupon && new Date(coupon.expiry) > new Date()) discount = subtotal * (coupon.discount / 100); }
             let total = subtotal + shippingCost - discount;
-            const shippingCostSpan = document.getElementById('shippingCost');
-            const discountAmountSpan = document.getElementById('discountAmount');
-            const cartTotalSpan = document.getElementById('cartTotal');
+            let shippingCostSpan = document.getElementById('shippingCost');
+            let discountAmountSpan = document.getElementById('discountAmount');
+            let cartTotalSpan = document.getElementById('cartTotal');
             if(shippingCostSpan) shippingCostSpan.innerText = shippingCost.toLocaleString() + ' IQD';
             if(discountAmountSpan) discountAmountSpan.innerText = discount.toLocaleString() + ' IQD';
             if(cartTotalSpan) cartTotalSpan.innerText = total.toLocaleString() + ' IQD';
@@ -2156,78 +1707,36 @@
         function applyCoupon() {
             let code = document.getElementById('couponCode')?.value;
             let coupon = coupons.find(c => c.code === code);
-            if(coupon && new Date(coupon.expiry) > new Date()) { 
-                appliedCoupon = code; 
-                updateCartTotal(); 
-                showToast(`کۆدێن ${code} جێبەجێکرا`); 
-            }
+            if(coupon && new Date(coupon.expiry) > new Date()) { appliedCoupon = code; updateCartTotal(); showToast(`کۆدێن ${code} جێبەجێکرا`); }
             else showToast('کۆدێن نادروستە یان بەسەرچووە');
         }
         
         function goToCheckout() {
-            if(cart.length === 0) { 
-                showToast(translations[currentLang].emptyCart); 
-                return; 
-            }
-            if(!document.getElementById('shippingCity')?.value) { 
-                showToast('تکایە شار هەڵبژێرە'); 
-                return; 
-            }
+            if(cart.length === 0) { showToast(translations[currentLang].emptyCart); return; }
+            if(!document.getElementById('shippingCity')?.value) { showToast('تکایە شار هەڵبژێرە'); return; }
             closeModal('cartModal');
             let total = document.getElementById('cartTotal')?.innerText || '0 IQD';
-            const checkoutSummary = document.getElementById('checkoutSummary');
+            let checkoutSummary = document.getElementById('checkoutSummary');
             if(checkoutSummary) checkoutSummary.innerHTML = `<div style="background:var(--border);padding:12px;border-radius:12px;"><strong>کۆ: ${total}</strong></div>`;
             openModal('checkoutModal');
         }
         
         function submitOrder() {
-            let name = document.getElementById('customerName')?.value, 
-                phone = document.getElementById('customerPhone')?.value, 
-                address = document.getElementById('customerAddress')?.value, 
-                city = document.getElementById('shippingCity')?.value;
-            if(!name || !phone || !address) { 
-                showToast('تکایە هەموو زانیارییەکان پڕ بکەرەوە'); 
-                return; 
-            }
+            let name = document.getElementById('customerName')?.value, phone = document.getElementById('customerPhone')?.value, address = document.getElementById('customerAddress')?.value, city = document.getElementById('shippingCity')?.value;
+            if(!name || !phone || !address) { showToast('تکایە هەموو زانیارییەکان پڕ بکەرەوە'); return; }
             let subtotal = cart.reduce((s,i) => s + (i.price * i.cartQty), 0);
             let shipping = shippingCities.find(c => c.city === city);
             let shippingCost = shipping ? shipping.cost : 0;
             let discount = 0;
-            if(appliedCoupon) { 
-                let coupon = coupons.find(c => c.code === appliedCoupon); 
-                if(coupon && new Date(coupon.expiry) > new Date()) discount = subtotal * (coupon.discount / 100); 
-            }
+            if(appliedCoupon) { let coupon = coupons.find(c => c.code === appliedCoupon); if(coupon && new Date(coupon.expiry) > new Date()) discount = subtotal * (coupon.discount / 100); }
             let total = subtotal + shippingCost - discount;
-            let order = { 
-                id: Date.now(), 
-                date: new Date().toLocaleString(), 
-                customer: name, 
-                phone, 
-                address, 
-                city, 
-                items: cart.map(i=>({...i})), 
-                subtotal, 
-                shippingCost, 
-                discount, 
-                total, 
-                trackingCode: 'TRK'+Date.now() 
-            };
-            orders.unshift(order); 
-            saveAllData();
+            let order = { id: Date.now(), date: new Date().toLocaleString(), customer: name, phone, address, city, items: cart.map(i=>({...i})), subtotal, shippingCost, discount, total, trackingCode: 'TRK'+Date.now() };
+            orders.unshift(order); saveAllData();
             let whatsapp = localStorage.getItem('vip_whatsapp') || '9647700000000';
             let msg = `📦 ئۆردەر نوێ\n👤 ${name}\n📞 ${phone}\n📍 ${address}\n🏙️ ${city}\n💰 ${total.toLocaleString()} IQD\n🔍 ${order.trackingCode}\n\n🛍️ بەرهەمەکان:\n${cart.map(i => `- ${i.name} x${i.cartQty} = ${(i.price*i.cartQty).toLocaleString()} IQD`).join('\n')}`;
             window.open(`https://wa.me/${whatsapp}?text=${encodeURIComponent(msg)}`, '_blank');
-            cart = []; 
-            quantities = {}; 
-            appliedCoupon = null; 
-            updateCartUI(); 
-            closeModal('checkoutModal');
-            const customerName = document.getElementById('customerName');
-            const customerPhone = document.getElementById('customerPhone');
-            const customerAddress = document.getElementById('customerAddress');
-            if(customerName) customerName.value = ''; 
-            if(customerPhone) customerPhone.value = ''; 
-            if(customerAddress) customerAddress.value = '';
+            cart = []; quantities = {}; appliedCoupon = null; updateCartUI(); closeModal('checkoutModal');
+            document.getElementById('customerName').value = ''; document.getElementById('customerPhone').value = ''; document.getElementById('customerAddress').value = '';
             showToast('داواکاری ڕەوانە کرا ✅');
             renderAdminOrders();
         }
@@ -2244,61 +1753,26 @@
         function toggleWishlist(id) {
             let product = products.find(p => p.id === id);
             let exists = wishlist.some(w => w.id === id);
-            if(exists) { 
-                wishlist = wishlist.filter(w => w.id !== id); 
-                showToast('لە دڵخوازەکان سڕایەوە'); 
-            }
-            else { 
-                wishlist.push(product); 
-                showToast('زیادکرا بۆ دڵخوازەکان'); 
-            }
+            if(exists) { wishlist = wishlist.filter(w => w.id !== id); showToast('لە دڵخوازەکان سڕایەوە'); }
+            else { wishlist.push(product); showToast('زیادکرا بۆ دڵخوازەکان'); }
             saveAllData();
-            renderProducts(); 
-            renderWishlist();
+            renderProducts(); renderWishlist();
         }
         
         function renderWishlist() {
             const t = translations[currentLang];
             let container = document.getElementById('wishlistItems');
             if(!container) return;
-            if(wishlist.length === 0) { 
-                container.innerHTML = `<div class="empty-state">${t.emptyWishlist}</div>`; 
-                return; 
-            }
-            container.innerHTML = wishlist.map(item => `<div class="cart-item">
-                <img src="${item.image1 || item.image2 || item.image3 || 'https://i.postimg.cc/RWNMnJDG/image.jpg'}" class="cart-item-img">
-                <div style="flex:1;">
-                    <div class="cart-item-name">${item.name}</div>
-                    <div class="cart-item-price">${item.price.toLocaleString()} IQD</div>
-                </div>
-                <button class="remove-item" onclick="addToCart(${item.id})"><i class="fas fa-shopping-cart"></i></button>
-            </div>`).join('');
+            if(wishlist.length === 0) { container.innerHTML = `<div class="empty-state">${t.emptyWishlist}</div>`; return; }
+            container.innerHTML = wishlist.map(item => `<div class="cart-item"><img src="${item.image1 || item.image2 || item.image3 || 'https://i.postimg.cc/RWNMnJDG/image.jpg'}" class="cart-item-img"><div style="flex:1;"><div class="cart-item-name">${item.name}</div><div class="cart-item-price">${item.price.toLocaleString()} IQD</div></div><button class="remove-item" onclick="addToCart(${item.id})"><i class="fas fa-shopping-cart"></i></button></div>`).join('');
         }
         
-        // Reviews
-        function openReviewModal(id) { 
-            currentProductForReview = id; 
-            openModal('reviewModal'); 
-        }
+        function openReviewModal(id) { currentProductForReview = id; openModal('reviewModal'); }
         
         function submitReview() {
             let rating = parseInt(document.getElementById('reviewRating')?.value || 5);
             let comment = document.getElementById('reviewComment')?.value;
-            if(comment) { 
-                reviews.push({ 
-                    id: Date.now(), 
-                    productId: currentProductForReview, 
-                    rating, 
-                    comment, 
-                    date: new Date().toLocaleString() 
-                }); 
-                saveAllData(); 
-                closeModal('reviewModal'); 
-                const reviewComment = document.getElementById('reviewComment');
-                if(reviewComment) reviewComment.value = ''; 
-                renderProducts(); 
-                showToast('پێداچوونەوەکەت زیادکرا ✅'); 
-            }
+            if(comment) { reviews.push({ id: Date.now(), productId: currentProductForReview, rating, comment, date: new Date().toLocaleString() }); saveAllData(); closeModal('reviewModal'); document.getElementById('reviewComment').value = ''; renderProducts(); showToast('پێداچوونەوەکەت زیادکرا ✅'); }
             else showToast('تکایە پێداچوونەوە بنووسە');
         }
         
@@ -2307,137 +1781,57 @@
             let slider = document.getElementById('slider');
             let dots = document.getElementById('sliderDots');
             if(!slider || !dots) return;
-            if(sliderImages.length === 0) { 
-                slider.innerHTML = `<div class="slide"><img src="https://i.postimg.cc/RWNMnJDG/image.jpg"></div>`; 
-                dots.innerHTML = ''; 
-                return; 
-            }
-            slider.innerHTML = sliderImages.map(item => {
-                if (item.type === 'video') {
-                    return `<div class="slide"><video src="${item.url}" style="width:100%; height:100%; object-fit:cover;" muted loop></video></div>`;
-                } else {
-                    return `<div class="slide"><img src="${item.url}"></div>`;
-                }
-            }).join('');
+            if(sliderImages.length === 0) { slider.innerHTML = `<div class="slide"><img src="https://i.postimg.cc/RWNMnJDG/image.jpg"></div>`; dots.innerHTML = ''; return; }
+            slider.innerHTML = sliderImages.map(item => item.type === 'video' ? `<div class="slide"><video src="${item.url}" style="width:100%; height:100%; object-fit:cover;" muted loop></video></div>` : `<div class="slide"><img src="${item.url}"></div>`).join('');
             dots.innerHTML = sliderImages.map((_,i) => `<span class="dot ${i===currentSlide?'active':''}" onclick="goToSlide(${i})"></span>`).join('');
             slider.style.transform = `translateX(-${currentSlide*100}%)`;
         }
         
-        function changeSlide(d) { 
-            if(sliderImages.length===0) return; 
-            currentSlide = (currentSlide + d + sliderImages.length) % sliderImages.length; 
-            renderSlider(); 
-        }
-        
-        function goToSlide(i) { 
-            currentSlide = i; 
-            renderSlider(); 
-        }
+        function changeSlide(d) { if(sliderImages.length===0) return; currentSlide = (currentSlide + d + sliderImages.length) % sliderImages.length; renderSlider(); }
+        function goToSlide(i) { currentSlide = i; renderSlider(); }
         
         function addSliderImage() { 
             let type = document.getElementById('sliderType')?.value || 'image';
             let url = document.getElementById('sliderImage')?.value; 
-            if(url) { 
-                sliderImages.push({type: type, url: url}); 
-                saveAllData(); 
-                renderSlider(); 
-                renderSliderAdmin(); 
-                const sliderImage = document.getElementById('sliderImage');
-                if(sliderImage) sliderImage.value = ''; 
-                showToast(type === 'video' ? 'ڤیدیۆ زیادکرا' : 'وێنە زیادکرا'); 
-            } 
+            if(url) { sliderImages.push({type: type, url: url}); saveAllData(); renderSlider(); renderSliderAdmin(); document.getElementById('sliderImage').value = ''; showToast(type === 'video' ? 'ڤیدیۆ زیادکرا' : 'وێنە زیادکرا'); } 
         }
         
         function renderSliderAdmin() { 
             let container = document.getElementById('sliderList'); 
             if(!container) return;
-            container.innerHTML = sliderImages.map((item,i) => `<div class="cart-item" style="justify-content:space-between;">
-                <div style="display:flex; align-items:center; gap:8px;">
-                    ${item.type === 'video' ? '🎬' : '🖼️'} 
-                    <span style="font-size:12px; overflow:hidden; text-overflow:ellipsis; max-width:150px;">${item.url.substring(0,30)}...</span>
-                </div>
-                <button class="remove-item" onclick="deleteSliderImage(${i})"><i class="fas fa-trash-alt"></i></button>
-            </div>`).join(''); 
+            container.innerHTML = sliderImages.map((item,i) => `<div class="cart-item" style="justify-content:space-between;"><div style="display:flex; align-items:center; gap:8px;">${item.type === 'video' ? '🎬' : '🖼️'} <span style="font-size:12px; overflow:hidden; text-overflow:ellipsis; max-width:150px;">${item.url.substring(0,30)}...</span></div><button class="remove-item" onclick="deleteSliderImage(${i})"><i class="fas fa-trash-alt"></i></button></div>`).join(''); 
         }
         
-        function deleteSliderImage(i) { 
-            sliderImages.splice(i,1); 
-            saveAllData(); 
-            renderSlider(); 
-            renderSliderAdmin(); 
-            showToast('سڕایەوە'); 
-        }
+        function deleteSliderImage(i) { sliderImages.splice(i,1); saveAllData(); renderSlider(); renderSliderAdmin(); showToast('سڕایەوە'); }
         
         // Shipping
         function renderShippingCities() {
             let select = document.getElementById('shippingCity');
-            if(select) { 
-                select.innerHTML = '<option value="">هەڵبژاردنی شار</option>'; 
-                shippingCities.forEach(c => { 
-                    select.innerHTML += `<option value="${c.city}">${c.city} - ${c.cost.toLocaleString()} IQD</option>`; 
-                }); 
-            }
+            if(select) { select.innerHTML = '<option value="">هەڵبژاردنی شار</option>'; shippingCities.forEach(c => { select.innerHTML += `<option value="${c.city}">${c.city} - ${c.cost.toLocaleString()} IQD</option>`; }); }
             let adminList = document.getElementById('shippingCitiesAdmin');
-            if(adminList) adminList.innerHTML = shippingCities.map((c,i) => `<div class="cart-item" style="justify-content:space-between;">
-                <span>${c.city}: ${c.cost.toLocaleString()} IQD</span>
-                <button class="remove-item" onclick="deleteShippingCity(${i})"><i class="fas fa-trash-alt"></i></button>
-            </div>`).join('');
+            if(adminList) adminList.innerHTML = shippingCities.map((c,i) => `<div class="cart-item" style="justify-content:space-between;"><span>${c.city}: ${c.cost.toLocaleString()} IQD</span><button class="remove-item" onclick="deleteShippingCity(${i})"><i class="fas fa-trash-alt"></i></button></div>`).join('');
         }
         
         function addShippingCity() { 
-            let city = document.getElementById('shippingCityName')?.value, 
-                cost = parseInt(document.getElementById('shippingCostValue')?.value || 0); 
-            if(city && cost) { 
-                shippingCities.push({city,cost}); 
-                saveAllData(); 
-                renderShippingCities(); 
-                const shippingCityName = document.getElementById('shippingCityName');
-                const shippingCostValue = document.getElementById('shippingCostValue');
-                if(shippingCityName) shippingCityName.value = ''; 
-                if(shippingCostValue) shippingCostValue.value = ''; 
-                showToast('شار زیادکرا'); 
-            } 
+            let city = document.getElementById('shippingCityName')?.value, cost = parseInt(document.getElementById('shippingCostValue')?.value || 0); 
+            if(city && cost) { shippingCities.push({city,cost}); saveAllData(); renderShippingCities(); document.getElementById('shippingCityName').value = ''; document.getElementById('shippingCostValue').value = ''; showToast('شار زیادکرا'); } 
         }
         
-        function deleteShippingCity(i) { 
-            shippingCities.splice(i,1); 
-            saveAllData(); 
-            renderShippingCities(); 
-            showToast('شار سڕایەوە'); 
-        }
+        function deleteShippingCity(i) { shippingCities.splice(i,1); saveAllData(); renderShippingCities(); showToast('شار سڕایەوە'); }
         
         // Coupons
         function addCoupon() { 
-            let code = document.getElementById('couponName')?.value, 
-                discount = parseInt(document.getElementById('couponPercent')?.value || 0), 
-                expiry = document.getElementById('couponDate')?.value; 
-            if(code && discount) { 
-                coupons.push({code, discount, expiry}); 
-                saveAllData(); 
-                renderCouponsAdmin(); 
-                const couponName = document.getElementById('couponName');
-                const couponPercent = document.getElementById('couponPercent');
-                if(couponName) couponName.value = ''; 
-                if(couponPercent) couponPercent.value = ''; 
-                showToast('کۆدێن زیادکرا'); 
-            } 
+            let code = document.getElementById('couponName')?.value, discount = parseInt(document.getElementById('couponPercent')?.value || 0), expiry = document.getElementById('couponDate')?.value; 
+            if(code && discount) { coupons.push({code, discount, expiry}); saveAllData(); renderCouponsAdmin(); document.getElementById('couponName').value = ''; document.getElementById('couponPercent').value = ''; showToast('کۆدێن زیادکرا'); } 
         }
         
         function renderCouponsAdmin() { 
             let container = document.getElementById('couponsList'); 
             if(!container) return;
-            container.innerHTML = coupons.map((c,i) => `<div class="cart-item" style="justify-content:space-between;">
-                <span>🎫 ${c.code} - ${c.discount}% (${c.expiry})</span>
-                <button class="remove-item" onclick="deleteCoupon(${i})"><i class="fas fa-trash-alt"></i></button>
-            </div>`).join(''); 
+            container.innerHTML = coupons.map((c,i) => `<div class="cart-item" style="justify-content:space-between;"><span>🎫 ${c.code} - ${c.discount}% (${c.expiry})</span><button class="remove-item" onclick="deleteCoupon(${i})"><i class="fas fa-trash-alt"></i></button></div>`).join(''); 
         }
         
-        function deleteCoupon(i) { 
-            coupons.splice(i,1); 
-            saveAllData(); 
-            renderCouponsAdmin(); 
-            showToast('کۆدێن سڕایەوە'); 
-        }
+        function deleteCoupon(i) { coupons.splice(i,1); saveAllData(); renderCouponsAdmin(); showToast('کۆدێن سڕایەوە'); }
         
         // Admin Products
         function updateAdminCategoriesSelect() {
@@ -2452,112 +1846,52 @@
             let stock = parseInt(document.getElementById('productStock')?.value || 0);
             let category = document.getElementById('productCategory')?.value;
             let status = document.getElementById('productStatus')?.value;
-            
             let image1 = document.getElementById('productImage1')?.value || '';
             let image2 = document.getElementById('productImage2')?.value || '';
             let image3 = document.getElementById('productImage3')?.value || '';
             let video = document.getElementById('productVideo')?.value || '';
             
-            if(!name || !price || isNaN(price)) {
-                showToast(currentLang === 'ku' ? 'تکایە ناو و نرخ بنووسە' : 'Please enter name and price');
-                return;
-            }
-            
+            if(!name || !price || isNaN(price)) { showToast(currentLang === 'ku' ? 'تکایە ناو و نرخ بنووسە' : 'Please enter name and price'); return; }
             if(!category && categories.length > 0) category = categories[0];
             
-            let newProduct = {
-                id: nextId++,
-                name: name,
-                desc: desc || '',
-                price: price,
-                stock: stock,
-                status: status || 'instock',
-                category: category || categories[0] || 'تغذیة',
-                image1: image1,
-                image2: image2,
-                image3: image3,
-                video: video
-            };
-            
+            let newProduct = { id: nextId++, name: name, desc: desc || '', price: price, stock: stock, status: status || 'instock', category: category || categories[0] || 'تغذیة', image1: image1, image2: image2, image3: image3, video: video };
             products.push(newProduct);
             saveAllData();
             refreshAllUI();
             
-            const productName = document.getElementById('productName');
-            const productDesc = document.getElementById('productDesc');
-            const productPrice = document.getElementById('productPrice');
-            const productStock = document.getElementById('productStock');
-            const productImage1 = document.getElementById('productImage1');
-            const productImage2 = document.getElementById('productImage2');
-            const productImage3 = document.getElementById('productImage3');
-            const productVideo = document.getElementById('productVideo');
-            if(productName) productName.value = '';
-            if(productDesc) productDesc.value = '';
-            if(productPrice) productPrice.value = '';
-            if(productStock) productStock.value = '';
-            if(productImage1) productImage1.value = '';
-            if(productImage2) productImage2.value = '';
-            if(productImage3) productImage3.value = '';
-            if(productVideo) productVideo.value = '';
+            document.getElementById('productName').value = '';
+            document.getElementById('productDesc').value = '';
+            document.getElementById('productPrice').value = '';
+            document.getElementById('productStock').value = '';
+            document.getElementById('productImage1').value = '';
+            document.getElementById('productImage2').value = '';
+            document.getElementById('productImage3').value = '';
+            document.getElementById('productVideo').value = '';
             renderAdminProducts();
-            
-            let resultDiv = document.getElementById('addProductResult');
-            if(resultDiv) { 
-                resultDiv.innerHTML = `✅ ${currentLang === 'ku' ? 'بەرهەم زیادکرا!' : 'Product added!'}`; 
-                setTimeout(() => { resultDiv.innerHTML = ''; }, 3000); 
-            }
             showToast(currentLang === 'ku' ? '✅ بەرهەم زیادکرا!' : '✅ Product added!');
         }
         
         function renderAdminProducts() {
             let container = document.getElementById('adminProducts');
             if(!container) return;
-            if(products.length === 0) { 
-                container.innerHTML = '<div class="empty-state">هیچ بەرهەمێک نییە</div>'; 
-                return; 
-            }
-            container.innerHTML = products.map(p => `
-                <div class="product-admin-item">
-                    <div style="flex:1;">
-                        <div><strong>${p.name}</strong></div>
-                        <div style="font-size:12px;">${p.price.toLocaleString()} IQD | ستۆک: ${p.stock} | پۆل: ${p.category}</div>
-                        <div style="font-size:11px; color:var(--text-light);">${p.desc ? p.desc.substring(0,50) : 'باسکردن نییە'}</div>
-                    </div>
-                    <div>
-                        <button class="edit-product-btn" onclick="editProductFromAdmin(${p.id})"><i class="fas fa-edit"></i> دەستکاری</button>
-                        <button class="delete-product-btn" onclick="deleteProductFromAdmin(${p.id})"><i class="fas fa-trash"></i> سڕینەوە</button>
-                    </div>
-                </div>
-            `).join('');
+            if(products.length === 0) { container.innerHTML = '<div class="empty-state">هیچ بەرهەمێک نییە</div>'; return; }
+            container.innerHTML = products.map(p => `<div class="product-admin-item"><div style="flex:1;"><div><strong>${p.name}</strong></div><div style="font-size:12px;">${p.price.toLocaleString()} IQD | ستۆک: ${p.stock} | پۆل: ${p.category}</div><div style="font-size:11px; color:var(--text-light);">${p.desc ? p.desc.substring(0,50) : 'باسکردن نییە'}</div></div><div><button class="edit-product-btn" onclick="editProductFromAdmin(${p.id})"><i class="fas fa-edit"></i> دەستکاری</button><button class="delete-product-btn" onclick="deleteProductFromAdmin(${p.id})"><i class="fas fa-trash"></i> سڕینەوە</button></div></div>`).join('');
         }
         
         function editProductFromAdmin(id) {
             let product = products.find(p => p.id === id);
             if(!product) return;
-            let newName = prompt('ناوی نوێ:', product.name); 
-            if(newName && newName.trim()) product.name = newName;
-            let newDesc = prompt('باسکردنی نوێ:', product.desc || ''); 
-            if(newDesc !== null) product.desc = newDesc;
-            let newPrice = prompt('نرخی نوێ (IQD):', product.price); 
-            if(newPrice && !isNaN(newPrice)) product.price = parseInt(newPrice);
-            let newStock = prompt('ستۆکی نوێ:', product.stock); 
-            if(newStock !== null && !isNaN(newStock)) product.stock = parseInt(newStock);
-            let newCategory = prompt('پۆلی نوێ:', product.category); 
-            if(newCategory && categories.includes(newCategory)) product.category = newCategory;
-            let newStatus = prompt('دۆخ (instock/outstock):', product.status); 
-            if(newStatus === 'instock' || newStatus === 'outstock') product.status = newStatus;
-            let newImage1 = prompt('لینکی وێنەی 1:', product.image1); 
-            if(newImage1 !== null) product.image1 = newImage1;
-            let newImage2 = prompt('لینکی وێنەی 2:', product.image2); 
-            if(newImage2 !== null) product.image2 = newImage2;
-            let newImage3 = prompt('لینکی وێنەی 3:', product.image3); 
-            if(newImage3 !== null) product.image3 = newImage3;
-            let newVideo = prompt('لینکی ڤیدیۆ:', product.video); 
-            if(newVideo !== null) product.video = newVideo;
-            saveAllData(); 
-            refreshAllUI(); 
-            renderAdminProducts(); 
-            showToast('✏️ بەرهەم نوێکرایەوە');
+            let newName = prompt('ناوی نوێ:', product.name); if(newName && newName.trim()) product.name = newName;
+            let newDesc = prompt('باسکردنی نوێ:', product.desc || ''); if(newDesc !== null) product.desc = newDesc;
+            let newPrice = prompt('نرخی نوێ (IQD):', product.price); if(newPrice && !isNaN(newPrice)) product.price = parseInt(newPrice);
+            let newStock = prompt('ستۆکی نوێ:', product.stock); if(newStock !== null && !isNaN(newStock)) product.stock = parseInt(newStock);
+            let newCategory = prompt('پۆلی نوێ:', product.category); if(newCategory && categories.includes(newCategory)) product.category = newCategory;
+            let newStatus = prompt('دۆخ (instock/outstock):', product.status); if(newStatus === 'instock' || newStatus === 'outstock') product.status = newStatus;
+            let newImage1 = prompt('لینکی وێنەی 1:', product.image1); if(newImage1 !== null) product.image1 = newImage1;
+            let newImage2 = prompt('لینکی وێنەی 2:', product.image2); if(newImage2 !== null) product.image2 = newImage2;
+            let newImage3 = prompt('لینکی وێنەی 3:', product.image3); if(newImage3 !== null) product.image3 = newImage3;
+            let newVideo = prompt('لینکی ڤیدیۆ:', product.video); if(newVideo !== null) product.video = newVideo;
+            saveAllData(); refreshAllUI(); renderAdminProducts(); showToast('✏️ بەرهەم نوێکرایەوە');
         }
         
         function deleteProductFromAdmin(id) {
@@ -2565,10 +1899,7 @@
                 products = products.filter(p => p.id !== id);
                 cart = cart.filter(item => item.id !== id);
                 wishlist = wishlist.filter(item => item.id !== id);
-                saveAllData(); 
-                refreshAllUI(); 
-                renderAdminProducts(); 
-                showToast('🗑️ بەرهەم سڕایەوە');
+                saveAllData(); refreshAllUI(); renderAdminProducts(); showToast('🗑️ بەرهەم سڕایەوە');
             }
         }
         
@@ -2576,46 +1907,8 @@
         function renderAdminOrders() {
             let container = document.getElementById('adminOrders');
             if(!container) return;
-            if(orders.length === 0) { 
-                container.innerHTML = '<div class="empty-state">📭 هیچ داواکارییەک نییە</div>'; 
-                return; 
-            }
-            
-            container.innerHTML = orders.map(order => {
-                let itemsList = '';
-                if(order.items && order.items.length > 0) {
-                    itemsList = '<div style="margin-top:10px; padding:10px; background:var(--bg); border-radius:12px;">';
-                    itemsList += '<strong>🛍️ بەرهەمەکان:</strong><br>';
-                    order.items.forEach((item, idx) => {
-                        itemsList += `<div style="display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px solid var(--border);">
-                            <span>${idx+1}. ${item.name}</span>
-                            <span>${item.cartQty} x ${item.price.toLocaleString()} IQD</span>
-                        </div>`;
-                    });
-                    itemsList += `<div style="margin-top:8px; text-align:left; font-weight:bold;">کۆ: ${order.subtotal.toLocaleString()} IQD</div></div>`;
-                }
-                
-                return `<div class="admin-section" style="margin-bottom:15px; padding:15px; border-right: 4px solid var(--primary);">
-                    <div style="display:flex; justify-content:space-between; flex-wrap:wrap;">
-                        <div><strong>📋 #${order.id}</strong></div>
-                        <div>📅 ${order.date}</div>
-                    </div>
-                    <div style="margin-top:8px; background:var(--primary); color:white; padding:8px; border-radius:10px;">
-                        <div>👤 <strong>${order.customer}</strong> | 📞 ${order.phone}</div>
-                        <div>📍 ${order.address} | 🏙️ ${order.city}</div>
-                    </div>
-                    ${itemsList}
-                    <div style="margin-top:10px; padding:10px; background:var(--success); color:white; border-radius:12px; display:flex; justify-content:space-between;">
-                        <span>💰 کۆی گشتی:</span><span><strong>${order.total.toLocaleString()} IQD</strong></span>
-                    </div>
-                    <div style="margin-top:10px; display:flex; justify-content:space-between; align-items:center;">
-                        <div>🔍 <span style="font-family:monospace; background:var(--bg); padding:4px 8px; border-radius:8px;">${order.trackingCode}</span></div>
-                        <button class="remove-item" onclick="deleteOrder(${order.id})" style="background:var(--danger); color:white; padding:6px 15px; border-radius:25px; border:none; cursor:pointer;">
-                            <i class="fas fa-trash-alt"></i> سڕینەوە
-                        </button>
-                    </div>
-                </div>`;
-            }).join('');
+            if(orders.length === 0) { container.innerHTML = '<div class="empty-state">📭 هیچ داواکارییەک نییە</div>'; return; }
+            container.innerHTML = orders.map(order => `<div class="admin-section" style="margin-bottom:15px; padding:15px; border-right: 4px solid var(--primary);"><div style="display:flex; justify-content:space-between;"><div><strong>📋 #${order.id}</strong></div><div>📅 ${order.date}</div></div><div style="margin-top:8px; background:var(--primary); color:white; padding:8px; border-radius:10px;"><div>👤 <strong>${order.customer}</strong> | 📞 ${order.phone}</div><div>📍 ${order.address} | 🏙️ ${order.city}</div></div><div style="margin-top:10px; padding:10px; background:var(--bg); border-radius:12px;"><strong>🛍️ بەرهەمەکان:</strong><br>${order.items.map((item,idx) => `<div style="display:flex; justify-content:space-between; padding:6px 0;"><span>${idx+1}. ${item.name}</span><span>${item.cartQty} x ${item.price.toLocaleString()} IQD</span></div>`).join('')}<div style="margin-top:8px; text-align:left; font-weight:bold;">کۆ: ${order.subtotal.toLocaleString()} IQD</div></div><div style="margin-top:10px; padding:10px; background:var(--success); color:white; border-radius:12px; display:flex; justify-content:space-between;"><span>💰 کۆی گشتی:</span><span><strong>${order.total.toLocaleString()} IQD</strong></span></div><div style="margin-top:10px; display:flex; justify-content:space-between;"><div>🔍 <span style="font-family:monospace;">${order.trackingCode}</span></div><button class="remove-item" onclick="deleteOrder(${order.id})" style="background:var(--danger); color:white; padding:6px 15px; border-radius:25px;"><i class="fas fa-trash-alt"></i> سڕینەوە</button></div></div>`).join('');
         }
         
         function deleteOrder(orderId) {
@@ -2638,18 +1931,13 @@
             let container = document.getElementById('chatMessages');
             if(!container) return;
             if(chatMessages.length === 0) container.innerHTML = `<div class="message message-admin">${translations[currentLang].welcomeMsg}<div class="message-time"></div></div>`;
-            else container.innerHTML = chatMessages.map(msg => `<div class="message ${msg.sender === 'user' ? 'message-user' : 'message-admin'}">
-                ${msg.text}<div class="message-time">${msg.time}</div>
-            </div>`).join('');
+            else container.innerHTML = chatMessages.map(msg => `<div class="message ${msg.sender === 'user' ? 'message-user' : 'message-admin'}">${msg.text}<div class="message-time">${msg.time}</div></div>`).join('');
             container.scrollTop = container.scrollHeight;
             let unread = chatMessages.filter(m => !m.read && m.sender === 'user').length;
-            const chatBadge = document.getElementById('chatBadge');
+            let chatBadge = document.getElementById('chatBadge');
             if(chatBadge) chatBadge.innerText = unread;
             let adminContainer = document.getElementById('adminChatMessages');
-            if(adminContainer) adminContainer.innerHTML = chatMessages.slice().reverse().map(msg => `<div class="cart-item" style="flex-direction:column;">
-                <div><strong>${msg.sender === 'user' ? '👤 کڕیار' : '👑 ئادمین'}</strong> - ${msg.time}</div>
-                <div>${msg.text}</div>
-            </div>`).join('');
+            if(adminContainer) adminContainer.innerHTML = chatMessages.slice().reverse().map(msg => `<div class="cart-item" style="flex-direction:column;"><div><strong>${msg.sender === 'user' ? '👤 کڕیار' : '👑 ئادمین'}</strong> - ${msg.time}</div><div>${msg.text}</div></div>`).join('');
         }
         
         function sendMessage() {
@@ -2668,11 +1956,11 @@
             }, 1000);
         }
         
-        // Utility Functions
+        // Utility
         function toggleDarkMode() { 
             document.body.classList.toggle('dark-mode'); 
             localStorage.setItem('vip_dark_mode', document.body.classList.contains('dark-mode')); 
-            const darkModeBtn = document.getElementById('darkModeBtn');
+            let darkModeBtn = document.getElementById('darkModeBtn');
             if(darkModeBtn) darkModeBtn.innerHTML = document.body.classList.contains('dark-mode') ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>'; 
         }
         
@@ -2695,98 +1983,70 @@
             document.body.appendChild(modal);
         }
         
-        // Initialize with sample products including the new Biscuits product
+        // Initialize sample products
         function initializeSampleProducts() {
-            // Add the Biscuits product from the image
-            const biscuitsProduct = {
-                id: 100,
-                name: "پسیکیتی لۆبیلو - BISCUITS",
-                desc: "BISCUITS\nGluten Free\nMilk free - Egg free\n\n✅ بێ گلوتن\n✅ بێ شیر\n✅ بێ هێلکە\n\n🔹 کالسیۆم\n🔹 ئاسن\n🔹 ڤیتامین B1\n\n📌 بۆ تەمەنی ٤ مانگ بۆ ٥ ساڵ\n\n✨ بەکار دەهێنرێت بۆ:\n• گولونین\n• شیر\n• هێڵکە\n• خواردنەوەی گەرم\n\n🌟 پسیکیتی تایبەت و بەرزترین کوالیتی بۆ منداڵانی تازەلەدایکبوو و منداڵانی هەستیار.\n\n🧪 بەرهەمی سروشتی و بێ هۆرمۆن\n\n✅ گەشەی تەندروست بۆ منداڵەکان\n\n📦 پەکێجی ئابووری - ٢٤ دانە",
-                price: 7000,
-                stock: 24,
-                status: "instock",
-                category: "تغذیة",
-                image1: "https://i.postimg.cc/RWNMnJDG/image.jpg",
-                image2: "",
-                image3: "",
-                video: ""
-            };
-            
-            // Add the previous Baby Milk Free product
-            const babyMilkFreeProduct = {
-                id: 101,
-                name: "پیکسکی لیزە - Baby Milk Free & Egg Free",
-                desc: "پیکسکی لیزە\n\n✅ بێ شیر\n✅ بێ هێلکە\n\n🔹 کالسیۆم\n🔹 ئاسن\n🔹 ڤیتامین B1\n\n📌 بۆ تەمەنی ٤ مانگ بۆ ٥ ساڵ\n\n✨ بەکار دەهێنرێت بۆ:\n• گولونین\n• شیر\n• هێڵکە\n• خواردنەوەی گەرم\n\n🌟 پیکسکی تایبەت و بەرزترین کوالیتی بۆ منداڵانی تازەلەدایکبوو و منداڵانی هەستیار بە شیر و هێلکە.\n\n🧪 بەرهەمی سروشتی و بێ هۆرمۆن\n\n✅ گەشەی تەندروست بۆ منداڵەکان\n\n📦 پەکێجی ئابووری - ٢٤ دانە",
-                price: 7000,
-                stock: 24,
-                status: "instock",
-                category: "تغذیة",
-                image1: "https://i.postimg.cc/RWNMnJDG/image.jpg",
-                image2: "",
-                image3: "",
-                video: ""
-            };
-            
-            // Check if products already exist
-            if (!products.some(p => p.id === 100)) {
-                products.push(biscuitsProduct);
-            }
-            if (!products.some(p => p.id === 101)) {
-                products.push(babyMilkFreeProduct);
-            }
-            nextId = 102;
+            products = [
+                { id: 1, name: "پسیکیتی لۆبیلو - BISCUITS", desc: "BISCUITS\nGluten Free\nMilk free - Egg free\n\n✅ بێ گلوتن\n✅ بێ شیر\n✅ بێ هێلکە\n\n🔹 کالسیۆم\n🔹 ئاسن\n🔹 ڤیتامین B1\n\n📌 بۆ تەمەنی ٤ مانگ بۆ ٥ ساڵ\n\n✨ بەکار دەهێنرێت بۆ:\n• گولونین\n• شیر\n• هێڵکە\n• خواردنەوەی گەرم\n\n🌟 پسیکیتی تایبەت و بەرزترین کوالیتی بۆ منداڵانی تازەلەدایکبوو.\n\n📦 پەکێجی ئابووری - ٢٤ دانە", price: 7000, stock: 24, status: "instock", category: "تغذیة", image1: "https://i.postimg.cc/RWNMnJDG/image.jpg", image2: "", image3: "", video: "" },
+                { id: 2, name: "پیکسکی لیزە - Baby Milk Free", desc: "پیکسکی لیزە\n\n✅ بێ شیر\n✅ بێ هێلکە\n\n🔹 کالسیۆم\n🔹 ئاسن\n🔹 ڤیتامین B1\n\n📌 بۆ تەمەنی ٤ مانگ بۆ ٥ ساڵ\n\n✨ بەکار دەهێنرێت بۆ گولونین و شیر و هێڵکە\n\n📦 پەکێجی ئابووری - ٢٤ دانە", price: 7000, stock: 24, status: "instock", category: "تغذیة", image1: "https://i.postimg.cc/RWNMnJDG/image.jpg", image2: "", image3: "", video: "" },
+                { id: 3, name: "شیری منداڵان VIP", desc: "شیری تایبەت و بەرزترین کوالیتی بۆ منداڵانی تازەلەدایکبوو", price: 25000, stock: 12, status: "instock", category: "تغذیة", image1: "https://i.postimg.cc/RWNMnJDG/image.jpg", image2: "", image3: "", video: "" },
+                { id: 4, name: "کۆمپلێتی منداڵان", desc: "کۆمپلێتی جل و بەرگی نەرم و خۆش بۆ منداڵان", price: 35000, stock: 7, status: "instock", category: "ملابس", image1: "https://i.postimg.cc/RWNMnJDG/image.jpg", image2: "", image3: "", video: "" }
+            ];
+            nextId = 5;
             saveAllData();
         }
         
-        // Initialize
+        // Load saved data
+        let savedProducts = localStorage.getItem('vip_products');
+        let savedCategories = localStorage.getItem('vip_categories');
+        let savedShipping = localStorage.getItem('vip_shipping');
+        let savedSlider = localStorage.getItem('vip_slider');
+        
+        if(savedProducts && JSON.parse(savedProducts).length > 0) {
+            products = JSON.parse(savedProducts);
+            nextId = Math.max(...products.map(p => p.id), 0) + 1;
+        } else {
+            initializeSampleProducts();
+        }
+        
+        if(savedCategories) categories = JSON.parse(savedCategories);
+        if(savedShipping) shippingCities = JSON.parse(savedShipping);
+        if(savedSlider) sliderImages = JSON.parse(savedSlider);
+        
+        let savedOrders = localStorage.getItem('vip_orders');
+        if(savedOrders) orders = JSON.parse(savedOrders);
+        let savedCoupons = localStorage.getItem('vip_coupons');
+        if(savedCoupons) coupons = JSON.parse(savedCoupons);
+        let savedReviews = localStorage.getItem('vip_reviews');
+        if(savedReviews) reviews = JSON.parse(savedReviews);
+        let savedChat = localStorage.getItem('vip_chat_messages');
+        if(savedChat) chatMessages = JSON.parse(savedChat);
+        let savedAutoReply = localStorage.getItem('vip_auto_reply');
+        if(savedAutoReply) autoReply = savedAutoReply;
+        
         let savedColor = localStorage.getItem('vip_theme_color'); 
         if(savedColor) document.documentElement.style.setProperty('--primary', savedColor);
         let savedDarkMode = localStorage.getItem('vip_dark_mode'); 
-        if(savedDarkMode === 'true') { 
-            document.body.classList.add('dark-mode'); 
-            const darkModeBtn = document.getElementById('darkModeBtn');
-            if(darkModeBtn) darkModeBtn.innerHTML = '<i class="fas fa-sun"></i>'; 
-        }
+        if(savedDarkMode === 'true') { document.body.classList.add('dark-mode'); document.getElementById('darkModeBtn').innerHTML = '<i class="fas fa-sun"></i>'; }
         let savedShopName = localStorage.getItem('vip_shop_name'); 
-        if(savedShopName) {
-            const shopNameDisplay = document.getElementById('shopNameDisplay');
-            if(shopNameDisplay) shopNameDisplay.innerText = savedShopName;
-        }
+        if(savedShopName) document.getElementById('shopNameDisplay').innerText = savedShopName;
         let savedWhatsapp = localStorage.getItem('vip_whatsapp'); 
-        if(savedWhatsapp) {
-            const whatsappBtn = document.getElementById('whatsappBtn');
-            if(whatsappBtn) whatsappBtn.href = `https://wa.me/${savedWhatsapp}`;
-        }
+        if(savedWhatsapp) document.getElementById('whatsappBtn').href = `https://wa.me/${savedWhatsapp}`;
         
-        if(database && firebaseInitialized) {
-            setupFirebaseListeners();
-        } else {
-            products = [
-                { id: 1, name: "شیری منداڵان VIP", desc: "شیری تایبەت و بەرزترین کوالیتی بۆ منداڵانی تازەلەدایکبوو", price: 25000, stock: 12, status: "instock", category: "تغذیة", image1: "https://i.postimg.cc/RWNMnJDG/image.jpg", image2: "", image3: "", video: "" },
-                { id: 2, name: "کۆمپلێتی منداڵان", desc: "کۆمپلێتی جل و بەرگی نەرم و خۆش بۆ منداڵان", price: 35000, stock: 7, status: "instock", category: "ملابس", image1: "https://i.postimg.cc/RWNMnJDG/image.jpg", image2: "", image3: "", video: "" },
-                { id: 3, name: "پاستا منداڵان", desc: "پاستای تایبەت بە منداڵان، خواردنەوەی بەمازە", price: 12000, stock: 20, status: "instock", category: "تغذیة", image1: "https://i.postimg.cc/RWNMnJDG/image.jpg", image2: "", image3: "", video: "" }
-            ];
-            categories = ['تغذیة', 'ملابس', 'العاب', 'عربات'];
-            shippingCities = [{ city: "بغداد", cost: 3000 }, { city: "هەولێر", cost: 4000 }, { city: "بەسرە", cost: 5000 }];
-            sliderImages = defaultSlider;
-            initializeSampleProducts();
-            refreshAllUI();
-        }
-        
-        renderSlider(); 
-        renderCategories(); 
-        renderProducts(); 
-        renderShippingCities(); 
-        renderChatMessages(); 
+        refreshAllUI();
+        renderSlider();
+        renderChatMessages();
         updateAllTexts();
         
-        // Make sure sample products are added even after Firebase loads
-        setTimeout(() => {
-            if (!products.some(p => p.id === 100)) {
-                initializeSampleProducts();
-                refreshAllUI();
-            }
-        }, 2000);
+        // Firebase sync if available
+        if(database) {
+            database.ref('products').on('value', (snapshot) => {
+                let data = snapshot.val();
+                if(data && Object.keys(data).length > 0) {
+                    products = Object.values(data);
+                    refreshAllUI();
+                }
+            });
+        }
     </script>
 </body>
 </html>
