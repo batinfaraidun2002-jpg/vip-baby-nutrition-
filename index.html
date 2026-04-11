@@ -53,9 +53,6 @@
        .dot.active { background: white; width: 20px; border-radius: 10px; }
        .search-section { padding: 12px 16px; }
        .search-input { width: 100%; padding: 12px 18px; border: 1px solid var(--border); border-radius: 40px; background: var(--card); color: var(--text); font-size: 15px; font-family: inherit; outline: none; text-align: right; }
-       .filter-bar { display: flex; gap: 12px; padding: 8px 16px; overflow-x: auto; border-bottom: 1px solid var(--border); margin-bottom: 8px; }
-       .filter-btn { padding: 6px 16px; border-radius: 30px; border: 1px solid var(--border); background: var(--card); color: var(--text); font-size: 13px; cursor: pointer; white-space: nowrap; }
-       .filter-btn.active { background: var(--primary); color: white; }
        .categories { display: flex; gap: 12px; overflow-x: auto; padding: 8px 16px 12px; }
        .cat-btn { padding: 8px 20px; border-radius: 40px; border: 1px solid var(--border); background: var(--card); color: var(--text); font-size: 14px; font-weight: 600; cursor: pointer; white-space: nowrap; }
        .cat-btn.active { background: var(--primary); color: white; }
@@ -79,17 +76,14 @@
        .product-desc:hover { background: var(--primary); color: white; }
        .views-count { font-size: 11px; color: var(--text-light); margin: 4px 0; display: flex; align-items: center; gap: 4px; }
        .product-price { color: var(--success); font-weight: 800; font-size: 16px; }
-       .size-selector { display: flex; gap: 12px; margin: 10px 0; justify-content: center; }
-       .size-option { width: 50px; padding: 6px; text-align: center; border: 1px solid var(--border); border-radius: 12px; background: var(--card); cursor: pointer; font-weight: bold; }
+       .size-selector { display: flex; gap: 12px; margin: 10px 0; justify-content: center; flex-wrap: wrap; }
+       .size-option { width: 70px; padding: 6px; text-align: center; border: 1px solid var(--border); border-radius: 12px; background: var(--card); cursor: pointer; font-weight: bold; }
        .size-option.selected { background: var(--primary); color: white; }
        .size-warning { font-size: 11px; color: var(--danger); margin: 5px 0; text-align: center; }
        .quantity-control { display: flex; align-items: center; gap: 10px; margin: 10px 0 6px; background: var(--bg); padding: 5px 8px; border-radius: 40px; width: fit-content; }
        .quantity-btn { width: 28px; height: 28px; border-radius: 50%; border: 1px solid var(--border); background: var(--card); cursor: pointer; font-weight: bold; }
        .add-to-cart { width: 100%; padding: 10px; margin-top: 8px; background: var(--primary); color: white; border: none; border-radius: 40px; font-weight: 700; font-size: 14px; cursor: pointer; }
        .add-to-cart:disabled { opacity: 0.5; cursor: not-allowed; background: var(--text-light); }
-       .pagination { display: flex; justify-content: center; gap: 8px; padding: 20px 16px; flex-wrap: wrap; }
-       .page-btn { width: 40px; height: 40px; border-radius: 50%; border: 1px solid var(--border); background: var(--card); cursor: pointer; font-weight: bold; }
-       .page-btn.active { background: var(--primary); color: white; }
        .chat-float { position: fixed; bottom: 20px; left: 20px; width: 55px; height: 55px; border-radius: 50%; background: var(--primary); color: white; display: flex; align-items: center; justify-content: center; font-size: 24px; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.2); z-index: 200; border: none; }
        .chat-modal { display: none; position: fixed; bottom: 90px; left: 20px; width: 350px; height: 500px; background: var(--card); border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); z-index: 300; flex-direction: column; overflow: hidden; border: 1px solid var(--border); }
        @media (max-width: 500px) { .chat-modal { width: calc(100% - 40px); left: 20px; } }
@@ -129,19 +123,19 @@
        .toast.show { visibility: visible; animation: fadeInUp 2s ease forwards; }
        @keyframes fadeInUp { 0% { opacity: 0; bottom: 60px; } 15% { opacity: 1; bottom: 100px; } 85% { opacity: 1; bottom: 100px; } 100% { opacity: 0; bottom: 60px; visibility: hidden; } }
        .empty-state { text-align: center; padding: 40px 20px; color: var(--text-light); }
-       .edit-cat-btn { background: var(--accent); color: black; border: none; padding: 2px 8px; border-radius: 12px; font-size: 11px; cursor: pointer; margin-left: 5px; }
-       .product-admin-item { display: flex; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 1px solid var(--border); }
-       .edit-product-btn, .delete-product-btn { padding: 4px 12px; border-radius: 20px; font-size: 12px; cursor: pointer; border: none; }
-       .edit-product-btn { background: var(--accent); color: black; margin-left: 5px; }
-       .delete-product-btn { background: var(--danger); color: white; }
-       .security-note { font-size: 12px; color: var(--text-light); margin-top: 8px; text-align: center; }
+       .size-dynamic-group { display: flex; flex-direction: column; gap: 10px; margin-bottom: 15px; }
+       .size-item { display: flex; align-items: center; gap: 10px; background: var(--bg); padding: 8px 12px; border-radius: 30px; }
+       .size-item input { flex: 1; margin: 0; }
+       .admin-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 10px; }
        .media-row { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 10px; }
        .media-field { flex: 1; min-width: 120px; }
        .media-field label { font-size: 11px; margin-bottom: 4px; display: block; font-weight: 600; }
-       .size-checkbox-group { display: flex; gap: 20px; margin-bottom: 15px; align-items: center; flex-wrap: wrap; }
-       .size-checkbox-group label { display: flex; align-items: center; gap: 5px; cursor: pointer; }
-       .size-checkbox-group input { width: 18px; height: 18px; margin: 0; cursor: pointer; }
-       .admin-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 10px; }
+       .video-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 3000; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+       .video-modal video { max-width: 90%; max-height: 90%; border-radius: 20px; }
+       .desc-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 2500; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+       .desc-modal-content { background: var(--card); border-radius: 20px; padding: 20px; max-width: 90%; max-height: 80%; overflow-y: auto; text-align: right; cursor: default; }
+       .close-desc { background: var(--primary); color: white; border: none; padding: 8px 20px; border-radius: 30px; margin-top: 15px; cursor: pointer; }
+       .product-admin-item { border-bottom: 1px solid var(--border); padding: 12px 0; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
    </style>
 </head>
 <body>
@@ -172,15 +166,8 @@
 
 <div class="search-section"><input type="text" class="search-input" id="searchInput" placeholder="🔍 گەڕان..." onkeyup="filterProducts()"></div>
 
-<div class="filter-bar" id="filterBar">
-    <button class="filter-btn active" data-filter="all" onclick="setPriceFilter('all')">💰 هەموو</button>
-    <button class="filter-btn" data-filter="low" onclick="setPriceFilter('low')">💰 هەرزانترین</button>
-    <button class="filter-btn" data-filter="high" onclick="setPriceFilter('high')">💰 گرانترین</button>
-</div>
-
 <div class="categories" id="categoriesList"></div>
 <div class="products-grid" id="productsGrid"></div>
-<div class="pagination" id="pagination"></div>
 
 <button class="chat-float" onclick="toggleChat()"><i class="fas fa-comment-dots"></i><span class="chat-badge" id="chatBadge">0</span></button>
 
@@ -202,25 +189,12 @@
 
 <div id="reviewModal" class="modal"><div class="modal-content"><div class="modal-header"><h3><i class="fas fa-star"></i> پێداچوونەوە</h3><button class="close-modal" onclick="closeModal('reviewModal')"><i class="fas fa-times"></i></button></div><select id="reviewRating"><option value="5">★★★★★ (5)</option><option value="4">★★★★☆ (4)</option><option value="3">★★★☆☆ (3)</option><option value="2">★★☆☆☆ (2)</option><option value="1">★☆☆☆☆ (1)</option></select><textarea id="reviewComment" rows="3" placeholder="پێداچوونەوەکەت بنووسە..."></textarea><button class="add-to-cart" onclick="submitReview()"><i class="fas fa-paper-plane"></i> ناردن</button></div></div>
 
-<!-- Admin Login Modal -->
-<div id="adminLoginModal" class="modal">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h3><i class="fas fa-lock"></i> چوونە ژوورەوەی ئادمین</h3>
-            <button class="close-modal" onclick="closeModal('adminLoginModal')"><i class="fas fa-times"></i></button>
-        </div>
-        <input type="password" id="adminPassword" placeholder="پاسۆرد">
-        <button class="add-to-cart" id="adminLoginBtn" style="background:var(--primary);"><i class="fas fa-sign-in-alt"></i> چوونە ژوورەوە</button>
-        <div class="security-note" style="margin-top:10px;">🔒 پاسۆردی بنەڕەتی: <strong>admin2026</strong></div>
-    </div>
-</div>
+<div id="sizeEditModal" class="modal"><div class="modal-content"><div class="modal-header"><h3><i class="fas fa-ruler"></i> دەستکاری قەبارەکان</h3><button class="close-modal" onclick="closeModal('sizeEditModal')"><i class="fas fa-times"></i></button></div><div id="sizeEditList"></div><div style="display:flex; gap:10px; margin:15px 0;"><input type="number" id="newSizeValue" placeholder="قەبارە (ژمارە، وەک 1 یان 2)" style="flex:1;"><button class="add-to-cart" style="width:auto; padding:8px 20px;" onclick="addSizeToEdit()">➕ زیادکردن</button></div><button class="save-btn" onclick="saveEditedSizes()">💾 هەڵگرتن</button></div></div>
 
-<!-- Admin Panel -->
+<div id="adminLoginModal" class="modal"><div class="modal-content"><div class="modal-header"><h3><i class="fas fa-lock"></i> چوونە ژوورەوەی ئادمین</h3><button class="close-modal" onclick="closeModal('adminLoginModal')"><i class="fas fa-times"></i></button></div><input type="password" id="adminPassword" placeholder="پاسۆرد"><button class="add-to-cart" id="adminLoginBtn" style="background:var(--primary);"><i class="fas fa-sign-in-alt"></i> چوونە ژوورەوە</button><div class="security-note" style="margin-top:10px;">🔒 پاسۆردی بنەڕەتی: <strong>admin2026</strong></div></div></div>
+
 <div id="adminPanel" class="admin-panel">
-    <div class="admin-header">
-        <h2><i class="fas fa-cogs"></i> پانێڵی ئادمین</h2>
-        <button class="icon-btn" style="background:var(--danger);color:white;font-size:18px;padding:8px 20px;border-radius:30px;" onclick="closeAdminPanel()"><i class="fas fa-times"></i> داخستن</button>
-    </div>
+    <div class="admin-header"><h2><i class="fas fa-cogs"></i> پانێڵی ئادمین</h2><button class="icon-btn" style="background:var(--danger);color:white;font-size:18px;padding:8px 20px;border-radius:30px;" onclick="closeAdminPanel()"><i class="fas fa-times"></i> داخستن</button></div>
     
     <div class="admin-section"><h3><i class="fas fa-key"></i> گۆڕینی پاسۆرد</h3><input type="password" id="oldPassword" placeholder="پاسۆردی کۆن"><input type="password" id="newPassword" placeholder="پاسۆردی نوێ"><input type="password" id="confirmPassword" placeholder="دووبارە پاسۆردی نوێ"><button class="save-btn change-password-btn" onclick="changeAdminPassword()"><i class="fas fa-save"></i> گۆڕینی پاسۆرد</button><div class="security-note">🔒 پاسۆردی بنەڕەتی: admin2026</div></div>
     
@@ -232,7 +206,7 @@
     
     <div class="admin-section"><h3><i class="fas fa-ticket-alt"></i> کۆدێن</h3><input type="text" id="couponName" placeholder="ناوی کۆدێن"><input type="number" id="couponPercent" placeholder="ڕێژە (١-١٠٠)"><input type="date" id="couponDate"><button class="save-btn" onclick="addCoupon()"><i class="fas fa-plus"></i> زیادکردن</button><div id="couponsList"></div></div>
     
-    <div class="admin-section"><h3><i class="fas fa-images"></i> سلایدەر</h3><select id="sliderType"><option value="image">وێنە</option><option value="video">ڤیدیۆ</option></select><input type="text" id="sliderImage" placeholder="لینکی وێنە یان ڤیدیۆ"><button class="save-btn" onclick="addSliderImage()"><i class="fas fa-plus"></i> زیادکردن</button><div id="sliderList"></div></div>
+    <div class="admin-section"><h3><i class="fas fa-images"></i> سلایدەر (وێنە/ڤیدیۆ)</h3><select id="sliderType"><option value="image">وێنە</option><option value="video">ڤیدیۆ</option></select><input type="text" id="sliderImage" placeholder="لینکی وێنە یان ڤیدیۆ"><button class="save-btn" onclick="addSliderImage()"><i class="fas fa-plus"></i> زیادکردن</button><div id="sliderList"></div></div>
     
     <div class="admin-section"><h3><i class="fas fa-tags"></i> کەتەگۆری</h3><div id="categoriesAdmin"></div><div style="display:flex;gap:8px;margin-top:10px;"><input type="text" id="newCategory" placeholder="ناوی نوێ" style="flex:1;"><button class="save-btn" style="width:auto;padding:10px 20px;" onclick="addCategory()"><i class="fas fa-plus"></i> زیادکردن</button></div></div>
     
@@ -244,7 +218,16 @@
         <input type="number" id="productStock" placeholder="ستۆک">
         <select id="productCategory"></select>
         <select id="productStatus"><option value="instock">لەبەردەستە</option><option value="outstock">تەواو بووە</option></select>
-        <div class="size-checkbox-group"><span>قەبارەکان: </span><label><input type="checkbox" id="size1" value="1"> 1</label><label><input type="checkbox" id="size2" value="2"> 2</label><label><input type="checkbox" id="size3" value="3"> 3</label></div>
+        
+        <div style="margin-bottom: 10px;">
+            <label style="display:block; margin-bottom:8px;"><i class="fas fa-ruler"></i> قەبارەکان (لیتر بۆ شیر):</label>
+            <div id="dynamicSizesContainer" style="display: flex; flex-direction: column; gap: 8px;"></div>
+            <div style="display: flex; gap: 8px; margin-top: 8px;">
+                <input type="number" id="newSizeInput" placeholder="قەبارە (ژمارە، نموونە: 1)" style="flex:1;">
+                <button type="button" class="save-btn" style="width: auto; padding: 8px 16px; margin:0;" onclick="addDynamicSize()">➕ زیادکردن</button>
+            </div>
+        </div>
+        
         <div class="media-row"><div class="media-field"><label>وێنەی 1</label><input type="text" id="productImage1" placeholder="لینکی وێنەی 1"></div><div class="media-field"><label>وێنەی 2</label><input type="text" id="productImage2" placeholder="لینکی وێنەی 2"></div><div class="media-field"><label>وێنەی 3</label><input type="text" id="productImage3" placeholder="لینکی وێنەی 3"></div><div class="media-field"><label>ڤیدیۆ</label><input type="text" id="productVideo" placeholder="لینکی ڤیدیۆ"></div></div>
         <button class="save-btn" onclick="addProduct()"><i class="fas fa-plus-circle"></i> زیادکردنی بەرهەم</button>
         <div id="addProductResult" style="margin-top:8px;font-size:12px;color:var(--success);"></div>
@@ -262,7 +245,7 @@
 <div id="toast" class="toast"></div>
 
 <script>
-    // ==================== Firebase Config ====================
+    // Firebase Config
     const firebaseConfig = {
         apiKey: "AIzaSyDmhlHwNy-8z4oFMK-1WoKdsKC--RmJBxI",
         authDomain: "vip-baby-nutrition-2659f.firebaseapp.com",
@@ -280,7 +263,7 @@
         console.log('✅ Firebase connected'); 
     } catch(e) { console.error('Firebase error:', e); }
     
-    // ==================== Default Data ====================
+    // Default Data
     let defaultWhatsapp = "9647725416979";
     let products = [];
     let categories = ['تغذیة', 'ملابس', 'العاب', 'عربات'];
@@ -297,34 +280,34 @@
     let quantities = {};
     let currentCategory = 'all';
     let currentLang = 'ku';
-    let currentPriceFilter = 'all';
     let appliedCoupon = null;
     let currentSlide = 0;
     let clickCount = 0;
     let currentProductForReview = null;
     let adminPassword = localStorage.getItem('vip_admin_password') || 'admin2026';
-    let currentPage = 1;
-    let itemsPerPage = 6;
     let selectedSizes = {};
     
-    // ==================== Translations ====================
+    let currentSizesArray = [];
+    let currentEditingProductId = null;
+    let tempSizesForEdit = [];
+    
+    // Translations
     const translations = {
-        ku: { search: "🔍 گەڕان...", all: "هەموو", instock: "لەبەردەستە", outstock: "تەواو بووە", addToCart: "زیادکردن", emptyCart: "سەبەتەکەت خاڵییە 🛒", emptyWishlist: "هیچ بەرهەمێک نییە 💔", noProducts: "هیچ بەرهەمێک نەدۆزرایەوە 😢", rem: "ماوە:", reviewBtn: "پێداچوونەوە", chatPlaceholder: "پەیام...", welcomeMsg: "سڵاو! چۆن دەتوانین یارمەتیت بدەین؟", filterAll: "💰 هەموو", filterLow: "💰 هەرزانترین", filterHigh: "💰 گرانترین", views: "👁️ بینین", pleaseSelectSize: "⚠️ تکایە قەبارە هەڵبژێرە" },
-        ar: { search: "🔍 بحث...", all: "الكل", instock: "متوفر", outstock: "نفذ", addToCart: "إضافة", emptyCart: "السلة فارغة 🛒", emptyWishlist: "لا توجد منتجات 💔", noProducts: "لم يتم العثور على منتجات 😢", rem: "المتبقي:", reviewBtn: "مراجعة", chatPlaceholder: "رسالة...", welcomeMsg: "مرحباً! كيف يمكننا مساعدتك؟", filterAll: "💰 الكل", filterLow: "💰 الأرخص", filterHigh: "💰 الأغلى", views: "👁️ مشاهدة", pleaseSelectSize: "⚠️ الرجاء اختيار المقاس" },
-        en: { search: "🔍 Search...", all: "All", instock: "In Stock", outstock: "Out", addToCart: "Add", emptyCart: "Cart is empty 🛒", emptyWishlist: "No items 💔", noProducts: "No products found 😢", rem: "Stock:", reviewBtn: "Review", chatPlaceholder: "Message...", welcomeMsg: "Hello! How can we help you?", filterAll: "💰 All", filterLow: "💰 Lowest", filterHigh: "💰 Highest", views: "👁️ Views", pleaseSelectSize: "⚠️ Please select size" }
+        ku: { search: "🔍 گەڕان...", all: "هەموو", instock: "لەبەردەستە", outstock: "تەواو بووە", addToCart: "زیادکردن", emptyCart: "سەبەتەکەت خاڵییە 🛒", emptyWishlist: "هیچ بەرهەمێک نییە 💔", noProducts: "هیچ بەرهەمێک نەدۆزرایەوە 😢", rem: "ماوە:", reviewBtn: "پێداچوونەوە", chatPlaceholder: "پەیام...", welcomeMsg: "سڵاو! چۆن دەتوانین یارمەتیت بدەین?", views: "👁️ بینین", pleaseSelectSize: "⚠️ تکایە قەبارە هەڵبژێرە" },
+        ar: { search: "🔍 بحث...", all: "الكل", instock: "متوفر", outstock: "نفذ", addToCart: "إضافة", emptyCart: "السلة فارغة 🛒", emptyWishlist: "لا توجد منتجات 💔", noProducts: "لم يتم العثور على منتجات 😢", rem: "المتبقي:", reviewBtn: "مراجعة", chatPlaceholder: "رسالة...", welcomeMsg: "مرحباً! كيف يمكننا مساعدتك؟", views: "👁️ مشاهدة", pleaseSelectSize: "⚠️ الرجاء اختيار المقاس" },
+        en: { search: "🔍 Search...", all: "All", instock: "In Stock", outstock: "Out", addToCart: "Add", emptyCart: "Cart is empty 🛒", emptyWishlist: "No items 💔", noProducts: "No products found 😢", rem: "Stock:", reviewBtn: "Review", chatPlaceholder: "Message...", welcomeMsg: "Hello! How can we help you?", views: "👁️ Views", pleaseSelectSize: "⚠️ Please select size" }
     };
     
-    // ==================== Helper Functions ====================
     function showToast(msg) { let t = document.getElementById('toast'); t.innerText = msg; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 2500); }
     function openModal(id) { let modal = document.getElementById(id); if(modal) modal.style.display = 'flex'; if(id === 'wishlistModal') renderWishlist(); }
     function closeModal(id) { let modal = document.getElementById(id); if(modal) modal.style.display = 'none'; }
     
     function showFullDescription(desc, productName) {
-        const modal = document.createElement('div');
-        modal.className = 'desc-modal';
-        modal.innerHTML = `<div class="desc-modal-content" onclick="event.stopPropagation()"><h4><i class="fas fa-info-circle"></i> ${productName}</h4><p>${desc.replace(/\n/g, '<br>')}</p><button class="close-desc" onclick="this.closest('.desc-modal').remove()"><i class="fas fa-times"></i> داخستن</button></div>`;
-        modal.onclick = () => modal.remove();
-        document.body.appendChild(modal);
+        const modalDiv = document.createElement('div');
+        modalDiv.className = 'desc-modal';
+        modalDiv.innerHTML = `<div class="desc-modal-content" onclick="event.stopPropagation()"><h4><i class="fas fa-info-circle"></i> ${productName}</h4><p>${desc.replace(/\n/g, '<br>')}</p><button class="close-desc" onclick="this.closest('.desc-modal').remove()"><i class="fas fa-times"></i> داخستن</button></div>`;
+        modalDiv.onclick = () => modalDiv.remove();
+        document.body.appendChild(modalDiv);
     }
     
     function updateAllTexts() {
@@ -333,12 +316,6 @@
         let chatInput = document.getElementById('chatInput');
         if(searchInput) searchInput.placeholder = t.search;
         if(chatInput) chatInput.placeholder = t.chatPlaceholder;
-        document.querySelectorAll('.filter-btn').forEach(btn => {
-            let filter = btn.getAttribute('data-filter');
-            if(filter === 'all') btn.innerHTML = t.filterAll;
-            else if(filter === 'low') btn.innerHTML = t.filterLow;
-            else if(filter === 'high') btn.innerHTML = t.filterHigh;
-        });
         renderProducts(); renderCategories(); updateCartUI(); renderWishlist(); renderChatMessages();
     }
     
@@ -352,7 +329,6 @@
         showToast(currentLang === 'ku' ? 'زمان گۆڕدرا' : 'Language changed'); 
     }
     
-    // Language dropdown
     const langSwitcher = document.getElementById('langSwitcher');
     const langDropdown = document.getElementById('langDropdown');
     if(langSwitcher) {
@@ -367,11 +343,9 @@
         opt.onclick = function(e) { e.stopPropagation(); let lang = this.getAttribute('data-lang'); changeLanguage(lang); if(langDropdown) langDropdown.classList.remove('show'); return false; };
     });
     
-    function setPriceFilter(filter) { currentPriceFilter = filter; currentPage = 1; document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active')); document.querySelector(`.filter-btn[data-filter="${filter}"]`).classList.add('active'); renderProducts(); }
     function incrementViewCount(productId) { let product = products.find(p => p.id === productId); if(product) { product.views = (product.views || 0) + 1; saveAllData(); } }
     function setSize(productId, size) { selectedSizes[productId] = size; document.querySelectorAll(`.size-option[data-product="${productId}"]`).forEach(el => { el.classList.remove('selected'); if(parseInt(el.getAttribute('data-size')) === size) el.classList.add('selected'); }); let addBtn = document.querySelector(`.add-to-cart-btn-${productId}`); if(addBtn) { addBtn.disabled = false; addBtn.classList.remove('disabled'); } }
     
-    // ==================== Save & Load Data ====================
     function saveAllData() {
         if(database) {
             database.ref('products').set(products);
@@ -394,7 +368,6 @@
         localStorage.setItem('vip_reviews', JSON.stringify(reviews));
         localStorage.setItem('vip_chat_messages', JSON.stringify(chatMessages));
         localStorage.setItem('vip_auto_reply', autoReply);
-        localStorage.setItem('vip_shop_name', document.getElementById('shopNameDisplay')?.innerText || 'VIP Baby Nutrition');
     }
     
     function setupFirebaseListeners() {
@@ -414,7 +387,6 @@
     
     function refreshAllUI() { renderProducts(); renderCategories(); renderShippingCities(); renderWishlist(); updateCartUI(); updateAdminCategoriesSelect(); renderAdminProducts(); renderSliderAdmin(); renderCouponsAdmin(); }
     
-    // ==================== Admin Functions ====================
     function changeAdminPassword() {
         let oldPass = document.getElementById('oldPassword').value;
         let newPass = document.getElementById('newPassword').value;
@@ -443,7 +415,6 @@
         }; 
     }
     
-    // FIXED: Admin Login function
     function adminLogin() { 
         let pass = document.getElementById('adminPassword').value; 
         if(pass === adminPassword) { 
@@ -465,7 +436,6 @@
         document.getElementById('adminPassword').value = ''; 
     }
     
-    // Attach login event to button
     document.getElementById('adminLoginBtn').onclick = adminLogin;
     
     function closeAdminPanel() { document.getElementById('adminPanel').style.display = 'none'; }
@@ -491,7 +461,6 @@
     
     function saveAutoReply() { let msg = document.getElementById('autoReplyMsg')?.value; if(msg) { autoReply = msg; saveAllData(); showToast('وەڵام هەڵگیرا'); } }
     
-    // ==================== Categories ====================
     function renderCategories() {
         const t = translations[currentLang];
         let container = document.getElementById('categoriesList');
@@ -504,31 +473,120 @@
         if(adminContainer) adminContainer.innerHTML = categories.map((cat,i) => `<div class="cart-item" style="justify-content:space-between;"><span>📁 ${cat}</span><div><button class="edit-cat-btn" onclick="editCategory(${i})"><i class="fas fa-edit"></i></button><button class="remove-item" onclick="deleteCategory(${i})"><i class="fas fa-trash-alt"></i></button></div></div>`).join('');
     }
     
-    function filterByCategory(cat) { currentCategory = cat; currentPage = 1; renderProducts(); renderCategories(); }
-    function filterProducts() { currentPage = 1; renderProducts(); }
+    function filterByCategory(cat) { currentCategory = cat; renderProducts(); renderCategories(); }
+    function filterProducts() { renderProducts(); }
     
     function addCategory() { let cat = document.getElementById('newCategory')?.value; if(cat && !categories.includes(cat)) { categories.push(cat); saveAllData(); renderCategories(); refreshAllUI(); document.getElementById('newCategory').value = ''; showToast('کەتەگۆری زیادکرا'); } }
     function editCategory(i) { let newName = prompt('ناوی نوێ:', categories[i]); if(newName && !categories.includes(newName)) { categories[i] = newName; saveAllData(); renderCategories(); refreshAllUI(); showToast('کەتەگۆری نوێکرایەوە'); } }
     function deleteCategory(i) { if(confirm('دڵنیای لە سڕینەوە؟')) { categories.splice(i,1); saveAllData(); renderCategories(); refreshAllUI(); showToast('کەتەگۆری سڕایەوە'); } }
     
-    // ==================== Products ====================
+    function renderDynamicSizes() {
+        let container = document.getElementById('dynamicSizesContainer');
+        if(!container) return;
+        if(currentSizesArray.length === 0) {
+            container.innerHTML = '<div style="color: var(--text-light); font-size:13px;">هیچ قەبارەیەک زیاد نەکراوە</div>';
+        } else {
+            container.innerHTML = currentSizesArray.map((size, idx) => `
+                <div class="size-item">
+                    <span style="flex:1;">📏 ${size} لیتر</span>
+                    <button type="button" class="remove-item" onclick="removeDynamicSize(${idx})" style="background:none; border:none; font-size:20px;"><i class="fas fa-trash-alt"></i></button>
+                </div>
+            `).join('');
+        }
+    }
+    
+    function addDynamicSize() {
+        let input = document.getElementById('newSizeInput');
+        let val = parseInt(input.value);
+        if(isNaN(val) || val <= 0) {
+            showToast('تکایە ژمارەیەکی دروست بنووسە (وەک 1, 2, 3)');
+            return;
+        }
+        if(currentSizesArray.includes(val)) {
+            showToast('ئەم قەبارەیە پێشتر زیاد کراوە');
+            return;
+        }
+        currentSizesArray.push(val);
+        currentSizesArray.sort((a,b) => a-b);
+        renderDynamicSizes();
+        input.value = '';
+    }
+    
+    function removeDynamicSize(index) {
+        currentSizesArray.splice(index, 1);
+        renderDynamicSizes();
+    }
+    
+    function openSizeEditModal(productId) {
+        let product = products.find(p => p.id === productId);
+        if(!product) return;
+        currentEditingProductId = productId;
+        tempSizesForEdit = [...(product.sizes || [])];
+        renderSizeEditList();
+        openModal('sizeEditModal');
+    }
+    
+    function renderSizeEditList() {
+        let container = document.getElementById('sizeEditList');
+        if(!container) return;
+        if(tempSizesForEdit.length === 0) {
+            container.innerHTML = '<div style="color: var(--text-light);">هیچ قەبارەیەک نییە</div>';
+        } else {
+            container.innerHTML = tempSizesForEdit.map((size, idx) => `
+                <div class="size-item">
+                    <span style="flex:1;">📏 ${size} لیتر</span>
+                    <button type="button" class="remove-item" onclick="removeTempSize(${idx})" style="background:none; border:none; font-size:20px;"><i class="fas fa-trash-alt"></i></button>
+                </div>
+            `).join('');
+        }
+    }
+    
+    function addSizeToEdit() {
+        let input = document.getElementById('newSizeValue');
+        let val = parseInt(input.value);
+        if(isNaN(val) || val <= 0) {
+            showToast('تکایە ژمارەیەکی دروست بنووسە');
+            return;
+        }
+        if(tempSizesForEdit.includes(val)) {
+            showToast('ئەم قەبارەیە هەیە');
+            return;
+        }
+        tempSizesForEdit.push(val);
+        tempSizesForEdit.sort((a,b) => a-b);
+        renderSizeEditList();
+        input.value = '';
+    }
+    
+    function removeTempSize(index) {
+        tempSizesForEdit.splice(index, 1);
+        renderSizeEditList();
+    }
+    
+    function saveEditedSizes() {
+        if(currentEditingProductId) {
+            let product = products.find(p => p.id === currentEditingProductId);
+            if(product) {
+                product.sizes = [...tempSizesForEdit];
+                saveAllData();
+                refreshAllUI();
+                showToast('✅ قەبارەکان نوێ کرانەوە');
+                closeModal('sizeEditModal');
+            }
+        }
+    }
+    
     function renderProducts() {
         const t = translations[currentLang];
         let filtered = currentCategory === 'all' ? [...products] : products.filter(p => p.category === currentCategory);
         let searchTerm = document.getElementById('searchInput')?.value.toLowerCase() || '';
         filtered = filtered.filter(p => p.name.toLowerCase().includes(searchTerm));
-        if(currentPriceFilter === 'low') filtered.sort((a, b) => a.price - b.price);
-        else if(currentPriceFilter === 'high') filtered.sort((a, b) => b.price - a.price);
-        
-        let totalPages = Math.ceil(filtered.length / itemsPerPage);
-        let startIndex = (currentPage - 1) * itemsPerPage;
-        let paginatedProducts = filtered.slice(startIndex, startIndex + itemsPerPage);
         
         let grid = document.getElementById('productsGrid');
         if(!grid) return;
-        if(paginatedProducts.length === 0) { grid.innerHTML = `<div class="empty-state">${t.noProducts}</div>`; document.getElementById('pagination').innerHTML = ''; return; }
+        if(filtered.length === 0) { grid.innerHTML = `<div class="empty-state">${t.noProducts}</div>`; return; }
         
-        grid.innerHTML = paginatedProducts.map(p => {
+        grid.innerHTML = filtered.map(p => {
             let productReviews = reviews.filter(r => r.productId === p.id);
             let avgRating = productReviews.length ? (productReviews.reduce((s,r)=>s+r.rating,0)/productReviews.length).toFixed(1) : 0;
             let statusText = p.status === 'instock' ? t.instock : t.outstock;
@@ -547,8 +605,8 @@
             if(galleryItems.length > 0) {
                 galleryHtml = `<div class="product-gallery" id="gallery-${p.id}">`;
                 galleryItems.forEach((item) => {
-                    if(item.type === 'video') { galleryHtml += `<video src="${item.url}" class="product-gallery-video" onclick="playVideo('${item.url}')" style="cursor:pointer;"></video>`; } 
-                    else { galleryHtml += `<img src="${item.url}" class="product-gallery-img" onclick="zoomImage('${item.url}')">`; }
+                    if(item.type === 'video') { galleryHtml += `<video src="${item.url}" class="product-gallery-video" onclick="event.stopPropagation(); playVideo('${item.url}')" style="cursor:pointer;"></video>`; } 
+                    else { galleryHtml += `<img src="${item.url}" class="product-gallery-img" onclick="event.stopPropagation(); zoomImage('${item.url}')">`; }
                 });
                 galleryHtml += `</div><div class="gallery-nav" id="gallery-nav-${p.id}"></div>`;
             } else {
@@ -560,7 +618,7 @@
             if(p.desc && p.desc.trim() !== '') {
                 let shortDesc = p.desc.substring(0, 80);
                 let hasMore = p.desc.length > 80;
-                descHtml = `<div class="product-desc" onclick="showFullDescription(\`${safeDesc}\`, \`${p.name.replace(/`/g, '\\`')}\`)"><i class="fas fa-info-circle"></i> ${shortDesc}${hasMore ? '...' : ''}<span><i class="fas fa-expand-alt"></i> کلیک بکە</span></div>`;
+                descHtml = `<div class="product-desc" onclick="showFullDescription(\`${safeDesc}\`, \`${p.name.replace(/`/g, '\\`')}\`)"><i class="fas fa-info-circle"></i> ${shortDesc}${hasMore ? '...' : ''}<span> <i class="fas fa-expand-alt"></i> کلیک بکە</span></div>`;
             }
             
             let sizeSelectorHtml = '';
@@ -568,9 +626,9 @@
             let sizeWarningHtml = '';
             if(hasSize) {
                 sizeSelectorHtml = `<div class="size-selector">`;
-                if(p.sizes.includes(1)) sizeSelectorHtml += `<div class="size-option ${selectedSize === 1 ? 'selected' : ''}" data-product="${p.id}" data-size="1" onclick="setSize(${p.id}, 1)">1</div>`;
-                if(p.sizes.includes(2)) sizeSelectorHtml += `<div class="size-option ${selectedSize === 2 ? 'selected' : ''}" data-product="${p.id}" data-size="2" onclick="setSize(${p.id}, 2)">2</div>`;
-                if(p.sizes.includes(3)) sizeSelectorHtml += `<div class="size-option ${selectedSize === 3 ? 'selected' : ''}" data-product="${p.id}" data-size="3" onclick="setSize(${p.id}, 3)">3</div>`;
+                p.sizes.forEach(size => {
+                    sizeSelectorHtml += `<div class="size-option ${selectedSize === size ? 'selected' : ''}" data-product="${p.id}" data-size="${size}" onclick="setSize(${p.id}, ${size})">${size} لیتر</div>`;
+                });
                 sizeSelectorHtml += `</div>`;
                 if(!sizeSelected) { sizeWarningHtml = `<div class="size-warning">⚠️ ${t.pleaseSelectSize}</div>`; addBtnDisabled = 'disabled'; }
             }
@@ -603,8 +661,6 @@
                     </div>`;
         }).join('');
         
-        renderPagination(totalPages);
-        
         products.forEach(p => {
             let galleryDiv = document.getElementById(`gallery-${p.id}`);
             if(galleryDiv) {
@@ -624,16 +680,6 @@
         });
     }
     
-    function renderPagination(totalPages) {
-        let container = document.getElementById('pagination');
-        if(!container) return;
-        if(totalPages <= 1) { container.innerHTML = ''; return; }
-        let html = '';
-        for(let i = 1; i <= totalPages; i++) { html += `<button class="page-btn ${i === currentPage ? 'active' : ''}" onclick="goToPage(${i})">${i}</button>`; }
-        container.innerHTML = html;
-    }
-    
-    function goToPage(page) { currentPage = page; renderProducts(); window.scrollTo({ top: 0, behavior: 'smooth' }); }
     function changeQuantity(id, delta) { quantities[id] = (quantities[id] || 1) + delta; if(quantities[id] < 1) quantities[id] = 1; let span = document.getElementById(`qty-${id}`); if(span) span.innerText = quantities[id]; }
     
     function addToCart(id) {
@@ -654,7 +700,7 @@
         let cartList = document.getElementById('cartItemsList');
         if(!cartList) return;
         if(cart.length === 0) { cartList.innerHTML = `<div class="empty-state">${translations[currentLang].emptyCart}</div>`; updateCartTotal(); return; }
-        cartList.innerHTML = cart.map((item,i) => `<div class="cart-item"><img src="${item.image1 || item.image2 || item.image3 || 'https://i.postimg.cc/RWNMnJDG/image.jpg'}" class="cart-item-img"><div style="flex:1;"><div class="cart-item-name">${item.name}${item.selectedSize ? ` (${item.selectedSize})` : ''}</div><div class="cart-item-price">${item.cartQty} x ${item.price.toLocaleString()} = ${(item.price*item.cartQty).toLocaleString()} IQD</div></div><button class="remove-item" onclick="removeFromCart(${i})"><i class="fas fa-trash-alt"></i></button></div>`).join('');
+        cartList.innerHTML = cart.map((item,i) => `<div class="cart-item"><img src="${item.image1 || item.image2 || item.image3 || 'https://i.postimg.cc/RWNMnJDG/image.jpg'}" class="cart-item-img"><div style="flex:1;"><div class="cart-item-name">${item.name}${item.selectedSize ? ` (${item.selectedSize} لیتر)` : ''}</div><div class="cart-item-price">${item.cartQty} x ${item.price.toLocaleString()} = ${(item.price*item.cartQty).toLocaleString()} IQD</div></div><button class="remove-item" onclick="removeFromCart(${i})"><i class="fas fa-trash-alt"></i></button></div>`).join('');
         updateCartTotal();
     }
     
@@ -699,7 +745,7 @@
         let order = { id: Date.now(), date: new Date().toLocaleString(), customer: name, phone, address, city, items: cart.map(i=>({...i})), subtotal, shippingCost, discount, total, trackingCode: 'TRK'+Date.now() };
         orders.unshift(order); saveAllData();
         let whatsapp = localStorage.getItem('vip_whatsapp') || defaultWhatsapp;
-        let msg = `📦 ئۆردەر نوێ\n👤 ${name}\n📞 ${phone}\n📍 ${address}\n🏙️ ${city}\n💰 ${total.toLocaleString()} IQD\n🔍 ${order.trackingCode}\n\n🛍️ بەرهەمەکان:\n${cart.map(i => `- ${i.name}${i.selectedSize ? ` (${i.selectedSize})` : ''} x${i.cartQty} = ${(i.price*i.cartQty).toLocaleString()} IQD`).join('\n')}`;
+        let msg = `📦 ئۆردەر نوێ\n👤 ${name}\n📞 ${phone}\n📍 ${address}\n🏙️ ${city}\n💰 ${total.toLocaleString()} IQD\n🔍 ${order.trackingCode}\n\n🛍️ بەرهەمەکان:\n${cart.map(i => `- ${i.name}${i.selectedSize ? ` (${i.selectedSize} لیتر)` : ''} x${i.cartQty} = ${(i.price*i.cartQty).toLocaleString()} IQD`).join('\n')}`;
         window.open(`https://wa.me/${whatsapp}?text=${encodeURIComponent(msg)}`, '_blank');
         cart = []; quantities = {}; appliedCoupon = null; updateCartUI(); closeModal('checkoutModal');
         document.getElementById('customerName').value = ''; document.getElementById('customerPhone').value = ''; document.getElementById('customerAddress').value = '';
@@ -742,7 +788,6 @@
         else showToast('تکایە پێداچوونەوە بنووسە');
     }
     
-    // ==================== Slider ====================
     function renderSlider() {
         let slider = document.getElementById('slider');
         let dots = document.getElementById('sliderDots');
@@ -760,7 +805,6 @@
     function renderSliderAdmin() { let container = document.getElementById('sliderList'); if(!container) return; container.innerHTML = sliderImages.map((item,i) => `<div class="cart-item" style="justify-content:space-between;"><div style="display:flex; align-items:center; gap:8px;">${item.type === 'video' ? '🎬' : '🖼️'} <span style="font-size:12px; overflow:hidden; text-overflow:ellipsis; max-width:150px;">${item.url.substring(0,30)}...</span></div><button class="remove-item" onclick="deleteSliderImage(${i})"><i class="fas fa-trash-alt"></i></button></div>`).join(''); }
     function deleteSliderImage(i) { sliderImages.splice(i,1); saveAllData(); renderSlider(); renderSliderAdmin(); showToast('سڕایەوە'); }
     
-    // ==================== Shipping ====================
     function renderShippingCities() {
         let select = document.getElementById('shippingCity');
         if(select) { select.innerHTML = '<option value="">هەڵبژاردنی شار</option>'; shippingCities.forEach(c => { select.innerHTML += `<option value="${c.city}">${c.city} - ${c.cost.toLocaleString()} IQD</option>`; }); }
@@ -770,12 +814,10 @@
     function addShippingCity() { let city = document.getElementById('shippingCityName')?.value, cost = parseInt(document.getElementById('shippingCostValue')?.value || 0); if(city && cost) { shippingCities.push({city,cost}); saveAllData(); renderShippingCities(); document.getElementById('shippingCityName').value = ''; document.getElementById('shippingCostValue').value = ''; showToast('شار زیادکرا'); } }
     function deleteShippingCity(i) { shippingCities.splice(i,1); saveAllData(); renderShippingCities(); showToast('شار سڕایەوە'); }
     
-    // ==================== Coupons ====================
     function addCoupon() { let code = document.getElementById('couponName')?.value, discount = parseInt(document.getElementById('couponPercent')?.value || 0), expiry = document.getElementById('couponDate')?.value; if(code && discount) { coupons.push({code, discount, expiry}); saveAllData(); renderCouponsAdmin(); document.getElementById('couponName').value = ''; document.getElementById('couponPercent').value = ''; showToast('کۆدێن زیادکرا'); } }
     function renderCouponsAdmin() { let container = document.getElementById('couponsList'); if(!container) return; container.innerHTML = coupons.map((c,i) => `<div class="cart-item" style="justify-content:space-between;"><span>🎫 ${c.code} - ${c.discount}% (${c.expiry})</span><button class="remove-item" onclick="deleteCoupon(${i})"><i class="fas fa-trash-alt"></i></button></div>`).join(''); }
     function deleteCoupon(i) { coupons.splice(i,1); saveAllData(); renderCouponsAdmin(); showToast('کۆدێن سڕایەوە'); }
     
-    // ==================== Admin Products ====================
     function updateAdminCategoriesSelect() {
         let select = document.getElementById('productCategory');
         if(select) select.innerHTML = categories.map(cat => `<option value="${cat}">${cat}</option>`).join('');
@@ -792,10 +834,7 @@
         let image2 = document.getElementById('productImage2')?.value || '';
         let image3 = document.getElementById('productImage3')?.value || '';
         let video = document.getElementById('productVideo')?.value || '';
-        let sizes = [];
-        if(document.getElementById('size1')?.checked) sizes.push(1);
-        if(document.getElementById('size2')?.checked) sizes.push(2);
-        if(document.getElementById('size3')?.checked) sizes.push(3);
+        let sizes = [...currentSizesArray];
         
         if(!name || !price || isNaN(price)) { showToast(currentLang === 'ku' ? 'تکایە ناو و نرخ بنووسە' : 'Please enter name and price'); return; }
         if(!category && categories.length > 0) category = categories[0];
@@ -814,9 +853,8 @@
         document.getElementById('productImage2').value = '';
         document.getElementById('productImage3').value = '';
         document.getElementById('productVideo').value = '';
-        document.getElementById('size1').checked = false;
-        document.getElementById('size2').checked = false;
-        document.getElementById('size3').checked = false;
+        currentSizesArray = [];
+        renderDynamicSizes();
         renderAdminProducts();
         showToast(currentLang === 'ku' ? '✅ بەرهەم زیادکرا!' : '✅ Product added!');
     }
@@ -825,7 +863,7 @@
         let container = document.getElementById('adminProducts');
         if(!container) return;
         if(products.length === 0) { container.innerHTML = '<div class="empty-state">هیچ بەرهەمێک نییە</div>'; return; }
-        container.innerHTML = products.map(p => `<div class="product-admin-item"><div style="flex:1;"><div><strong>${p.name}</strong></div><div style="font-size:12px;">${p.price.toLocaleString()} IQD | ستۆک: ${p.stock} | پۆل: ${p.category} | 👁️ ${p.views || 0} | قەبارە: ${p.sizes && p.sizes.length ? p.sizes.join(',') : 'بێ قەبارە'}</div><div style="font-size:11px; color:var(--text-light);">${p.desc ? p.desc.substring(0,50) : 'باسکردن نییە'}</div></div><div><button class="edit-product-btn" onclick="editProductFromAdmin(${p.id})"><i class="fas fa-edit"></i> دەستکاری</button><button class="delete-product-btn" onclick="deleteProductFromAdmin(${p.id})"><i class="fas fa-trash"></i> سڕینەوە</button></div></div>`).join('');
+        container.innerHTML = products.map(p => `<div class="product-admin-item"><div style="flex:1;"><div><strong>${p.name}</strong></div><div style="font-size:12px;">${p.price.toLocaleString()} IQD | ستۆک: ${p.stock} | پۆل: ${p.category} | 👁️ ${p.views || 0} | قەبارە: ${p.sizes && p.sizes.length ? p.sizes.map(s=>s+' لیتر').join(',') : 'بێ قەبارە'}</div><div style="font-size:11px; color:var(--text-light);">${p.desc ? p.desc.substring(0,50) : 'باسکردن نییە'}</div></div><div style="display:flex; gap:8px;"><button class="edit-product-btn" onclick="editProductFromAdmin(${p.id})" style="background:var(--primary); color:white; border:none; padding:6px 12px; border-radius:20px;"><i class="fas fa-edit"></i> دەستکاری</button><button class="edit-product-btn" onclick="openSizeEditModal(${p.id})" style="background:var(--accent); color:black; border:none; padding:6px 12px; border-radius:20px;"><i class="fas fa-ruler"></i> قەبارە</button><button class="delete-product-btn" onclick="deleteProductFromAdmin(${p.id})" style="background:var(--danger); color:white; border:none; padding:6px 12px; border-radius:20px;"><i class="fas fa-trash"></i> سڕینەوە</button></div></div>`).join('');
     }
     
     function editProductFromAdmin(id) {
@@ -842,9 +880,6 @@
         let newImage2 = prompt('لینکی وێنەی 2:', product.image2); if(newImage2 !== null) product.image2 = newImage2;
         let newImage3 = prompt('لینکی وێنەی 3:', product.image3); if(newImage3 !== null) product.image3 = newImage3;
         let newVideo = prompt('لینکی ڤیدیۆ:', product.video); if(newVideo !== null) product.video = newVideo;
-        let sizesInput = prompt('قەبارەکان (بە کۆما جیابکەوە، نموونە: 1,2,3 یان بە بەتاڵی بەجێبهێڵە):', product.sizes ? product.sizes.join(',') : '');
-        if(sizesInput !== null && sizesInput.trim() !== '') { product.sizes = sizesInput.split(',').map(s => parseInt(s.trim())).filter(s => !isNaN(s) && s >= 1 && s <= 3); } 
-        else if(sizesInput === '') { product.sizes = []; }
         
         saveAllData();
         refreshAllUI();
@@ -864,12 +899,11 @@
         }
     }
     
-    // ==================== Admin Orders ====================
     function renderAdminOrders() {
         let container = document.getElementById('adminOrders');
         if(!container) return;
         if(orders.length === 0) { container.innerHTML = '<div class="empty-state">📭 هیچ داواکارییەک نییە</div>'; return; }
-        container.innerHTML = orders.map(order => `<div class="admin-section" style="margin-bottom:15px; padding:15px; border-right: 4px solid var(--primary);"><div style="display:flex; justify-content:space-between;"><div><strong>📋 #${order.id}</strong></div><div>📅 ${order.date}</div></div><div style="margin-top:8px; background:var(--primary); color:white; padding:8px; border-radius:10px;"><div>👤 <strong>${order.customer}</strong> | 📞 ${order.phone}</div><div>📍 ${order.address} | 🏙️ ${order.city}</div></div><div style="margin-top:10px; padding:10px; background:var(--bg); border-radius:12px;"><strong>🛍️ بەرهەمەکان:</strong><br>${order.items.map((item,idx) => `<div style="display:flex; justify-content:space-between; padding:6px 0;"><span>${idx+1}. ${item.name}${item.selectedSize ? ` (${item.selectedSize})` : ''}</span><span>${item.cartQty} x ${item.price.toLocaleString()} IQD</span></div>`).join('')}<div style="margin-top:8px; text-align:left; font-weight:bold;">کۆ: ${order.subtotal.toLocaleString()} IQD</div></div><div style="margin-top:10px; padding:10px; background:var(--success); color:white; border-radius:12px; display:flex; justify-content:space-between;"><span>💰 کۆی گشتی:</span><span><strong>${order.total.toLocaleString()} IQD</strong></span></div><div style="margin-top:10px; display:flex; justify-content:space-between;"><div>🔍 <span style="font-family:monospace;">${order.trackingCode}</span></div><button class="remove-item" onclick="deleteOrder(${order.id})" style="background:var(--danger); color:white; padding:6px 15px; border-radius:25px;"><i class="fas fa-trash-alt"></i> سڕینەوە</button></div></div>`).join('');
+        container.innerHTML = orders.map(order => `<div class="admin-section" style="margin-bottom:15px; padding:15px; border-right: 4px solid var(--primary);"><div style="display:flex; justify-content:space-between;"><div><strong>📋 #${order.id}</strong></div><div>📅 ${order.date}</div></div><div style="margin-top:8px; background:var(--primary); color:white; padding:8px; border-radius:10px;"><div>👤 <strong>${order.customer}</strong> | 📞 ${order.phone}</div><div>📍 ${order.address} | 🏙️ ${order.city}</div></div><div style="margin-top:10px; padding:10px; background:var(--bg); border-radius:12px;"><strong>🛍️ بەرهەمەکان:</strong><br>${order.items.map((item,idx) => `<div style="display:flex; justify-content:space-between; padding:6px 0;"><span>${idx+1}. ${item.name}${item.selectedSize ? ` (${item.selectedSize} لیتر)` : ''}</span><span>${item.cartQty} x ${item.price.toLocaleString()} IQD</span></div>`).join('')}<div style="margin-top:8px; text-align:left; font-weight:bold;">کۆ: ${order.subtotal.toLocaleString()} IQD</div></div><div style="margin-top:10px; padding:10px; background:var(--success); color:white; border-radius:12px; display:flex; justify-content:space-between;"><span>💰 کۆی گشتی:</span><span><strong>${order.total.toLocaleString()} IQD</strong></span></div><div style="margin-top:10px; display:flex; justify-content:space-between;"><div>🔍 <span style="font-family:monospace;">${order.trackingCode}</span></div><button class="remove-item" onclick="deleteOrder(${order.id})" style="background:var(--danger); color:white; padding:6px 15px; border-radius:25px;"><i class="fas fa-trash-alt"></i> سڕینەوە</button></div></div>`).join('');
     }
     
     function deleteOrder(orderId) {
@@ -881,7 +915,6 @@
         }
     }
     
-    // ==================== Chat ====================
     function toggleChat() { let chat = document.getElementById('chatModal'); if(chat) chat.style.display = chat.style.display === 'flex' ? 'none' : 'flex'; renderChatMessages(); }
     
     function renderChatMessages() {
@@ -907,25 +940,23 @@
         setTimeout(() => { let replyTime = new Date().toLocaleTimeString('ku', { hour: '2-digit', minute: '2-digit' }); chatMessages.push({ id: Date.now() + 1, sender: 'admin', text: autoReply, time: replyTime, read: true }); saveAllData(); renderChatMessages(); }, 1500);
     }
     
-    // ==================== Utility ====================
     function toggleDarkMode() { document.body.classList.toggle('dark-mode'); localStorage.setItem('vip_dark_mode', document.body.classList.contains('dark-mode')); document.getElementById('darkModeBtn').innerHTML = document.body.classList.contains('dark-mode') ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>'; }
     function zoomImage(src) { let modal = document.createElement('div'); modal.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.9);z-index:3000;display:flex;align-items:center;justify-content:center;cursor:pointer;'; let img = document.createElement('img'); img.src = src; img.style.cssText = 'max-width:90%;max-height:90%;border-radius:20px;'; modal.appendChild(img); modal.onclick = () => modal.remove(); document.body.appendChild(modal); }
     function playVideo(url) { let modal = document.createElement('div'); modal.className = 'video-modal'; modal.innerHTML = `<video src="${url}" controls autoplay style="max-width:90%; max-height:90%; border-radius:20px;"></video>`; modal.onclick = () => modal.remove(); document.body.appendChild(modal); }
     
-    // ==================== Initialize Sample Products ====================
     function initializeSampleProducts() {
         if(products.length === 0) {
             products = [
-                { id: 1, name: "پسیکیتی لۆبیلو - BISCUITS", desc: "BISCUITS\nGluten Free\nMilk free - Egg free\n\n✅ بێ گلوتن\n✅ بێ شیر\n✅ بێ هێلکە\n\n🔹 کالسیۆم\n🔹 ئاسن\n🔹 ڤیتامین B1\n\n📌 بۆ تەمەنی ٤ مانگ بۆ ٥ ساڵ\n\n📦 پەکێجی ئابووری - ٢٤ دانە", price: 7000, stock: 24, status: "instock", category: "تغذیة", image1: "https://i.postimg.cc/RWNMnJDG/image.jpg", image2: "", image3: "", video: "", views: 0, sizes: [] },
-                { id: 2, name: "شیری منداڵان VIP - 1 لیتر", desc: "شیری تایبەت و بەرزترین کوالیتی بۆ منداڵانی تازەلەدایکبوو\n\n✅ بەرزترین کالسیۆم\n✅ ڤیتامین D\n✅ ئۆمێگا 3\n\n📌 بۆ تەمەنی ٦ مانگ بۆ ٥ ساڵ", price: 25000, stock: 12, status: "instock", category: "تغذیة", image1: "https://i.postimg.cc/RWNMnJDG/image.jpg", image2: "", image3: "", video: "", views: 0, sizes: [1, 2, 3] },
+                { id: 1, name: "شیری VIP منداڵان - 1 لیتر", desc: "شیری تایبەت و بەرزترین کوالیتی بۆ منداڵانی تازەلەدایکبوو\n\n✅ بەرزترین کالسیۆم\n✅ ڤیتامین D\n✅ ئۆمێگا 3\n\n📌 بۆ تەمەنی ٦ مانگ بۆ ٥ ساڵ", price: 25000, stock: 50, status: "instock", category: "تغذیة", image1: "https://i.postimg.cc/RWNMnJDG/image.jpg", image2: "", image3: "", video: "", views: 0, sizes: [1, 2, 3] },
+                { id: 2, name: "پسیکیتی لۆبیلو", desc: "BISCUITS\nGluten Free\nMilk free - Egg free\n\n✅ بێ گلوتن\n✅ بێ شیر\n✅ بێ هێلکە\n\n🔹 کالسیۆم\n🔹 ئاسن\n🔹 ڤیتامین B1\n\n📌 بۆ تەمەنی ٤ مانگ بۆ ٥ ساڵ\n\n📦 پەکێجی ئابووری - ٢٤ دانە", price: 7000, stock: 24, status: "instock", category: "تغذیة", image1: "https://i.postimg.cc/RWNMnJDG/image.jpg", image2: "", image3: "", video: "", views: 0, sizes: [] },
                 { id: 3, name: "کۆمپلێتی منداڵان", desc: "کۆمپلێتی جل و بەرگی نەرم و خۆش بۆ منداڵان", price: 35000, stock: 7, status: "instock", category: "ملابس", image1: "https://i.postimg.cc/RWNMnJDG/image.jpg", image2: "", image3: "", video: "", views: 0, sizes: [] },
-                { id: 4, name: "شیری پیکسکی لیزە - Baby Milk Free", desc: "پیکسکی لیزە\n\n✅ بێ شیر\n✅ بێ هێلکە\n\n🔹 کالسیۆم\n🔹 ئاسن\n🔹 ڤیتامین B1\n\n📌 بۆ تەمەنی ٤ مانگ بۆ ٥ ساڵ\n\n📦 پەکێجی ئابووری - ٢٤ دانە", price: 7000, stock: 24, status: "instock", category: "تغذیة", image1: "https://i.postimg.cc/RWNMnJDG/image.jpg", image2: "", image3: "", video: "", views: 0, sizes: [1, 2, 3] }
+                { id: 4, name: "عەرەبانەی VIP", desc: "عەرەبانەی تایبەت بۆ منداڵان، سووک و بەهێز", price: 125000, stock: 4, status: "instock", category: "عربات", image1: "https://i.postimg.cc/RWNMnJDG/image.jpg", image2: "", image3: "", video: "", views: 0, sizes: [] },
+                { id: 5, name: "یاری پەروەردەیی", desc: "یاری فکری و پەروەردەیی بۆ منداڵان", price: 15000, stock: 22, status: "instock", category: "العاب", image1: "https://i.postimg.cc/RWNMnJDG/image.jpg", image2: "", image3: "", video: "", views: 0, sizes: [] }
             ];
             saveAllData();
         }
     }
     
-    // ==================== Load Data ====================
     let savedColor = localStorage.getItem('vip_theme_color'); if(savedColor) document.documentElement.style.setProperty('--primary', savedColor);
     let savedDarkMode = localStorage.getItem('vip_dark_mode'); if(savedDarkMode === 'true') { document.body.classList.add('dark-mode'); document.getElementById('darkModeBtn').innerHTML = '<i class="fas fa-sun"></i>'; }
     let savedShopName = localStorage.getItem('vip_shop_name'); if(savedShopName) document.getElementById('shopNameDisplay').innerText = savedShopName;
@@ -951,6 +982,7 @@
     renderSlider();
     renderChatMessages();
     updateAllTexts();
+    renderDynamicSizes();
 </script>
 </body>
 </html>
