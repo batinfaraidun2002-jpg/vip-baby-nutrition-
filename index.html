@@ -202,8 +202,20 @@
 
 <div id="reviewModal" class="modal"><div class="modal-content"><div class="modal-header"><h3><i class="fas fa-star"></i> پێداچوونەوە</h3><button class="close-modal" onclick="closeModal('reviewModal')"><i class="fas fa-times"></i></button></div><select id="reviewRating"><option value="5">★★★★★ (5)</option><option value="4">★★★★☆ (4)</option><option value="3">★★★☆☆ (3)</option><option value="2">★★☆☆☆ (2)</option><option value="1">★☆☆☆☆ (1)</option></select><textarea id="reviewComment" rows="3" placeholder="پێداچوونەوەکەت بنووسە..."></textarea><button class="add-to-cart" onclick="submitReview()"><i class="fas fa-paper-plane"></i> ناردن</button></div></div>
 
-<div id="adminLoginModal" class="modal"><div class="modal-content"><div class="modal-header"><h3><i class="fas fa-lock"></i> چوونە ژوورەوەی ئادمین</h3><button class="close-modal" onclick="closeModal('adminLoginModal')"><i class="fas fa-times"></i></button></div><input type="password" id="adminPassword" placeholder="پاسۆرد"><button class="add-to-cart" onclick="adminLogin()"><i class="fas fa-sign-in-alt"></i> چوونە ژوورەوە</button></div></div>
+<!-- Admin Login Modal -->
+<div id="adminLoginModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3><i class="fas fa-lock"></i> چوونە ژوورەوەی ئادمین</h3>
+            <button class="close-modal" onclick="closeModal('adminLoginModal')"><i class="fas fa-times"></i></button>
+        </div>
+        <input type="password" id="adminPassword" placeholder="پاسۆرد">
+        <button class="add-to-cart" id="adminLoginBtn" style="background:var(--primary);"><i class="fas fa-sign-in-alt"></i> چوونە ژوورەوە</button>
+        <div class="security-note" style="margin-top:10px;">🔒 پاسۆردی بنەڕەتی: <strong>admin2026</strong></div>
+    </div>
+</div>
 
+<!-- Admin Panel -->
 <div id="adminPanel" class="admin-panel">
     <div class="admin-header">
         <h2><i class="fas fa-cogs"></i> پانێڵی ئادمین</h2>
@@ -262,7 +274,11 @@
     };
     
     let database = null;
-    try { firebase.initializeApp(firebaseConfig); database = firebase.database(); console.log('✅ Firebase connected'); } catch(e) { console.error('Firebase error:', e); }
+    try { 
+        firebase.initializeApp(firebaseConfig); 
+        database = firebase.database(); 
+        console.log('✅ Firebase connected'); 
+    } catch(e) { console.error('Firebase error:', e); }
     
     // ==================== Default Data ====================
     let defaultWhatsapp = "9647725416979";
@@ -293,9 +309,9 @@
     
     // ==================== Translations ====================
     const translations = {
-        ku: { search: "🔍 گەڕان...", all: "هەموو", instock: "لەبەردەستە", outstock: "تەواو بووە", addToCart: "زیادکردن", emptyCart: "سەبەتەکەت خاڵییە 🛒", emptyWishlist: "هیچ بەرهەمێک نییە 💔", noProducts: "هیچ بەرهەمێک نەدۆزرایەوە 😢", rem: "ماوە:", reviewBtn: "پێداچوونەوە", chatPlaceholder: "پەیام...", welcomeMsg: "سڵاو! چۆن دەتوانین یارمەتیت بدەین؟", changePassword: "گۆڕینی پاسۆرد", changePasswordBtn: "گۆڕینی پاسۆرد", oldPassword: "پاسۆردی کۆن", newPassword: "پاسۆردی نوێ", confirmPassword: "دووبارە پاسۆردی نوێ", securityNote: "🔒 پاسۆردی بنەڕەتی: admin2026", filterAll: "💰 هەموو", filterLow: "💰 هەرزانترین", filterHigh: "💰 گرانترین", views: "👁️ بینین", pleaseSelectSize: "⚠️ تکایە قەبارە هەڵبژێرە" },
-        ar: { search: "🔍 بحث...", all: "الكل", instock: "متوفر", outstock: "نفذ", addToCart: "إضافة", emptyCart: "السلة فارغة 🛒", emptyWishlist: "لا توجد منتجات 💔", noProducts: "لم يتم العثور على منتجات 😢", rem: "المتبقي:", reviewBtn: "مراجعة", chatPlaceholder: "رسالة...", welcomeMsg: "مرحباً! كيف يمكننا مساعدتك؟", changePassword: "تغيير كلمة المرور", changePasswordBtn: "تغيير كلمة المرور", oldPassword: "كلمة المرور القديمة", newPassword: "كلمة المرور الجديدة", confirmPassword: "تأكيد كلمة المرور", securityNote: "🔒 كلمة المرور الافتراضية: admin2026", filterAll: "💰 الكل", filterLow: "💰 الأرخص", filterHigh: "💰 الأغلى", views: "👁️ مشاهدة", pleaseSelectSize: "⚠️ الرجاء اختيار المقاس" },
-        en: { search: "🔍 Search...", all: "All", instock: "In Stock", outstock: "Out", addToCart: "Add", emptyCart: "Cart is empty 🛒", emptyWishlist: "No items 💔", noProducts: "No products found 😢", rem: "Stock:", reviewBtn: "Review", chatPlaceholder: "Message...", welcomeMsg: "Hello! How can we help you?", changePassword: "Change Password", changePasswordBtn: "Change Password", oldPassword: "Old Password", newPassword: "New Password", confirmPassword: "Confirm Password", securityNote: "🔒 Default Password: admin2026", filterAll: "💰 All", filterLow: "💰 Lowest", filterHigh: "💰 Highest", views: "👁️ Views", pleaseSelectSize: "⚠️ Please select size" }
+        ku: { search: "🔍 گەڕان...", all: "هەموو", instock: "لەبەردەستە", outstock: "تەواو بووە", addToCart: "زیادکردن", emptyCart: "سەبەتەکەت خاڵییە 🛒", emptyWishlist: "هیچ بەرهەمێک نییە 💔", noProducts: "هیچ بەرهەمێک نەدۆزرایەوە 😢", rem: "ماوە:", reviewBtn: "پێداچوونەوە", chatPlaceholder: "پەیام...", welcomeMsg: "سڵاو! چۆن دەتوانین یارمەتیت بدەین؟", filterAll: "💰 هەموو", filterLow: "💰 هەرزانترین", filterHigh: "💰 گرانترین", views: "👁️ بینین", pleaseSelectSize: "⚠️ تکایە قەبارە هەڵبژێرە" },
+        ar: { search: "🔍 بحث...", all: "الكل", instock: "متوفر", outstock: "نفذ", addToCart: "إضافة", emptyCart: "السلة فارغة 🛒", emptyWishlist: "لا توجد منتجات 💔", noProducts: "لم يتم العثور على منتجات 😢", rem: "المتبقي:", reviewBtn: "مراجعة", chatPlaceholder: "رسالة...", welcomeMsg: "مرحباً! كيف يمكننا مساعدتك؟", filterAll: "💰 الكل", filterLow: "💰 الأرخص", filterHigh: "💰 الأغلى", views: "👁️ مشاهدة", pleaseSelectSize: "⚠️ الرجاء اختيار المقاس" },
+        en: { search: "🔍 Search...", all: "All", instock: "In Stock", outstock: "Out", addToCart: "Add", emptyCart: "Cart is empty 🛒", emptyWishlist: "No items 💔", noProducts: "No products found 😢", rem: "Stock:", reviewBtn: "Review", chatPlaceholder: "Message...", welcomeMsg: "Hello! How can we help you?", filterAll: "💰 All", filterLow: "💰 Lowest", filterHigh: "💰 Highest", views: "👁️ Views", pleaseSelectSize: "⚠️ Please select size" }
     };
     
     // ==================== Helper Functions ====================
@@ -317,8 +333,6 @@
         let chatInput = document.getElementById('chatInput');
         if(searchInput) searchInput.placeholder = t.search;
         if(chatInput) chatInput.placeholder = t.chatPlaceholder;
-        let securityNote = document.querySelector('.security-note');
-        if(securityNote) securityNote.innerText = t.securityNote;
         document.querySelectorAll('.filter-btn').forEach(btn => {
             let filter = btn.getAttribute('data-filter');
             if(filter === 'all') btn.innerHTML = t.filterAll;
@@ -418,23 +432,41 @@
     }
     
     let adminTrigger = document.getElementById('adminTrigger');
-    if(adminTrigger) { adminTrigger.onclick = () => { clickCount++; if(clickCount >= 3) { openModal('adminLoginModal'); clickCount = 0; } setTimeout(() => clickCount = 0, 2000); }; }
+    if(adminTrigger) { 
+        adminTrigger.onclick = function() { 
+            clickCount++; 
+            if(clickCount >= 3) { 
+                openModal('adminLoginModal'); 
+                clickCount = 0; 
+            } 
+            setTimeout(function() { clickCount = 0; }, 2000); 
+        }; 
+    }
     
+    // FIXED: Admin Login function
     function adminLogin() { 
         let pass = document.getElementById('adminPassword').value; 
         if(pass === adminPassword) { 
             closeModal('adminLoginModal'); 
             document.getElementById('adminPanel').style.display = 'block'; 
-            renderAdminProducts(); renderAdminOrders(); renderSliderAdmin(); renderCouponsAdmin(); 
+            renderAdminProducts(); 
+            renderAdminOrders(); 
+            renderSliderAdmin(); 
+            renderCouponsAdmin(); 
             document.getElementById('shopNameInput').value = document.getElementById('shopNameDisplay')?.innerText || 'VIP Baby Nutrition';
             document.getElementById('shopWhatsappInput').value = localStorage.getItem('vip_whatsapp') || defaultWhatsapp;
             document.getElementById('currentWhatsapp').innerText = localStorage.getItem('vip_whatsapp') || defaultWhatsapp;
             document.getElementById('autoReplyMsg').value = autoReply;
             renderChatMessages();
             showToast('بەخێربێیت بۆ پانێڵی ئادمین'); 
-        } else showToast('پاسۆرد هەڵەیە!'); 
+        } else { 
+            showToast('پاسۆرد هەڵەیە!'); 
+        } 
         document.getElementById('adminPassword').value = ''; 
     }
+    
+    // Attach login event to button
+    document.getElementById('adminLoginBtn').onclick = adminLogin;
     
     function closeAdminPanel() { document.getElementById('adminPanel').style.display = 'none'; }
     function changeThemeColor(color) { document.documentElement.style.setProperty('--primary', color); localStorage.setItem('vip_theme_color', color); }
